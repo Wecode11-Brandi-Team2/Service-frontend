@@ -1,7 +1,5 @@
 <template>
-  <div>
-    디테일 페이지!!! test1
-  </div>
+  <div>디테일 페이지!!! test1</div>
 </template>
 
 <script>

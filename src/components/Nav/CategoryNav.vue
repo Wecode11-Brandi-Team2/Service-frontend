@@ -33,11 +33,6 @@
         v-bind:style="{ left: (line - 0.5) * (100 / lines.length) + '%' }"
       ></div>
     </div>
-    <div class="advertise">
-      <img
-        src="http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg"
-      />
-    </div>
   </div>
 </template>
 <script>
@@ -46,6 +41,7 @@ export default {
   data() {
     return {
       cateogoryActive: false,
+      lines: [1, 2, 3, 4, 5, 6, 7],
       CATEGORY_CONTENTS: [
         '홈',
         '랭킹',

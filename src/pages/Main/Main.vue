@@ -1,12 +1,17 @@
 <template>
   <div>
-    메인 페이지!!!
+    <Nav />
   </div>
 </template>
 
 <script>
+import Nav from '../../components/Nav/Nav';
+
 export default {
-  name: 'Main'
+  name: 'Main',
+  components: {
+    Nav
+  }
 };
 </script>
 

@@ -14,7 +14,8 @@
         <button class="signUpButton">회원가입</button>
       </div>
       <div class="findIdPw">
-        <a href="">아이디 찾기</a> |
+        <a href="">아이디 찾기</a>
+        <span>|</span>
         <a href="">비밀번호 찾기</a>
       </div>
       <div class="signWord">간편로그인/가입</div>
@@ -59,6 +60,7 @@ input:focus {
       justify-content: center;
       flex-direction: column;
       align-items: center;
+      margin-bottom: 10px;
       span {
         margin: 10px 0;
       }
@@ -76,33 +78,59 @@ a {
   font-size: 17px;
   text-align: center;
   padding-top: 40px;
-  padding-bottom: 30px;
-  border-top: 0.5px solid gray;
+  padding-bottom: 25px;
+  border-top: 0.5px solid #e1e1e1;
+  letter-spacing: 5px;
 }
 
 .findIdPw {
-  text-align: right;
-  padding: 10px 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 18px 0;
+  letter-spacing: 1px;
+  color: #aaa;
+  font-size: 13px;
+
   a {
     color: #666;
     font-size: 14px;
+    transition: all 0.5s ease-in-out;
+    &:hover {
+      color: black;
+    }
+  }
+  span {
+    margin: 0 10px;
   }
 }
 .idInput {
+  font-size: 14px;
   height: 50px;
   border: 1px solid #e1e1e1;
   border-radius: 4px;
   margin: 4px 0;
   width: 100%;
   padding: 10px;
+  transition: 0.5s linear;
+
+  &:hover {
+    border-color: black;
+  }
 }
 .pwInput {
+  font-size: 14px;
   height: 50px;
   border: 1px solid #e1e1e1;
   border-radius: 4px;
   margin: 4px 0;
   width: 100%;
   padding: 10px;
+  transition: 0.5s linear;
+
+  &:hover {
+    border-color: black;
+  }
 }
 
 .loginButton {
@@ -183,7 +211,12 @@ a {
   margin-top: 20px;
 }
 .freeWord {
-  font-size: 32px;
-  font-weight: 100;
+  font-weight: bold;
+  transition: all 0.5s ease-in-out;
+  font-size: 34px;
+  &:hover {
+    font-size: 34px;
+    color: #ff204b;
+  }
 }
 </style>

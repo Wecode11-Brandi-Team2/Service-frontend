@@ -1,0 +1,17 @@
+@mixin setFlex($justify, $align, $direction) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+}
+
+@mixin setSize($color, $size) {
+  width: $width;
+  height: $height;
+}
+
+@mixin setFont($size, $color, $weight) {
+  font-size: $size;
+  color: $color;
+  font-weight: $weight;
+}

@@ -17,8 +17,13 @@ export default {
 #bannerProduct {
   padding: 0 3%;
   margin: 50px 0 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   img {
+    max-width: 1200px;
+
     width: 100%;
   }
 }

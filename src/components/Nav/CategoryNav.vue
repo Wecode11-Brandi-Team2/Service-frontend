@@ -1,14 +1,16 @@
 <template>
-  <div class="nav">
+  <div
+    v-on:mouseover="cateogoryActiveChange"
+    v-on:mouseleave="cateogoryActiveReChange"
+  >
     <nav class="categoryNav">
       <ul>
         <li
           :newkey="CATEGORY"
           class="modalShowing"
           :key="CATEGORY"
-          v-for="CATEGORY in CATEGORY_CONTENTS"
-          v-on:mouseover="cateogoryActiveChange"
-          v-on:mouseleave="cateogoryActiveChange"
+          ref="focus"
+          v-for="CATEGORY of navData.map(el => Object.keys(el)[1])"
         >
           <a>{{ CATEGORY }}</a>
         </li>
@@ -17,12 +19,18 @@
     <div
       v-bind:class="[cateogoryActive ? 'modalCategory' : 'hidden']"
       v-on:mouseover="cateogoryActiveChange"
+      v-on:mouseleave="cateogoryActiveReChange"
     >
-      <ul :key="MODAL" v-for="MODAL in MODAL_SAMPLE">
-        <li :key="Items" v-for="Items of Object.keys(MODAL)">
-          <span>{{ Items }}</span>
-          <a :key="Item" v-for="Item of MODAL[Items]">
-            {{ Item }}
+      <ul>
+        <li :key="Object.keys(MODAL)[0]" v-for="MODAL in this.showingData">
+          <span>{{ Object.keys(MODAL)[1] }}</span>
+          <a
+            class="categoryValue"
+            href=""
+            :key="Item"
+            v-for="Item of MODAL[Object.keys(MODAL)[1]]"
+          >
+            {{ Item['name'] }}
           </a>
         </li>
       </ul>
@@ -42,64 +50,760 @@ export default {
     return {
       cateogoryActive: false,
       lines: [1, 2, 3, 4, 5, 6, 7],
-      CATEGORY_CONTENTS: [
-        '홈',
-        '랭킹',
-        '하루배송',
-        '쇼핑몰,마켓',
-        '브랜드',
-        '뷰티',
-        '특가',
-        '기획전',
-        '스토어'
-      ],
-      MODAL_SAMPLE: {
-        쇼핑몰마켓: {
-          아우터: [
-            '자켓',
-            '가디건',
-            '코트',
-            '점퍼',
-            '패딩',
-            '무스탕/퍼',
-            '기타'
-          ],
-          바지: [
-            '청바지',
-            '슬랙스',
-            '면바지',
-            '반바지',
-            '트레이닝/조거',
-            '레깅스'
-          ],
-          원피스: ['미니', '미디', '롱', '투피스', '점프수트'],
-          스커트: ['미니', '미디', '롱'],
-          신발: ['플랫/로퍼', '샌들/슬리퍼', '힐', '스니커즈', '부츠/워커'],
-          가방: ['크로스백', '토트백', '숄더백', '에코백', '클러치', '백팩'],
-          주얼리: ['귀걸이', '목걸이', '팔찌/발찌', '반지'],
-          잡화: [
-            '휴대폰 acc',
-            '헤어 acc',
-            '양말/스타킹',
-            '지갑/파우치',
-            '모자',
-            '벨트',
-            '시계',
-            '스카프/머플러',
-            '아이웨어',
-            '기타'
-          ],
-          라이프웨어: ['언더웨어', '홈웨어', '스윔웨어', '비치웨어', '기타'],
-          빅사이즈: ['아우터', '상의', '바지', '원피스', '스커트']
+      navCheckData: '',
+      showingData: '',
+      navData: [
+        {
+          id: 1,
+          홈: []
+        },
+        {
+          id: 2,
+          랭킹: []
+        },
+        {
+          id: 3,
+          하루배송: []
+        },
+        {
+          id: 4,
+          '쇼핑몰 · 마켓': [
+            {
+              id: 1,
+              아우터: [
+                {
+                  id: 1,
+                  name: '자켓'
+                },
+                {
+                  id: 2,
+                  name: '가디건'
+                },
+                {
+                  id: 3,
+                  name: '코트'
+                },
+                {
+                  id: 4,
+                  name: '점퍼'
+                },
+                {
+                  id: 5,
+                  name: '패딩'
+                },
+                {
+                  id: 6,
+                  name: '무스탕/퍼'
+                },
+                {
+                  id: 7,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 2,
+              상의: [
+                {
+                  id: 8,
+                  name: '티셔츠'
+                },
+                {
+                  id: 9,
+                  name: '셔츠/블라우스'
+                },
+                {
+                  id: 10,
+                  name: '니트'
+                },
+                {
+                  id: 11,
+                  name: '후드/맨투맨'
+                },
+                {
+                  id: 12,
+                  name: '베스트'
+                }
+              ]
+            },
+            {
+              id: 3,
+              바지: [
+                {
+                  id: 13,
+                  name: '청바지'
+                },
+                {
+                  id: 14,
+                  name: '슬랙스'
+                },
+                {
+                  id: 15,
+                  name: '면바지'
+                },
+                {
+                  id: 16,
+                  name: '반바지'
+                },
+                {
+                  id: 17,
+                  name: '트레이닝/조거'
+                },
+                {
+                  id: 18,
+                  name: '레깅스'
+                }
+              ]
+            },
+            {
+              id: 4,
+              원피스: [
+                {
+                  id: 19,
+                  name: '미니'
+                },
+                {
+                  id: 20,
+                  name: '미디'
+                },
+                {
+                  id: 21,
+                  name: '롱'
+                },
+                {
+                  id: 22,
+                  name: '투피스'
+                },
+                {
+                  id: 23,
+                  name: '점프수트'
+                }
+              ]
+            },
+            {
+              id: 5,
+              스커트: [
+                {
+                  id: 24,
+                  name: '미니'
+                },
+                {
+                  id: 25,
+                  name: '미디'
+                },
+                {
+                  id: 26,
+                  name: '롱'
+                }
+              ]
+            },
+            {
+              id: 6,
+              신발: [
+                {
+                  id: 27,
+                  name: '플랫/로퍼'
+                },
+                {
+                  id: 28,
+                  name: '샌들/슬리퍼'
+                },
+                {
+                  id: 29,
+                  name: '힐'
+                },
+                {
+                  id: 30,
+                  name: '스니커즈'
+                },
+                {
+                  id: 31,
+                  name: '부츠/워커'
+                }
+              ]
+            },
+            {
+              id: 7,
+              가방: [
+                {
+                  id: 32,
+                  name: '크로스백'
+                },
+                {
+                  id: 33,
+                  name: '토트백'
+                },
+                {
+                  id: 34,
+                  name: '숄더백'
+                },
+                {
+                  id: 35,
+                  name: '에코백'
+                },
+                {
+                  id: 36,
+                  name: '클러치'
+                },
+                {
+                  id: 37,
+                  name: '백팩'
+                }
+              ]
+            },
+            {
+              id: 8,
+              주얼리: [
+                {
+                  id: 38,
+                  name: '귀걸이'
+                },
+                {
+                  id: 39,
+                  name: '목걸이'
+                },
+                {
+                  id: 40,
+                  name: '팔찌/발찌'
+                },
+                {
+                  id: 41,
+                  name: '반지'
+                }
+              ]
+            },
+            {
+              id: 9,
+              잡화: [
+                {
+                  id: 42,
+                  name: '휴대폰 acc'
+                },
+                {
+                  id: 43,
+                  name: '헤어 acc'
+                },
+                {
+                  id: 44,
+                  name: '양말/스타킹'
+                },
+                {
+                  id: 45,
+                  name: '지갑/파우치'
+                },
+                {
+                  id: 46,
+                  name: '모자'
+                },
+                {
+                  id: 47,
+                  name: '벨트'
+                },
+                {
+                  id: 48,
+                  name: '시계'
+                },
+                {
+                  id: 49,
+                  name: '스카프/머플러'
+                },
+                {
+                  id: 50,
+                  name: '아이웨어'
+                },
+                {
+                  id: 51,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 10,
+              라이프웨어: [
+                {
+                  id: 52,
+                  name: '언더웨어'
+                },
+                {
+                  id: 53,
+                  name: '홈웨어'
+                },
+                {
+                  id: 54,
+                  name: '스윔웨어'
+                },
+                {
+                  id: 55,
+                  name: '비치웨어'
+                },
+                {
+                  id: 56,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 11,
+              빅사이즈: [
+                {
+                  id: 57,
+                  name: '아우터'
+                },
+                {
+                  id: 58,
+                  name: '상의'
+                },
+                {
+                  id: 59,
+                  name: '바지'
+                },
+                {
+                  id: 60,
+                  name: '원피스'
+                },
+                {
+                  id: 61,
+                  name: '스커트'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 5,
+          브랜드: [
+            {
+              id: 12,
+              아우터: [
+                {
+                  id: 62,
+                  name: '코트'
+                },
+                {
+                  id: 63,
+                  name: '점퍼'
+                },
+                {
+                  id: 64,
+                  name: '자켓'
+                },
+                {
+                  id: 65,
+                  name: '가디건'
+                },
+                {
+                  id: 66,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 13,
+              상의: [
+                {
+                  id: 67,
+                  name: '티/반팔티'
+                },
+                {
+                  id: 68,
+                  name: '민소매/나시'
+                },
+                {
+                  id: 69,
+                  name: '셔츠/블라우스'
+                },
+                {
+                  id: 70,
+                  name: '니트'
+                },
+                {
+                  id: 71,
+                  name: '맨투맨'
+                },
+                {
+                  id: 72,
+                  name: '후드/집업'
+                },
+                {
+                  id: 73,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 14,
+              바지: [
+                {
+                  id: 74,
+                  name: '청바지'
+                },
+                {
+                  id: 75,
+                  name: '면바지'
+                },
+                {
+                  id: 76,
+                  name: '슬랙스'
+                },
+                {
+                  id: 77,
+                  name: '반바지'
+                },
+                {
+                  id: 78,
+                  name: '트레이닝/조거'
+                },
+                {
+                  id: 79,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 15,
+              원피스: [
+                {
+                  id: 80,
+                  name: '미니'
+                },
+                {
+                  id: 81,
+                  name: '미디'
+                },
+                {
+                  id: 82,
+                  name: '롱'
+                },
+                {
+                  id: 83,
+                  name: '점프수트'
+                },
+                {
+                  id: 84,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 16,
+              스커트: [
+                {
+                  id: 85,
+                  name: '미니'
+                },
+                {
+                  id: 86,
+                  name: '미디'
+                },
+                {
+                  id: 87,
+                  name: '롱'
+                },
+                {
+                  id: 88,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 17,
+              신발: [
+                {
+                  id: 89,
+                  name: '스니커즈'
+                },
+                {
+                  id: 90,
+                  name: '러닝화'
+                },
+                {
+                  id: 91,
+                  name: '플랫/로퍼'
+                },
+                {
+                  id: 92,
+                  name: '펌프스'
+                },
+                {
+                  id: 93,
+                  name: '부츠'
+                },
+                {
+                  id: 94,
+                  name: '샌들/슬리퍼'
+                },
+                {
+                  id: 95,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 18,
+              가방: [
+                {
+                  id: 96,
+                  name: '숄더백'
+                },
+                {
+                  id: 97,
+                  name: '토트백'
+                },
+                {
+                  id: 98,
+                  name: '에코백'
+                },
+                {
+                  id: 99,
+                  name: '백팩'
+                },
+                {
+                  id: 100,
+                  name: '지갑/파우치'
+                },
+                {
+                  id: 101,
+                  name: '클러치'
+                },
+                {
+                  id: 102,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 19,
+              주얼리: [
+                {
+                  id: 103,
+                  name: '귀걸이'
+                },
+                {
+                  id: 104,
+                  name: '목걸이'
+                },
+                {
+                  id: 105,
+                  name: '반지'
+                },
+                {
+                  id: 106,
+                  name: '팔찌/발찌'
+                }
+              ]
+            },
+            {
+              id: 20,
+              잡화: [
+                {
+                  id: 107,
+                  name: '시계'
+                },
+                {
+                  id: 108,
+                  name: '스카프/머플러'
+                },
+                {
+                  id: 109,
+                  name: '모자'
+                },
+                {
+                  id: 110,
+                  name: '양말'
+                },
+                {
+                  id: 111,
+                  name: '폰 악세서리'
+                },
+                {
+                  id: 112,
+                  name: '선글라스/아이웨어'
+                },
+                {
+                  id: 113,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 21,
+              라이프웨어: [
+                {
+                  id: 114,
+                  name: '언더웨어'
+                },
+                {
+                  id: 115,
+                  name: '홈웨어'
+                }
+              ]
+            },
+            {
+              id: 22,
+              스포츠웨어: [
+                {
+                  id: 116,
+                  name: '상의'
+                },
+                {
+                  id: 117,
+                  name: '하의'
+                },
+                {
+                  id: 118,
+                  name: '레깅스'
+                },
+                {
+                  id: 119,
+                  name: '스윔웨어'
+                },
+                {
+                  id: 120,
+                  name: '기타'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 6,
+          뷰티: [
+            {
+              id: 23,
+              스킨케어: [
+                {
+                  id: 121,
+                  name: '스킨/토너'
+                },
+                {
+                  id: 122,
+                  name: '에센스/앰플'
+                },
+                {
+                  id: 123,
+                  name: '크림'
+                },
+                {
+                  id: 124,
+                  name: '클렌징'
+                },
+                {
+                  id: 125,
+                  name: '기타'
+                }
+              ]
+            },
+            {
+              id: 24,
+              메이크업: [
+                {
+                  id: 126,
+                  name: '베이스'
+                },
+                {
+                  id: 127,
+                  name: '립'
+                },
+                {
+                  id: 128,
+                  name: '아이'
+                }
+              ]
+            },
+            {
+              id: 25,
+              바디케어: [
+                {
+                  id: 129,
+                  name: '로션/크림'
+                },
+                {
+                  id: 130,
+                  name: '워시/스크럽'
+                }
+              ]
+            },
+            {
+              id: 26,
+              헤어케어: [
+                {
+                  id: 131,
+                  name: '샴푸/린스'
+                },
+                {
+                  id: 132,
+                  name: '트리트먼트'
+                },
+                {
+                  id: 133,
+                  name: '스타일링/에센스'
+                }
+              ]
+            },
+            {
+              id: 27,
+              향수: [
+                {
+                  id: 134,
+                  name: '향수'
+                },
+                {
+                  id: 135,
+                  name: '디퓨저/방향제'
+                }
+              ]
+            },
+            {
+              id: 28,
+              미용소품: [
+                {
+                  id: 136,
+                  name: '뷰티툴'
+                },
+                {
+                  id: 137,
+                  name: '네일'
+                },
+                {
+                  id: 138,
+                  name: '기타'
+                }
+              ]
+            }
+          ]
+        },
+        {
+          id: 7,
+          특가: []
+        },
+        {
+          id: 8,
+          기획전: []
+        },
+        {
+          id: 9,
+          스토어: []
         }
-      }
+      ]
     };
   },
+  created: function() {},
   methods: {
     cateogoryActiveChange(event) {
-      if (event.target.attributes.newkey.value === '쇼핑몰,마켓') {
-        this.cateogoryActive = !this.cateogoryActive;
+      if (event.target.attributes.newkey.value === undefined) {
+        return;
       }
+      this.navCheckData = event.target.attributes.newkey.value;
+      for (let i = 0; i < this.navData.length; i++) {
+        if (this.navData[i][this.navCheckData]) {
+          this.showingData = this.navData[i][this.navCheckData];
+          this.cateogoryActive = true;
+        }
+      }
+    },
+    cateogoryActiveReChange() {
+      this.cateogoryActive = false;
+      console.log(this.cateogoryActive);
     }
   }
 };
@@ -107,6 +811,10 @@ export default {
 <style scoped lang="scss">
 * {
   box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+  color: black;
 }
 
 .hidden {
@@ -124,6 +832,13 @@ export default {
   left: 0;
   z-index: 10000;
   overflow: hidden;
+  .categoryValue {
+    color: black;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      color: #ff204b;
+    }
+  }
   ul {
     width: 100%;
     overflow: hidden;
@@ -182,6 +897,8 @@ export default {
       padding: 19px;
       display: inline-block;
       margin: 0 10px;
+      border-bottom: 3px solid white;
+
       a {
         color: black;
       }

@@ -22,11 +22,10 @@ export default {
     window.addEventListener('scroll', this.removeButton);
   },
   methods: {
-    removeButton() {
-      const scrollY = window.screenY;
-      console.log(scrollY);
-      return (this.buttonActive = !this.buttonActive);
-    }
+    // removeButton() {
+    //   const scrollY = window.screenY;
+    //   return (this.buttonActive = !this.buttonActive);
+    // }
   }
 };
 </script>

@@ -52,8 +52,13 @@ a {
   width: 20%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   img {
     height: 254px;
+  }
+  ul {
+    width: 235px;
   }
   li {
     .brand {

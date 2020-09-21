@@ -1,13 +1,13 @@
 <template>
   <div class="Nav">
     <img
-      class="homeBanner"
+      class="home-banner"
       src="https://image.brandi.me/home/banner/bannerImage_159279_1593394935.jpg"
       alt="bannerImg"
     />
-    <div class="navBox">
-      <div class="brandiLogo">
-        <a class="logoLink" href="/">
+    <div class="nav-box">
+      <div class="brandi-logo">
+        <a class="logo-link" href="/">
           <img
             class="logo"
             src="https://web-staging.brandi.co.kr/static/3.50.6/images/logo@3x.png"
@@ -15,13 +15,13 @@
           />
         </a>
       </div>
-      <div class="searchBox">
-        <form class="searchBar">
-          <button class="searchBtn"></button>
-          <input class="searchInput" type="text" />
+      <div class="search-box">
+        <form class="search-bar">
+          <button class="search-btn"></button>
+          <input class="search-input" type="text" />
         </form>
       </div>
-      <div class="upperMenuBox">
+      <div class="upper-menubox">
         <a class="menu" href="#">찜</a>
         ㅣ
         <a class="menu" href="/cart">장바구니</a>
@@ -46,12 +46,12 @@ export default {
 
 <style scoped lang="scss">
 .Nav {
-  .homeBanner {
+  .home-banner {
     display: block;
     width: 100%;
     margin: 0 auto;
   }
-  .navBox {
+  .nav-box {
     display: flex;
     justify-content: center;
     max-width: 1300px;
@@ -59,10 +59,10 @@ export default {
     padding: 20px 40px;
     letter-spacing: -0.05em;
     font-family: 'Spoqa Han Sans', Sans-serif;
-    .brandiLogo {
+    .brandi-logo {
       display: flex;
       align-items: center;
-      .logoLink {
+      .logo-link {
         .logo {
           width: 150px;
           height: 25px;
@@ -70,16 +70,16 @@ export default {
         }
       }
     }
-    .searchBox {
+    .search-box {
       margin-top: 20px;
       padding: 0 8%;
-      .searchBar {
+      .search-bar {
         display: flex;
         border-radius: 20px;
         background-color: #eee;
         width: 505px;
         height: 40px;
-        .searchBtn {
+        .search-btn {
           width: 30px;
           height: 30px;
           margin: 5px;
@@ -92,7 +92,7 @@ export default {
           overflow: hidden;
           outline: none;
         }
-        .searchInput {
+        .search-input {
           margin: 0 auto;
           background: none;
           font-size: 14px;
@@ -104,7 +104,7 @@ export default {
         }
       }
     }
-    .upperMenuBox {
+    .upper-menubox {
       line-height: 80px;
       text-align: center;
       .menu {

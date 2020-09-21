@@ -1,34 +1,34 @@
 <template>
   <div class="Footer">
     <div class="frame">
-      <div class="footerTop">
-        <div class="infoCs">
+      <div class="footer-top">
+        <div class="info-cs">
           <a class="cs" href="tel:1566-6575">고객센터 1566-6575</a>
           <p class="description">
             영업시간 : AM 10:00 ~ PM 17:00 (주말 및 공휴일 휴무)
           </p>
           <p class="description">점심시간 : PM 12:30 ~ PM 13:30</p>
         </div>
-        <div class="linkSnsBox">
-          <a class="linkQuestion" href="https://web-staging.brandi.co.kr/faq"
+        <div class="link-snsbox">
+          <a class="link-question" href="https://web-staging.brandi.co.kr/faq"
             >자주 묻는 질문</a
           >
-          <a class="linkKakao" href="https://pf.kakao.com/_xexkxcxkl"
+          <a class="link-kakao" href="https://pf.kakao.com/_xexkxcxkl"
             >카톡 플러스 친구</a
           >
-          <a class="linkFacebook" href="https://www.facebook.com/brandiapp/"
+          <a class="link-facebook" href="https://www.facebook.com/brandiapp/"
             >페이스북</a
           >
           <a
-            class="linkInstagram"
+            class="link-instagram"
             href="https://www.instagram.com/brandi__official"
             >인스타그램</a
           >
         </div>
       </div>
-      <div class="footerBottom">
+      <div class="footer-bottom">
         <div>
-          <div class="infoCompany">
+          <div class="info-company">
             <p class="description">
               회사명 : ㈜브랜디 | 대표이사 : 서정민 | 사업자등록번호 :
               220-88-93187 | 통신판매업신고 : 2016-서울강남-00359 | 호스팅사업자
@@ -45,7 +45,7 @@
               등록한 상품정보 및 거래에 브랜디는 책임을 지지 않습니다.
             </p>
           </div>
-          <div class="linkCompany">
+          <div class="link-Company">
             <a
               class="terms"
               href="https://web-staging.brandi.co.kr/access-term"
@@ -67,19 +67,22 @@
             >
           </div>
         </div>
-        <div class="linkFamily">
-          <a class="linkSeller" href="http://admin.brandi.co.kr" target="_blank"
+        <div class="link-family">
+          <a
+            class="link-seller"
+            href="http://admin.brandi.co.kr"
+            target="_blank"
             >셀러어드민</a
           >
           <a
-            class="linkStand"
+            class="link-stand"
             href="http://www.brandiinc.com/brandi"
             target="_blank"
             >입점문의</a
           >
           <a
             ><img
-              class="escrowMark"
+              class="escrow-mark"
               src="https://web-staging.brandi.co.kr/static/3.50.7/images/escrow.png"
               alt="에스크로 인증마크"
           /></a>
@@ -97,7 +100,6 @@ export default {
 
 <style scoped lang="scss">
 .footer {
-  position: fixed;
   bottom: 0px;
   width: 100%;
   margin-top: 50px;
@@ -108,11 +110,11 @@ export default {
   .frame {
     margin: 0 70px;
     padding: 0 30px;
-    .footerTop {
+    .footer-top {
       display: flex;
       justify-content: space-between;
       padding-bottom: 40px;
-      .infoCs {
+      .info-cs {
         .cs {
           line-height: 1.5;
           font-size: 2.5em;
@@ -128,12 +130,12 @@ export default {
           line-height: 1.3;
         }
       }
-      .linkSnsBox {
+      .link-snsbox {
         margin-top: 0;
         display: flex;
         justify-content: space-between;
         width: 447px;
-        .linkQuestion {
+        .link-question {
           color: #d4d4d4;
           font-size: 14px;
           line-height: 3em;
@@ -151,7 +153,7 @@ export default {
             vertical-align: -7px;
           }
         }
-        .linkKakao {
+        .link-kakao {
           color: #d4d4d4;
           font-size: 14px;
           line-height: 3em;
@@ -169,7 +171,7 @@ export default {
             vertical-align: -7px;
           }
         }
-        .linkFacebook {
+        .link-facebook {
           color: #d4d4d4;
           font-size: 14px;
           line-height: 3em;
@@ -187,7 +189,7 @@ export default {
             vertical-align: -7px;
           }
         }
-        .linkInstagram {
+        .link-instagram {
           color: #d4d4d4;
           font-size: 14px;
           line-height: 3em;
@@ -207,12 +209,12 @@ export default {
         }
       }
     }
-    .footerBottom {
+    .footer-bottom {
       display: flex;
       justify-content: space-between;
       padding: 40px 0;
       border-top: 1px solid #333;
-      .infoCompany {
+      .info-company {
         margin-top: 10px;
         .description {
           opacity: 0.56;
@@ -221,7 +223,7 @@ export default {
           line-height: 1.5;
         }
       }
-      .linkCompany {
+      .link-company {
         margin: 10px 0;
         .terms {
           padding-right: 10px;
@@ -260,14 +262,14 @@ export default {
           font-weight: normal;
         }
       }
-      .linkFamily {
+      .link-family {
         display: flex;
         justify-content: center;
         justify-content: space-between;
         align-items: center;
         width: 260px;
         height: 50px;
-        .linkSeller {
+        .link-seller {
           color: #d4d4d4;
           font-size: 14px;
           line-height: 3em;
@@ -285,7 +287,7 @@ export default {
             vertical-align: -7px;
           }
         }
-        .linkStand {
+        .link-stand {
           color: #d4d4d4;
           font-size: 14px;
           line-height: 3em;
@@ -303,7 +305,7 @@ export default {
             vertical-align: -7px;
           }
         }
-        .escrowMark {
+        .escrow-mark {
           width: 50px;
           cursor: pointer;
         }

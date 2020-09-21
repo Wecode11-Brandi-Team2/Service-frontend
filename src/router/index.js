@@ -4,6 +4,8 @@ import Main from '../pages/Main/Main';
 import Detail from '../pages/Detail/Detail';
 import Login from '../pages/Login/Login';
 import Mypage from '../pages/Mypage/Mypage';
+import SignUp from '../pages/Login/SignUp';
+import Agreement from '../pages/Login/Agreement.vue';
 
 Vue.use(VueRouter);
 
@@ -29,6 +31,16 @@ export const router = new VueRouter({
       path: '/mypage',
       name: 'Mypage',
       component: Mypage
+    },
+    {
+      path: '/signup',
+      name: 'SignUp',
+      component: SignUp
+    },
+    {
+      path: '/agreement',
+      name: 'Agreement',
+      component: Agreement
     }
   ]
 });

@@ -1,12 +1,12 @@
 <template>
-  <div class="ProductInfo">
-    <div class="productionInfo_1">
+  <div>
+    <div class="production-info-1">
       <img
         alt="product picture"
         src="https://image.brandi.me/cproductdetail/2020/05/07/fedfb70ef04b85b06ece1157af1e1c47.jpg"
       />
     </div>
-    <div class="productionInfo_2">
+    <div class="production-info-2">
       <div class="comment">
         <span>comment</span>
         <br />3단추와 적당히 루즈한 핏이 <br />네츄럴하고 여리한 느낌의
@@ -17,12 +17,12 @@
         <br />
         <br />스커트 팬츠 어떤 하의와도 <br />매치가 쉽답니다:-)
       </div>
-      <div class="infoList">
+      <div>
         <br />
         <span>-color-</span>
         <br />블랙 화이트 네이비 오트밀 베이지
         <br />
-        <span class="wearingColor">착용컬러 네이비 오트밀 베이지</span>
+        <span class="wearing-color">착용컬러 네이비 오트밀 베이지</span>
         <br />
         <br />
         <span>-fabric-</span>
@@ -40,21 +40,21 @@
         <span>*제일 하단 내려가주시면 코디제품들 볼 수 있어요:)*</span>
       </div>
     </div>
-    <div class="productionInfo_3">
+    <div class="production-info-3">
       <img
-        alt="productsImage"
+        alt="products image"
         v-for="image in productImages"
         :key="image.id"
         :src="image.image"
       />
-      <div class="productInfoTitle">PRODUCT INFO</div>
-      <div class="sizeInfoImage">
+      <div class="product-info-title">PRODUCT INFO</div>
+      <div class="size-info-image">
         <img
-          alt="sizeInfoImage"
+          alt="size-info-image"
           src="https://image.brandi.me/category/image/img_product_knit.jpg"
         />
       </div>
-      <div class="productInfoTxt">(단면/CM)</div>
+      <div class="product-info-txt">(단면/CM)</div>
       <ProductSizeInfoTable />
       <ProductEtcInfoTable />
     </div>
@@ -232,20 +232,20 @@ export default {
 <style scoped lang="scss">
 @import '../../styles/common.scss';
 
-.productionInfo_1 {
+.production-info-1 {
   display: flex;
   justify-content: center;
   width: 100%;
   margin-bottom: 4px;
 }
 
-.productionInfo_2 {
+.production-info-2 {
   margin-bottom: 40px;
   text-align: center;
   line-height: 19px;
   font-size: 13px;
 
-  .wearingColor {
+  .wearing-color {
     font-size: 12px;
   }
 
@@ -255,24 +255,24 @@ export default {
   }
 }
 
-.productionInfo_3 {
+.production-info-3 {
   @include setFlex(normal, center, column);
 
   img {
     margin-bottom: 4px;
   }
 
-  .productInfoTitle {
+  .product-info-title {
     font-size: 18px;
   }
 
-  .sizeInfoImage {
+  .size-info-image {
     width: 100%;
     padding: 10px 40px 30px 40px;
     text-align: center;
   }
 
-  .productInfoTxt {
+  .product-info-txt {
     width: 100%;
     padding-bottom: 5px;
     text-align: right;

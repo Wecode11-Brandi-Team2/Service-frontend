@@ -6,6 +6,16 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta
+      name="google-signin-client_id"
+      content="696521731503-v1kf85lo9tukgl81oosjcc22ceu6sfss.apps.googleusercontent.com"
+    />
+    <script
+      src="https://apis.google.com/js/platform.js?onload=renderButton"
+      async
+      defer
+    ></script>
+
     <link rel="icon" href="images/favicon-32x32.png" />
     <link
       href="//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css"
@@ -16,6 +26,59 @@
       src="https://kit.fontawesome.com/487013c9c9.js"
       crossorigin="anonymous"
     ></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+      function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        console.log('ID: ' + profile.getId());
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail());
+      }
+      async function onSuccess(googleUser) {
+        const user = await googleUser.reloadAuthResponse();
+        console.log(
+          'token_type',
+          user.token_type,
+          'access_token',
+          user.access_token
+        );
+        // axios({
+        //   method: 'get',
+        //   url: 'http://10.251.1.125:5000/user/google_login',
+        //   data: {
+        //     access_token: user.access_token
+        //   }
+        fetch('http://10.251.1.125:5000/user/google_login', {
+          method: 'POST',
+          body: JSON.stringify({
+            token_type: user.token_type,
+            access_token: user.access_token
+          })
+        })
+          .then(res => res.json())
+          .then(res => {
+            if (res.success) {
+              alert('저장 완료');
+            }
+          });
+      }
+      function onFailure(error) {
+        console.log(error);
+      }
+      function renderButton() {
+        gapi.signin2.render('my-signin2', {
+          scope: 'profile email',
+          width: 570,
+          height: 55,
+          longtitle: true,
+          onsuccess: onSuccess,
+          onfailure: onFailure,
+          textAlign: 'center'
+        });
+      }
+    </script>
+
     <link
       href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
       rel="stylesheet"

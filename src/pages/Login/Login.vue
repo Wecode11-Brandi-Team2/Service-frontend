@@ -1,53 +1,87 @@
 <template>
-  <section class="Login">
-    <div class="loginContainer">
-      <div class="wordWrapper">
-        <span class="arriveWord"> 오늘 사면 내일 도착! </span>
-        <span class="freeWord"> 무료배송으로 내일 받는 브랜디 LOGIN </span>
+  <section>
+    <section class="Login">
+      <div class="loginContainer">
+        <div class="wordWrapper">
+          <span class="arriveWord"> 오늘 사면 내일 도착! </span>
+          <span class="freeWord"> 무료배송으로 내일 받는 브랜디 LOGIN </span>
+        </div>
+        <div>
+          <input class="idInput" type="text" placeholder="아이디 입력" />
+          <input class="pwInput" type="password" placeholder="비밀번호 입력" />
+        </div>
+        <div>
+          <button class="loginButton">로그인</button>
+          <button class="signUpButton">회원가입</button>
+        </div>
+        <div class="findIdPw">
+          <a href="">아이디 찾기</a>
+          <span>|</span>
+          <a href="">비밀번호 찾기</a>
+        </div>
+        <div class="signWord">간편로그인/가입</div>
+        <div class="ImportGoogleButton">
+          <!-- <div class="googleLoginButton">
+            <a>
+              <img
+                alt="googleLogin"
+                src="https://web-staging.brandi.co.kr/static/3.50.7/images/google-logo.png"
+              />
+              <span>Google</span>
+              <span> 계정으로 계속하기</span>
+            </a>
+          </div> -->
+        </div>
+        <div id="my-signin2" v-on:click="fetchData"></div>
       </div>
-      <div>
-        <input class="idInput" type="text" placeholder="아이디 입력" />
-        <input class="pwInput" type="password" placeholder="비밀번호 입력" />
-      </div>
-      <div>
-        <button class="loginButton">로그인</button>
-        <button class="signUpButton">회원가입</button>
-      </div>
-      <div class="findIdPw">
-        <a href="">아이디 찾기</a>
-        <span>|</span>
-        <a href="">비밀번호 찾기</a>
-      </div>
-      <div class="signWord">간편로그인/가입</div>
-
-      <div class="googleLoginButton">
-        <a href="">
-          <img
-            alt="googleLogin"
-            src="https://web-staging.brandi.co.kr/static/3.50.7/images/google-logo.png"
-          />
-          <span>Google</span>
-          <span> 계정으로 계속하기</span>
-        </a>
-      </div>
-    </div>
+    </section>
   </section>
 </template>
 
 <script>
+import Nav from '../../components/Nav/Nav';
+import CategoryNav from '../../components/Nav/CategoryNav';
+import Footer from '../../components/Footer/Footer';
+
 export default {
-  name: 'Login'
+  name: 'Login',
+  components: {
+    Nav,
+    CategoryNav,
+    Footer
+  },
+  methods: {
+    fetchData() {
+      console.log(Object.keys(sessionStorage));
+      fetch('http://10.251.1.125:5000/user/google_login', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: sessionStorage.getItem()
+        })
+      })
+        .then(res => res.json())
+        .then(res => {
+          if (res.success) {
+            alert('저장 완료');
+          }
+        });
+    }
+  }
 };
 </script>
 
 <style scoped lang="scss">
+.importButton {
+  color: red;
+}
+
 input:focus {
   outline: none;
 }
 
 .Login {
   max-width: 1300px;
-  padding: 0 20px;
+  padding: 50px 20px;
   width: 100%;
   margin: 0px auto;
   .loginContainer {
@@ -174,7 +208,13 @@ a {
   }
 }
 
+.ImportGoogleButton {
+  position: relative;
+}
+
 .googleLoginButton {
+  z-index: 10000;
+  position: absolute;
   cursor: pointer;
   text-align: center;
   background: #ffffff;

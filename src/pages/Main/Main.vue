@@ -1,7 +1,5 @@
 <template>
   <div class="Main">
-    <Nav />
-    <CategoryNav />
     <div class="advertise">
       <img
         src="http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg"
@@ -21,9 +19,7 @@
         <ProductCard :key="PRODUCT" v-for="PRODUCT in PRODUCT_SAMPLE" />
       </section>
       <ContentsPlusButton />
-      <div class="buttonWrapper">
-        <Buttons />
-      </div>
+      <div class="buttonWrapper"></div>
     </div>
   </div>
 </template>
@@ -32,9 +28,6 @@
 import ProductCard from '../../components/ProductCard/ProductCard';
 import BannerProduct from './components/BannerProduct';
 import ContentsPlusButton from './components/ContentsPlusButton';
-import CategoryNav from '../../components/Nav/CategoryNav';
-import Nav from '../../components/Nav/Nav';
-import Buttons from '../../components/Button/Buttons';
 
 export default {
   name: 'Main',
@@ -45,10 +38,7 @@ export default {
   components: {
     ProductCard,
     BannerProduct,
-    ContentsPlusButton,
-    CategoryNav,
-    Buttons,
-    Nav
+    ContentsPlusButton
   },
 
   data() {

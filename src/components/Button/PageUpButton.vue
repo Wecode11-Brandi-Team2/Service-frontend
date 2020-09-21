@@ -1,6 +1,6 @@
 <template class="Button">
   <div
-    v-bind:class="[!showButton ? 'pageUpButton' : 'hidden']"
+    v-bind:class="[!showButton ? 'page-up-button' : 'hidden']"
     v-on:click="pageUp"
   >
     <div>
@@ -43,7 +43,7 @@ export default {
   display: none;
 }
 
-.pageUpButton {
+.page-up-button {
   cursor: pointer;
   width: 52px;
   height: 52px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="contentsPlusButton">
+  <div class="contents-plus-button">
     <button>
       더보기
     </button>
@@ -12,7 +12,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.contentsPlusButton {
+.contents-plus-button {
   display: flex;
   justify-content: center;
   align-items: center;

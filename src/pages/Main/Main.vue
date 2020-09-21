@@ -5,17 +5,17 @@
         src="http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg"
       />
     </div>
-    <div class="productContents">
-      <span class="collectionWord">당신을 위한 추천</span>
-      <section class="productSection">
+    <div class="product-contents">
+      <span>당신을 위한 추천</span>
+      <section class="product-section">
         <ProductCard :key="PRODUCT" v-for="PRODUCT in PRODUCT_SAMPLE" />
       </section>
       <BannerProduct />
-      <section class="productSection">
+      <section class="product-section">
         <ProductCard :key="PRODUCT" v-for="PRODUCT in PRODUCT_SAMPLE" />
       </section>
       <BannerProduct />
-      <section class="productSection">
+      <section class="product-section">
         <ProductCard :key="PRODUCT" v-for="PRODUCT in PRODUCT_SAMPLE" />
       </section>
       <ContentsPlusButton />
@@ -101,54 +101,35 @@ export default {
   box-sizing: border-box;
 }
 
-.buttondisplay {
-  visibility: visible;
-  transition: all 0.5s ease-in-out;
-}
-
-.hidden {
-  visibility: hidden;
-  max-height: 0;
-}
-
-.halfBanner {
-  img {
-    width: 100%;
-  }
-  padding: 0 0.5%;
-  margin: 50px 0 80px;
-}
-
 .Main {
   background: white;
-}
-
-.productSection {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 0 3%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.productContents {
-  span {
-    display: block;
-    text-align: center;
-    font-weight: bold;
-    font-size: 26px;
-    padding-top: 40px;
-    margin-bottom: 30px;
-  }
-}
-
-.advertise {
-  width: 100%;
-  margin-bottom: 40px;
-
-  img {
+  .advertise {
     width: 100%;
+    margin-bottom: 40px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .product-contents {
+    span {
+      display: block;
+      margin-bottom: 30px;
+      padding-top: 40px;
+      font-size: 26px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .product-section {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 3%;
+    }
   }
 }
 </style>

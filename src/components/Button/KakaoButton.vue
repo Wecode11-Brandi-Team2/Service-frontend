@@ -1,5 +1,5 @@
 <template>
-  <div class="kakaoButton">
+  <div class="kakao-button">
     <a
       href="https://accounts.kakao.com/login?continue=https%3A%2F%2Fbizmessage.kakao.com%2Fchat%2FtIYXCRX926BVb0rsRh5_bw%3Frf%3Dhttps%3A%2F%2Fapi.happytalk.io%2Fapi%2Fkakao%2Fchat_open%3Fyid%3D%40%25EB%25B8%258C%25EB%259E%259C%25EB%2594%2594%26site_id%3D1000222727%26category_id%3D112187%26division_id%3D112189"
     >
@@ -22,7 +22,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.kakaoButton {
+.kakao-button {
   padding: 1px;
   border-radius: 100%;
   background-color: #fce500;

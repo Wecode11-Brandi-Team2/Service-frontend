@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
@@ -10,20 +10,19 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     contentBase: path.join(__dirname, '../dist'),
     compress: true,
     open: true,
-    historyApiFallback: true,
+    historyApiFallback: true
   },
   plugins: [
-    new webpack.DefinePlugin({	
-      'process.env': {	
-        NODE_ENV: '"development"',	
-        BASE_URL: '"/"'	
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"development"',
+        BASE_URL: '"/"'
       }
     }),
-    new HtmlWebpackPlugin(
-    {
-      template:path.resolve(__dirname, '../public/index.html'),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, '../public/index.html')
     })
   ]
-})
+});
 
 module.exports = devWebpackConfig;

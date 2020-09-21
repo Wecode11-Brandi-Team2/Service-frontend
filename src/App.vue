@@ -8,4 +8,5 @@
 
 <style>
 @import './styles/_reset.scss';
+@import './styles/common.scss';
 </style>

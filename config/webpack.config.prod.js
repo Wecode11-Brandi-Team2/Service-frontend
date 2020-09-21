@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const path = require('path');
@@ -9,35 +9,32 @@ const OptimizeCssnanoPlugin = require('@intervolga/optimize-cssnano-plugin');
 
 const prodWebpackConfig = merge(baseWebpackConfig, {
   plugins: [
-    new webpack.DefinePlugin({	
-      'process.env': {	
-        NODE_ENV: '"production"',	
-        BASE_URL: '"/"'	
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"',
+        BASE_URL: '"/"'
       }
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash:8].css',
       chunkFilename: 'css/[name].[contenthash:8].css'
     }),
-    new OptimizeCssnanoPlugin(
-      {
-        sourceMap: false,
-        cssnanoOptions: {
-          preset: [
-            'default',
-            {
-              mergeLonghand: false,
-              cssDeclarationSorter: false
-            }
-          ]
-        }
+    new OptimizeCssnanoPlugin({
+      sourceMap: false,
+      cssnanoOptions: {
+        preset: [
+          'default',
+          {
+            mergeLonghand: false,
+            cssDeclarationSorter: false
+          }
+        ]
       }
-    ),
+    }),
     new webpack.HashedModuleIdsPlugin({
       hashDigest: 'hex'
     }),
-    new HtmlWebpackPlugin(
-    {
+    new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../public/index.html'),
       minify: {
         removeComments: true,
@@ -45,9 +42,9 @@ const prodWebpackConfig = merge(baseWebpackConfig, {
         removeAttributeQuotes: true,
         collapseBooleanAttributes: true,
         removeScriptTypeAttributes: true
-      },
+      }
     })
   ]
-})
+});
 
 module.exports = prodWebpackConfig;

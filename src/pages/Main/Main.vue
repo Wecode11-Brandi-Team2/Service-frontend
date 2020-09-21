@@ -1,5 +1,6 @@
 <template>
   <div class="Main">
+    <Nav />
     <CategoryNav />
     <div class="advertise">
       <img
@@ -32,6 +33,7 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import BannerProduct from './components/BannerProduct';
 import ContentsPlusButton from './components/ContentsPlusButton';
 import CategoryNav from '../../components/Nav/CategoryNav';
+import Nav from '../../components/Nav/Nav';
 import Buttons from '../../components/Button/Buttons';
 
 export default {
@@ -45,7 +47,8 @@ export default {
     BannerProduct,
     ContentsPlusButton,
     CategoryNav,
-    Buttons
+    Buttons,
+    Nav
   },
 
   data() {
@@ -77,19 +80,13 @@ export default {
   },
   created: function() {
     window.addEventListener('scroll', this.removeButton);
-    // let timer;
-    // window.addEventListener('scroll', e => {
-    //   if (!timer) {
-    //     timer = setTimeout(() => {
-    //       timer = null;
-    //       this.removeButton();
-    //     }, 200);
-    //   }
-    // });
+    this.getNavData();
   },
   methods: {
+    getNavData() {
+      fetch('mainMockdata.json').then(res => console.log('InMAin!', res));
+    },
     cateogoryActiveChange(event) {
-      console.log(event.target.attributes.newkey.value);
       if (event.target.attributes.newkey.value === '쇼핑몰,마켓') {
         this.cateogoryActive = !this.cateogoryActive;
       }
@@ -103,14 +100,12 @@ export default {
           timer = null;
           return (this.buttonActive = !this.buttonActive);
         }, 200);
-        // return (this.buttonActive = !this.buttonActive);
       }
     }
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 * {
   box-sizing: border-box;
@@ -136,19 +131,15 @@ export default {
 
 .Main {
   background: white;
-  margin-top: 200px;
 }
 
 .productSection {
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0 3%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-
-  #ProductCard {
-    margin: 10px;
-  }
 }
 
 .productContents {

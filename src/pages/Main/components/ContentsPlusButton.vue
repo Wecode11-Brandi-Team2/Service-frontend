@@ -19,6 +19,11 @@ export default {
   padding: 20px 0;
 
   button {
+    &:hover {
+      background-color: black;
+      color: white;
+    }
+    transition: all 0.5s ease-in-out;
     width: 250px;
     margin: 0 auto;
     padding: 10px 0;

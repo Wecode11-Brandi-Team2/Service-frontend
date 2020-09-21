@@ -1,16 +1,19 @@
 <template>
   <div>
     <Nav />
+    <Footer />
   </div>
 </template>
 
 <script>
 import Nav from '../../components/Nav/Nav';
+import Footer from '../../components/Footer/Footer';
 
 export default {
   name: 'Main',
   components: {
-    Nav
+    Nav,
+    Footer
   }
 };
 </script>

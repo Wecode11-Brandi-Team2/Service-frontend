@@ -3,11 +3,10 @@
     v-on:mouseover="cateogoryActiveChange"
     v-on:mouseleave="cateogoryActiveReChange"
   >
-    <nav class="categoryNav">
+    <nav class="category-nav">
       <ul>
         <li
           :newkey="CATEGORY"
-          class="modalShowing"
           :key="CATEGORY"
           ref="focus"
           v-for="CATEGORY of navData.map(el => Object.keys(el)[1])"
@@ -17,7 +16,7 @@
       </ul>
     </nav>
     <div
-      v-bind:class="[cateogoryActive ? 'modalCategory' : 'hidden']"
+      v-bind:class="[cateogoryActive ? 'modal-category' : 'hidden']"
       v-on:mouseover="cateogoryActiveChange"
       v-on:mouseleave="cateogoryActiveReChange"
     >
@@ -25,7 +24,7 @@
         <li :key="Object.keys(MODAL)[0]" v-for="MODAL in this.showingData">
           <span>{{ Object.keys(MODAL)[1] }}</span>
           <a
-            class="categoryValue"
+            class="category-value"
             href=""
             :key="Item"
             v-for="Item of MODAL[Object.keys(MODAL)[1]]"
@@ -35,7 +34,7 @@
         </li>
       </ul>
       <div
-        class="divisionLine"
+        class="division-line"
         :key="line"
         v-for="line in lines"
         v-bind:style="{ left: (line - 0.5) * (100 / lines.length) + '%' }"
@@ -808,77 +807,9 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-* {
-  box-sizing: border-box;
-}
-a {
-  text-decoration: none;
-  color: black;
-}
+@import '../../styles/common.scss';
 
-.hidden {
-  visibility: hidden;
-  max-height: 0;
-}
-
-.modalCategory {
-  transition: all 0.5s ease-in-out;
-  visibility: visible;
-  box-shadow: 0px 3px 5px 2px rgba(0, 0, 0, 0.3);
-  background: rgba(255, 255, 255, 0.96);
-  position: absolute;
-  right: 0;
-  left: 0;
-  z-index: 10000;
-  overflow: hidden;
-  .categoryValue {
-    color: black;
-    transition: all 0.3s ease-in-out;
-    &:hover {
-      color: #ff204b;
-    }
-  }
-  ul {
-    width: 100%;
-    overflow: hidden;
-    padding: 0 7%;
-    display: flex;
-    flex-wrap: wrap;
-
-    li {
-      padding: 0 3.6%;
-      margin: 0;
-      display: inline-block;
-      width: 16.6666%;
-      line-height: 40px;
-      margin-bottom: 5px;
-      box-sizing: border-box;
-      vertical-align: top;
-      span {
-        text-align: center;
-        display: block;
-        font-weight: 700;
-      }
-      a {
-        display: block;
-        height: 50px;
-        text-align: center;
-        font-size: 16px;
-      }
-    }
-  }
-
-  .divisionLine {
-    width: 1px;
-    content: '';
-    height: 100%;
-    position: absolute;
-    background: #e1e1e1;
-    top: 0;
-  }
-}
-
-.categoryNav {
+.category-nav {
   border-top: 0.5px solid gray;
   border-bottom: 0.5px solid gray;
   height: 60px;
@@ -888,9 +819,8 @@ a {
     max-width: 1300px;
     height: 100%;
     margin: 0px auto;
-    overflow: hidden;
+
     li {
-      vertical-align: top;
       text-align: center;
       width: calc(100% / 10);
       padding: 19px;
@@ -911,5 +841,71 @@ a {
       }
     }
   }
+}
+
+.modal-category {
+  visibility: visible;
+  position: absolute;
+  right: 0;
+  left: 0;
+  box-shadow: 0px 3px 5px 2px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.96);
+  transition: all 0.5s ease-in-out;
+
+  .category-value {
+    color: black;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      color: #ff204b;
+    }
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 0 7%;
+
+    li {
+      width: 16.6666%;
+      margin-bottom: 5px;
+      padding: 0 3.6%;
+      line-height: 40px;
+
+      span {
+        display: block;
+        text-align: center;
+        font-weight: 700;
+      }
+      a {
+        display: block;
+        height: 50px;
+        text-align: center;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .division-line {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: #e1e1e1;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.hidden {
+  visibility: hidden;
+  max-height: 0;
 }
 </style>

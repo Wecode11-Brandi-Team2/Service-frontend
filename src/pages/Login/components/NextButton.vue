@@ -1,6 +1,6 @@
 <template>
   <div class="cellphoneButton">
-    <a :click="goToAgreement">{{ word }}</a>
+    <a>{{ word }}</a>
   </div>
 </template>
 <script>
@@ -10,20 +10,19 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.cellphoneButton {
-  cursor: pointer;
-  width: 200px;
-  height: 60px;
-  font-size: 19px;
-  line-height: 59px;
-  font-weight: 300;
-  text-align: center;
-  background-color: black;
-  color: white;
-  border-radius: 2px;
-  border: 1px solid white;
+@import '../../../styles/common.scss';
 
+.cellphoneButton {
+  @include setSize(200px, 60px);
+  line-height: 59px;
+  text-align: center;
+  @include setFont(19px, white, 300);
+  background-color: black;
+  border: 1px solid white;
+  border-radius: 2px;
   transition: all 0.5s ease-in-out;
+  cursor: pointer;
+
   &:hover {
     color: black;
     background-color: white;

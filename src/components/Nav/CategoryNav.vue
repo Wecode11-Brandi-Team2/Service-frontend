@@ -803,7 +803,6 @@ export default {
     },
     cateogoryActiveReChange() {
       this.cateogoryActive = false;
-      console.log(this.cateogoryActive);
     }
   }
 };

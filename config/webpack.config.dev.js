@@ -10,7 +10,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     contentBase: path.join(__dirname, '../dist'),
     compress: true,
     open: true,
-    historyApiFallback: true
+    historyApiFallback: true,
+    proxy: {
+      '/user': {
+        target: 'http://10.251.1.125:5000'
+        // target: 'http://0.0.0.0:8080',
+        // changeOrigin: true,
+      }
+    }
   },
   plugins: [
     new webpack.DefinePlugin({

@@ -1,27 +1,31 @@
 <template>
   <section>
     <section class="Login">
-      <div class="loginContainer">
-        <div class="wordWrapper">
-          <span class="arriveWord"> 오늘 사면 내일 도착! </span>
-          <span class="freeWord"> 무료배송으로 내일 받는 브랜디 LOGIN </span>
+      <div class="login-container">
+        <div class="word-wrapper">
+          <span class="arrive-word"> 오늘 사면 내일 도착! </span>
+          <span class="free-word"> 무료배송으로 내일 받는 브랜디 LOGIN </span>
         </div>
         <div>
-          <input class="idInput" type="text" placeholder="아이디 입력" />
-          <input class="pwInput" type="password" placeholder="비밀번호 입력" />
+          <input class="user-input" type="text" placeholder="아이디 입력" />
+          <input
+            class="user-input"
+            type="password"
+            placeholder="비밀번호 입력"
+          />
         </div>
         <div>
-          <button class="loginButton">로그인</button>
-          <button class="signUpButton">회원가입</button>
+          <button class="login-button">로그인</button>
+          <button class="login-button ">회원가입</button>
         </div>
-        <div class="findIdPw">
+        <div class="find-id-pw">
           <a href="">아이디 찾기</a>
           <span>|</span>
           <a href="">비밀번호 찾기</a>
         </div>
-        <div class="signWord">간편로그인/가입</div>
-        <div class="ImportGoogleButton">
-          <!-- <div class="googleLoginButton">
+        <div class="sign-word">간편로그인<span>/</span>가입</div>
+        <div class="import-google-button">
+          <!-- <div class="google-login-button">
             <a>
               <img
                 alt="googleLogin"
@@ -43,7 +47,6 @@ export default {
   name: 'Login',
   methods: {
     fetchData() {
-      console.log(Object.keys(sessionStorage));
       fetch('http://10.251.1.125:5000/user/google_login', {
         method: 'POST',
         body: JSON.stringify({
@@ -62,30 +65,37 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.importButton {
-  color: red;
-}
-
-input:focus {
-  outline: none;
-}
-
+@import '../../styles/common.scss';
 .Login {
   max-width: 1300px;
   padding: 50px 20px;
   width: 100%;
   margin: 0px auto;
-  .loginContainer {
-    width: 100%;
+
+  .login-container {
     max-width: 600px;
     margin: 10px auto;
     padding: 16px;
-    .wordWrapper {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      align-items: center;
+
+    .word-wrapper {
+      @include setFlex(center, center, column);
       margin-bottom: 10px;
+
+      .arrive-word {
+        margin-top: 20px;
+        font-size: 34px;
+        font-weight: bold;
+        color: #ff204b;
+      }
+
+      .free-word {
+        @include setFont(34px, null, 700);
+        transition: all 0.5s ease-in-out;
+
+        &:hover {
+          @include setFont(34px, #ff204b, null);
+        }
+      }
       span {
         margin: 10px 0;
       }
@@ -93,14 +103,8 @@ input:focus {
   }
 }
 
-a {
-  color: black;
-  text-decoration: none;
-}
-
-.signWord {
-  font-weight: 700;
-  font-size: 17px;
+.sign-word {
+  @include setFont(17px, null, 700);
   text-align: center;
   padding-top: 40px;
   padding-bottom: 25px;
@@ -108,10 +112,8 @@ a {
   letter-spacing: 5px;
 }
 
-.findIdPw {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+.find-id-pw {
+  @include setFlex(flex-end, center, null);
   padding: 18px 0;
   letter-spacing: 1px;
   color: #aaa;
@@ -129,28 +131,13 @@ a {
     margin: 0 10px;
   }
 }
-.idInput {
-  font-size: 14px;
-  height: 50px;
+.user-input {
+  @include setSize(100%, 50px);
+  margin: 4px 0;
+  padding: 10px;
   border: 1px solid #e1e1e1;
   border-radius: 4px;
-  margin: 4px 0;
-  width: 100%;
-  padding: 10px;
-  transition: 0.5s linear;
-
-  &:hover {
-    border-color: black;
-  }
-}
-.pwInput {
   font-size: 14px;
-  height: 50px;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  margin: 4px 0;
-  width: 100%;
-  padding: 10px;
   transition: 0.5s linear;
 
   &:hover {
@@ -158,40 +145,16 @@ a {
   }
 }
 
-.loginButton {
-  height: 50px;
-  padding: 0;
+.login-button {
+  display: block;
+  @include setSize(100%, 50px);
+  margin: 10px 0px 2px 0px;
   line-height: 50px;
   border-radius: 4px;
-  cursor: pointer;
-  margin: 10px 0px 2px 0px;
-  color: #000000;
-  display: block;
-  text-align: center;
   border: 1px solid #000000;
-  width: 100%;
   background: #ffffff;
   transition: all 0.5s ease-in-out;
-
-  &:hover {
-    color: #ffffff;
-    background: #000000;
-  }
-}
-.signUpButton {
-  height: 50px;
-  padding: 0;
-  line-height: 50px;
-  border-radius: 4px;
   cursor: pointer;
-  margin: 10px 0px 2px 0px;
-  color: #000000;
-  display: block;
-  text-align: center;
-  border: 1px solid #000000;
-  width: 100%;
-  background: #ffffff;
-  transition: all 0.5s ease-in-out;
 
   &:hover {
     color: #ffffff;
@@ -199,11 +162,16 @@ a {
   }
 }
 
-.ImportGoogleButton {
-  position: relative;
+input:focus {
+  outline: none;
 }
 
-.googleLoginButton {
+a {
+  color: black;
+  text-decoration: none;
+}
+
+/* .google-login-button {
   z-index: 10000;
   position: absolute;
   cursor: pointer;
@@ -233,21 +201,5 @@ a {
       color: #ffffff;
     }
   }
-}
-.arriveWord {
-  color: #ff204b;
-  font-size: 34px;
-  font-weight: bold;
-  margin: 0;
-  margin-top: 20px;
-}
-.freeWord {
-  font-weight: bold;
-  transition: all 0.5s ease-in-out;
-  font-size: 34px;
-  &:hover {
-    font-size: 34px;
-    color: #ff204b;
-  }
-}
+} */
 </style>

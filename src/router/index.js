@@ -6,6 +6,7 @@ import Login from '../pages/Login/Login';
 import Mypage from '../pages/Mypage/Mypage';
 import SignUp from '../pages/Login/SignUp';
 import Agreement from '../pages/Login/Agreement.vue';
+import TimeDeal from '../pages/TimeDeal/TimeDeal';
 
 Vue.use(VueRouter);
 
@@ -41,6 +42,11 @@ export const router = new VueRouter({
       path: '/agreement',
       name: 'Agreement',
       component: Agreement
+    },
+    {
+      path: '/timedeal',
+      name: 'TimeDeal',
+      component: TimeDeal
     }
   ]
 });

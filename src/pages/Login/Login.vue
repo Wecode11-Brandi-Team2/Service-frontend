@@ -24,42 +24,83 @@
           <a href="">비밀번호 찾기</a>
         </div>
         <div class="sign-word">간편로그인<span>/</span>가입</div>
-        <div class="import-google-button">
-          <!-- <div class="google-login-button">
-            <a>
-              <img
-                alt="googleLogin"
-                src="https://web-staging.brandi.co.kr/static/3.50.7/images/google-logo.png"
-              />
-              <span>Google</span>
-              <span> 계정으로 계속하기</span>
-            </a>
-          </div> -->
-        </div>
-        <div id="my-signin2" v-on:click="fetchData"></div>
+        <GoogleLogin
+          class="google-login-button"
+          :params="params"
+          :onSuccess="onSuccess"
+          :onFailure="onFailure"
+        >
+          <img
+            alt="googleLogin"
+            src="https://web-staging.brandi.co.kr/static/3.50.7/images/google-logo.png"
+          />
+          <span>Google</span>
+          <span> 계정으로 계속하기</span>
+        </GoogleLogin>
       </div>
     </section>
   </section>
 </template>
 
 <script>
+import GoogleLogin from 'vue-google-login';
+import axios from 'axios';
+
 export default {
   name: 'Login',
+  components: {
+    GoogleLogin
+  },
+  data() {
+    return {
+      params: {
+        client_id: '696521731503-v1kf85lo9tukgl81oosjcc22ceu6sfss'
+      }
+    };
+  },
   methods: {
-    fetchData() {
-      fetch('http://10.251.1.125:5000/user/google_login', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: sessionStorage.getItem()
+    onSuccess(googleUser) {
+      axios
+        .post('http://10.251.1.125:5000/user/google-login', {
+          tokent_type: googleUser.wc.tokent_type,
+          access_token: googleUser.wc.access_token
         })
-      })
-        .then(res => res.json())
-        .then(res => {
-          if (res.success) {
-            alert('저장 완료');
-          }
-        });
+        .then(googleUser => {
+          console.log('LoginSuccess', googleUser);
+        })
+        .catch(error => alert(error));
+      console.log(googleUser);
+      // alert('Google Login Success');
+      console.log(googleUser.getBasicProfile());
+    },
+
+    onFailure(googleUser) {
+      alert('Google Login Fail');
+      console.log(googleUser);
     }
+    // GoogleLoginSuccess(googleUser) {
+    //   if (localStorage.getItem('JWT_token')) return alert('로그인됨');
+    //   Google.GoogleLoginSuccess(googleUser);
+    // },
+    // GoogleLoginFailure() {
+    //   Google.LoginFailure();
+    //   console.log('fail');
+    // },
+
+    // fetchData() {
+    //   fetch('http://10.251.1.125:5000/user/google_login', {
+    //     method: 'POST',
+    //     body: JSON.stringify({
+    //       name: sessionStorage.getItem()
+    //     })
+    //   })
+    //     .then(res => res.json())
+    //     .then(res => {
+    //       if (res.success) {
+    //         alert('저장 완료');
+    //       }
+    //     });
+    // }
   }
 };
 </script>
@@ -171,14 +212,12 @@ a {
   text-decoration: none;
 }
 
-/* .google-login-button {
-  z-index: 10000;
-  position: absolute;
+.google-login-button {
+  width: 100%;
   cursor: pointer;
   text-align: center;
   background: #ffffff;
   border: 1px solid #bdbdbd;
-  margin-right: 0;
   border-radius: 5px;
   line-height: 50px;
   transition: all 0.5s ease-in-out;
@@ -189,17 +228,12 @@ a {
   }
   a {
     transition: all 0.5s ease-in-out;
-
     color: rgba(0, 0, 0, 0.54);
     text-decoration: none;
   }
-
   &:hover {
     background-color: black;
-
-    a {
-      color: #ffffff;
-    }
+    color: #ffffff;
   }
-} */
+}
 </style>

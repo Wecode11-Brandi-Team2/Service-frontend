@@ -7,17 +7,6 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-    <!-- google login meta info. -->
-    <meta
-      name="google-signin-client_id"
-      content="696521731503-v1kf85lo9tukgl81oosjcc22ceu6sfss.apps.googleusercontent.com"
-    />
-    <script
-      src="https://apis.google.com/js/platform.js?onload=renderButton"
-      async
-      defer
-    ></script>
-
     <link rel="icon" href="images/favicon-32x32.png" />
     <link
       href="https://web-staging.brandi.co.kr/static/2020.7.3/images/favicons/favicon-96x96.png"
@@ -33,67 +22,6 @@
       src="https://kit.fontawesome.com/487013c9c9.js"
       crossorigin="anonymous"
     ></script>
-
-    <!-- google login script info. -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script>
-      function onSignIn(googleUser) {
-        var profile = googleUser.getBasicProfile();
-        console.log('ID: ' + profile.getId());
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail());
-      }
-      async function onSuccess(googleUser) {
-        const user = await googleUser.reloadAuthResponse();
-        const body = JSON.stringify({
-          token_type: user.token_type,
-          access_token: user.access_token
-        });
-        console.log(body);
-        fetch('/user/google_login', {
-          method: 'POST',
-          headers: {
-            // Host: '10.251.1.125:5000',
-            // Origin: 'http://localhost:8080/login',
-            // 'Access-Control-Allow-Origin': '*'
-            // 'Access-Control-Request-Method': 'POST',
-            // 'Access-Control-Request-Origin': '*',
-            // 'Allow-Control-Allow-Credentials': true
-            // '10.251.1.125:5000/user/google_login'
-            // Origin: 'http://localhost:8080',
-            // Referer: 'http://localhost:8080/login'
-          },
-          body
-        })
-          .then(res => res.json())
-          .then(res => {
-            console.log(res);
-            if (res.success) {
-              alert('저장 완료');
-            }
-          });
-      }
-      function onFailure(error) {
-        console.log(error);
-      }
-      function renderButton() {
-        gapi.signin2.render('my-signin2', {
-          scope: 'profile email',
-          width: 570,
-          height: 55,
-          longtitle: true,
-          onsuccess: onSuccess,
-          onfailure: onFailure,
-          textAlign: 'center'
-        });
-      }
-    </script>
-
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
-      rel="stylesheet"
-    />
     <title>브랜디 - 여성 전문 쇼핑앱</title>
   </head>
 

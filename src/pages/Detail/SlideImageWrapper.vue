@@ -1,12 +1,14 @@
 <template>
   <section class="Slide-image-wrapper">
-    <Slide :slideImage="slideImage" />
+    <Slide :slideImage="slideImage" :selectedImage="selectedImage" />
     <div class="slider-container">
       <div
         class="image-slide-tab"
+        :class="[image.id === selectedImage ? 'active-tab' : '']"
         v-for="image in slideImage"
         :key="image.id"
         :style="{ backgroundImage: 'url(' + image.image + ')' }"
+        @click="imageSlide(image)"
       ></div>
     </div>
   </section>
@@ -21,6 +23,7 @@ export default {
   },
   data() {
     return {
+      selectedImage: 1,
       slideImage: [
         {
           id: 1,
@@ -49,6 +52,11 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    imageSlide(image) {
+      this.selectedImage = image.id;
+    }
   }
 };
 </script>
@@ -58,6 +66,7 @@ export default {
 
 .Slide-image-wrapper {
   width: 560px;
+  overflow: hidden;
 
   .slider-container {
     @include setSize(100%, 85px);
@@ -67,6 +76,11 @@ export default {
       @include setSize(82px, 100%);
       margin-right: 13px;
       background-size: 100%;
+      opacity: 0.6;
+    }
+
+    .active-tab {
+      opacity: 1;
     }
   }
 }

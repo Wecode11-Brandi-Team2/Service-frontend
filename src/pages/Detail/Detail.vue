@@ -18,8 +18,8 @@
             <div class="quantity">{{ purchaseInfo.quantity }}개 구매중</div>
           </section>
           <section class="option-payment">
-            <SelectColor option="컬러" />
-            <SelectColor option="사이즈" />
+            <SelectColor />
+            <SelectSize />
             <div class="total-price-container">
               <div class="total-price-seat">총 상품 금액</div>
               <div class="total-price-wrapper">
@@ -50,6 +50,7 @@
 
 <script>
 import SelectColor from './SelectColor';
+import SelectSize from './SelectSize';
 import ProductInfo from './ProductInfo';
 import QA from './QA';
 import SlideImageWrapper from './SlideImageWrapper';
@@ -58,6 +59,7 @@ export default {
   name: 'Detail',
   components: {
     SelectColor,
+    SelectSize,
     ProductInfo,
     QA,
     SlideImageWrapper
@@ -74,9 +76,7 @@ export default {
       detailInfoTab: {
         review: 0,
         Q_A: 0
-      },
-      innerWidth: 0,
-      singleWidth: 0
+      }
     };
   }
 };

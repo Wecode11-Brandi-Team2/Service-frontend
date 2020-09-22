@@ -1,5 +1,9 @@
 <template>
-  <div class="Slide">
+  <div
+    @click="calcSlideWidth"
+    class="Slide"
+    :style="{ transform: 'translateX(' + calcSlideWidth(-560) + 'px)' }"
+  >
     <div
       class="product-image"
       v-for="image in slideImage"
@@ -11,7 +15,16 @@
 
 <script>
 export default {
-  props: ['slideImage']
+  props: ['slideImage', 'selectedImage'],
+  methods: {
+    calcSlideWidth(width) {
+      if (this.selectedImage === 1) return width * 0;
+      if (this.selectedImage === 2) return width;
+      if (this.selectedImage === 3) return width * 2;
+      if (this.selectedImage === 4) return width * 3;
+      if (this.selectedImage === 5) return width * 4;
+    }
+  }
 };
 </script>
 
@@ -19,7 +32,7 @@ export default {
 .Slide {
   display: flex;
   width: 100%;
-  // overflow: hidden;
+  transition-duration: 300ms;
 
   .product-image {
     min-width: 100%;

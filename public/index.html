@@ -6,6 +6,8 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- google login meta info. -->
     <meta
       name="google-signin-client_id"
       content="696521731503-v1kf85lo9tukgl81oosjcc22ceu6sfss.apps.googleusercontent.com"
@@ -18,6 +20,11 @@
 
     <link rel="icon" href="images/favicon-32x32.png" />
     <link
+      href="https://web-staging.brandi.co.kr/static/2020.7.3/images/favicons/favicon-96x96.png"
+      rel="shortcut icon"
+      type="image/x-icon"
+    />
+    <link
       href="//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css"
       rel="stylesheet"
       type="text/css"
@@ -26,6 +33,8 @@
       src="https://kit.fontawesome.com/487013c9c9.js"
       crossorigin="anonymous"
     ></script>
+
+    <!-- google login script info. -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script>
       function onSignIn(googleUser) {
@@ -37,27 +46,29 @@
       }
       async function onSuccess(googleUser) {
         const user = await googleUser.reloadAuthResponse();
-        console.log(
-          'token_type',
-          user.token_type,
-          'access_token',
-          user.access_token
-        );
-        // axios({
-        //   method: 'get',
-        //   url: 'http://10.251.1.125:5000/user/google_login',
-        //   data: {
-        //     access_token: user.access_token
-        //   }
-        fetch('http://10.251.1.125:5000/user/google_login', {
+        const body = JSON.stringify({
+          token_type: user.token_type,
+          access_token: user.access_token
+        });
+        console.log(body);
+        fetch('/user/google_login', {
           method: 'POST',
-          body: JSON.stringify({
-            token_type: user.token_type,
-            access_token: user.access_token
-          })
+          headers: {
+            // Host: '10.251.1.125:5000',
+            // Origin: 'http://localhost:8080/login',
+            // 'Access-Control-Allow-Origin': '*'
+            // 'Access-Control-Request-Method': 'POST',
+            // 'Access-Control-Request-Origin': '*',
+            // 'Allow-Control-Allow-Credentials': true
+            // '10.251.1.125:5000/user/google_login'
+            // Origin: 'http://localhost:8080',
+            // Referer: 'http://localhost:8080/login'
+          },
+          body
         })
           .then(res => res.json())
           .then(res => {
+            console.log(res);
             if (res.success) {
               alert('저장 완료');
             }

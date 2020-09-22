@@ -1,29 +1,29 @@
 <template>
   <scetion>
-    <div class="signUpTitle">
+    <div class="sign-up-title">
       <span>{{ title }}</span>
     </div>
-    <div class="SignUpCategory">
-      <div class="imageWrapper">
-        <div class="categoryImages">
+    <div class="sign-up-category">
+      <div class="image-wrapper">
+        <div class="category-image">
           <img
             src="https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-join-step-01-s@3x.png"
           />
           <span>본인인증</span>
         </div>
-        <div class="categoryImages">
+        <div class="category-image">
           <img
             src="https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-join-step-02-40-s@3x.png"
           />
           <span>정보수집동의</span>
         </div>
-        <div class="categoryImages">
+        <div class="category-image">
           <img
             src="https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-join-step-03-40-s@3x.png"
           />
           <span>정보입력</span>
         </div>
-        <div class="categoryImages">
+        <div class="category-image">
           <img
             src="https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-join-step-04-s@3x.png"
           />
@@ -42,41 +42,43 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.signUpTitle {
-  font-size: 2.2em;
-  font-weight: normal;
+@import '../../../styles/common.scss';
+
+.sign-up-title {
+  @include setFont(18px, null, 700);
   text-align: center;
   margin-bottom: 15px;
 }
-.SignUpCategory {
+
+.sign-up-category {
   margin-top: 30px;
   height: 113px;
 }
-.imageWrapper {
+
+.image-wrapper {
   display: flex;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  @include setSize(100%, 100%);
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   color: #a1a1a1;
-  .categoryImages {
-    &:nth-child(1) {
+
+  .category-image {
+    &:nth-child(2) {
       border-right: 1px solid black;
       border-left: 1px solid black;
       color: black;
+
       img {
         opacity: 1;
       }
     }
 
+    @include setFlex(center, center, column);
     width: 23%;
     max-width: 180px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     margin: 0 10px;
+
     img {
       opacity: 0.4;
       width: 60px;

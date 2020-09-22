@@ -73,9 +73,6 @@ export default {
     this.getNavData();
   },
   methods: {
-    getNavData() {
-      fetch('mainMockdata.json').then(res => console.log('InMAin!', res));
-    },
     cateogoryActiveChange(event) {
       if (event.target.attributes.newkey.value === '쇼핑몰,마켓') {
         this.cateogoryActive = !this.cateogoryActive;

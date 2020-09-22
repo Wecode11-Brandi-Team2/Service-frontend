@@ -1,10 +1,10 @@
 <template>
-  <div class="ProductSizeInfoTable">
-    <table class="ProductSizeInfo">
+  <div class="Product-size-info-table">
+    <table class="product-size-info">
       <thead>
         <tr>
           <td
-            class="ProductInfoHeader"
+            class="product-info-header"
             v-for="header in sizeInfoHeaders"
             :key="header.id"
           >
@@ -14,7 +14,7 @@
       </thead>
       <tbody>
         <tr>
-          <td class="SelectedTxt">FREE</td>
+          <td class="selected-txt">FREE</td>
           <td v-for="data in sizeInfoDatas" :key="data.id">{{ data.data }}</td>
         </tr>
       </tbody>
@@ -104,10 +104,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.ProductSizeInfoTable {
+.Product-size-info-table {
   width: 100%;
 
-  .ProductSizeInfo {
+  .product-size-info {
     width: 100%;
     margin-bottom: 20px;
     border-top: 3px solid #000000;
@@ -119,7 +119,7 @@ export default {
       display: table-header-group;
       vertical-align: middle;
 
-      .ProductInfoHeader {
+      .product-info-header {
         font-weight: 800;
         font-size: 14px;
       }
@@ -131,7 +131,7 @@ export default {
       padding: 20px;
     }
 
-    .SelectedTxt {
+    .selected-txt {
       font-weight: 800;
       font-size: 14px;
     }

@@ -39,17 +39,8 @@
 </template>
 
 <script>
-import Nav from '../../components/Nav/Nav';
-import CategoryNav from '../../components/Nav/CategoryNav';
-import Footer from '../../components/Footer/Footer';
-
 export default {
   name: 'Login',
-  components: {
-    Nav,
-    CategoryNav,
-    Footer
-  },
   methods: {
     fetchData() {
       console.log(Object.keys(sessionStorage));

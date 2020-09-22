@@ -1,9 +1,9 @@
 <template>
-  <table class="ProductEtcInfoTable">
+  <table class="Product-etc-info-table">
     <tbody>
       <tr>
         <td
-          :class="[flexdata.isTrue ? 'SelectedTxt' : '']"
+          :class="[flexdata.isTrue ? 'selected-txt' : '']"
           v-for="flexdata in flexibility"
           :key="flexdata.id"
         >
@@ -12,7 +12,7 @@
       </tr>
       <tr>
         <td
-          :class="[seeThroughData.isTrue ? 'SelectedTxt' : '']"
+          :class="[seeThroughData.isTrue ? 'selected-txt' : '']"
           v-for="seeThroughData in seeThrough"
           :key="seeThroughData.id"
         >
@@ -21,7 +21,7 @@
       </tr>
       <tr>
         <td
-          :class="[feel.isTrue ? 'SelectedTxt' : '']"
+          :class="[feel.isTrue ? 'selected-txt' : '']"
           v-for="feel in feels"
           :key="feel.id"
         >
@@ -30,7 +30,7 @@
       </tr>
       <tr>
         <td
-          :class="[fit.isTrue ? 'SelectedTxt' : '']"
+          :class="[fit.isTrue ? 'selected-txt' : '']"
           v-for="fit in fits"
           :key="fit.id"
         >
@@ -39,7 +39,7 @@
       </tr>
       <tr>
         <td
-          :class="[thick.isTrue ? 'SelectedTxt' : '']"
+          :class="[thick.isTrue ? 'selected-txt' : '']"
           v-for="thick in thickness"
           :key="thick.id"
         >
@@ -161,7 +161,7 @@ export default {
         {
           id: 4,
           isTrue: true,
-          data: '없음'
+          data: '얇음'
         }
       ]
     };
@@ -170,7 +170,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.ProductEtcInfoTable {
+.Product-etc-info-table {
   width: 100%;
   margin-bottom: 20px;
   border-top: 3px solid #000000;
@@ -183,7 +183,7 @@ export default {
     display: table-row-group;
     vertical-align: middle;
 
-    .SelectedTxt {
+    .selected-txt {
       font-weight: 800;
       font-size: 14px;
     }

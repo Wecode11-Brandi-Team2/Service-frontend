@@ -1,17 +1,84 @@
 <template>
-  <div class="Select-color">
-    <span>[{{ option }}]를 선택하세요.</span>
-    <div class="select-menu-icon-container">
-      <div class="select-menu-icon" />
+  <div>
+    <div
+      class="Select-color"
+      @click="activeDropdownColor"
+      :style="{
+        borderBottom: activeDropdown ? 'none' : '',
+        borderRadius: activeDropdown ? '6px 6px 0 0' : ''
+      }"
+    >
+      <span>[컬러]를 선택하세요.</span>
+      <div class="select-menu-icon-container">
+        <div
+          class="select-menu-icon"
+          :style="{ transform: activeDropdown ? 'scaleY(-1)' : 'scaleY(1)' }"
+        />
+      </div>
+    </div>
+    <div class="dropdown-root">
+      <ul class="color-list" v-if="activeDropdown">
+        <li
+          class="color"
+          :style="{ backgroundColor: color.onedayDelivery ? '#F8FBFE' : '' }"
+          v-for="color in colors"
+          :key="color.id"
+        >
+          <div>{{ color.color }}</div>
+          <img class="delivery" :src="color.image" />
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: {
-    option: {
-      type: String
+  data() {
+    return {
+      activeDropdown: false,
+      colors: [
+        {
+          id: 1,
+          color: 'Black',
+          onedayDelivery: true,
+          image:
+            'https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-baro-xl@2x.png'
+        },
+        {
+          id: 2,
+          color: 'Navy',
+          onedayDelivery: false,
+          image:
+            'https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-seller-xl@3x.png'
+        },
+        {
+          id: 3,
+          color: 'White',
+          onedayDelivery: true,
+          image:
+            'https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-baro-xl@2x.png'
+        },
+        {
+          id: 4,
+          color: 'Beige',
+          onedayDelivery: false,
+          image:
+            'https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-seller-xl@3x.png'
+        },
+        {
+          id: 5,
+          color: 'Oatmeal',
+          onedayDelivery: false,
+          image:
+            'https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-seller-xl@3x.png'
+        }
+      ]
+    };
+  },
+  methods: {
+    activeDropdownColor() {
+      this.activeDropdown = !this.activeDropdown;
     }
   }
 };
@@ -26,7 +93,7 @@ export default {
   align-items: center;
   height: 50px;
   padding: 0 52px 0 16px;
-  margin: 10px 0 5px 0;
+  margin-top: 10px;
   border: 1px solid #e6e6e6;
   border-radius: 6px;
   font-size: 16px;
@@ -43,6 +110,37 @@ export default {
       background-size: 70%;
       background-repeat: no-repeat;
       background-position: top 5px center;
+    }
+  }
+}
+
+.dropdown-root {
+  position: relative;
+}
+
+.color-list {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-height: 300px;
+  border-left: 1px solid #e6e6e6;
+  border-right: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  border-radius: 0 0 6px 6px;
+  background-color: #fff;
+  overflow: scroll;
+  z-index: 5;
+
+  .color {
+    padding: 16px;
+    font-size: 18px;
+    border-top: 1px solid #e6e6e6;
+
+    .delivery {
+      width: 60px;
+      height: 14px;
+      margin-top: 3px;
     }
   }
 }

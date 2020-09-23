@@ -64,7 +64,7 @@ export default {
   color: #a1a1a1;
 
   .category-image {
-    &:nth-child(2) {
+    &:nth-child(3) {
       border-right: 1px solid black;
       border-left: 1px solid black;
       color: black;

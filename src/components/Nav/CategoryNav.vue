@@ -7,8 +7,8 @@
       <ul>
         <li
           :newkey="CATEGORY"
-          :key="CATEGORY"
-          ref="focus"
+          class="modalShowing"
+          :key="String(CATEGORY)"
           v-for="CATEGORY of navData.map(el => Object.keys(el)[1])"
         >
           <a>{{ CATEGORY }}</a>
@@ -21,12 +21,15 @@
       v-on:mouseleave="cateogoryActiveReChange"
     >
       <ul>
-        <li :key="Object.keys(MODAL)[0]" v-for="MODAL in this.showingData">
+        <li
+          :key="String(Object.keys(MODAL)[1]) + 'li'"
+          v-for="MODAL in this.showingData"
+        >
           <span>{{ Object.keys(MODAL)[1] }}</span>
           <a
             class="category-value"
             href=""
-            :key="Item"
+            :key="String(Item['id']) + 'atagKey'"
             v-for="Item of MODAL[Object.keys(MODAL)[1]]"
           >
             {{ Item['name'] }}
@@ -34,8 +37,8 @@
         </li>
       </ul>
       <div
-        class="division-line"
-        :key="line"
+        class="divisionLine"
+        :key="String(line)"
         v-for="line in lines"
         v-bind:style="{ left: (line - 0.5) * (100 / lines.length) + '%' }"
       ></div>
@@ -43,6 +46,8 @@
   </div>
 </template>
 <script>
+// import axios from 'axios';
+
 export default {
   name: 'CategoryNav',
   data() {
@@ -51,6 +56,8 @@ export default {
       lines: [1, 2, 3, 4, 5, 6, 7],
       navCheckData: '',
       showingData: '',
+      getCategory: '',
+      // navData: []
       navData: [
         {
           id: 1,
@@ -786,13 +793,24 @@ export default {
       ]
     };
   },
-  created: function() {},
+  // mounted() {},
+  // created: function() {
+  //   this.getData();
+  // },
   methods: {
+    // getData() {
+    //   axios
+    //     .get('/data/maindata.json')
+    //     .then(res => console.log(res.json()))
+    //     .then(data => (this.navData = data));
+    // },
+
     cateogoryActiveChange(event) {
-      if (event.target.attributes.newkey.value === undefined) {
+      this.getCategory = event.target.attributes.newkey;
+      if (this.getCategory === undefined) {
         return;
       }
-      this.navCheckData = event.target.attributes.newkey.value;
+      this.navCheckData = this.getCategory.value;
       for (let i = 0; i < this.navData.length; i++) {
         if (this.navData[i][this.navCheckData]) {
           this.showingData = this.navData[i][this.navCheckData];
@@ -850,7 +868,6 @@ export default {
   left: 0;
   box-shadow: 0px 3px 5px 2px rgba(0, 0, 0, 0.3);
   background: rgba(255, 255, 255, 0.96);
-  transition: all 0.5s ease-in-out;
 
   .category-value {
     color: black;
@@ -878,6 +895,7 @@ export default {
         text-align: center;
         font-weight: 700;
       }
+
       a {
         display: block;
         height: 50px;

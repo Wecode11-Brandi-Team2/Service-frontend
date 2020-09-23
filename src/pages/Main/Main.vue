@@ -70,8 +70,8 @@ export default {
   },
   created: function() {
     window.addEventListener('scroll', this.removeButton);
-    this.getNavData();
   },
+
   methods: {
     cateogoryActiveChange(event) {
       if (event.target.attributes.newkey.value === '쇼핑몰,마켓') {

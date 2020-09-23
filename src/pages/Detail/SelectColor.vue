@@ -18,14 +18,8 @@
     </div>
     <div class="dropdown-root">
       <ul class="color-list" v-if="activeDropdown">
-        <li
-          class="color"
-          :style="{ backgroundColor: color.onedayDelivery ? '#F8FBFE' : '' }"
-          v-for="color in colors"
-          :key="color.id"
-        >
+        <li class="color" v-for="color in colors" :key="color.id">
           <div>{{ color.color }}</div>
-          <img class="delivery" :src="color.image" />
         </li>
       </ul>
     </div>
@@ -40,38 +34,23 @@ export default {
       colors: [
         {
           id: 1,
-          color: 'Black',
-          onedayDelivery: true,
-          image:
-            'https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-baro-xl@2x.png'
+          color: 'Black'
         },
         {
           id: 2,
-          color: 'Navy',
-          onedayDelivery: false,
-          image:
-            'https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-seller-xl@3x.png'
+          color: 'Navy'
         },
         {
           id: 3,
-          color: 'White',
-          onedayDelivery: true,
-          image:
-            'https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-baro-xl@2x.png'
+          color: 'White'
         },
         {
           id: 4,
-          color: 'Beige',
-          onedayDelivery: false,
-          image:
-            'https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-seller-xl@3x.png'
+          color: 'Beige'
         },
         {
           id: 5,
-          color: 'Oatmeal',
-          onedayDelivery: false,
-          image:
-            'https://web-staging.brandi.co.kr/static/2020.7.3/images/ic-seller-xl@3x.png'
+          color: 'Oatmeal'
         }
       ]
     };
@@ -136,12 +115,6 @@ export default {
     padding: 16px;
     font-size: 18px;
     border-top: 1px solid #e6e6e6;
-
-    .delivery {
-      width: 60px;
-      height: 14px;
-      margin-top: 3px;
-    }
   }
 }
 </style>

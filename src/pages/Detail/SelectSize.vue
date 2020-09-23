@@ -1,11 +1,27 @@
 <template>
-  <div class="Select-size" @click="activeDropdownSize">
-    <span class="select-size-dropdown">[사이즈]를 선택하세요.</span>
-    <div class="select-menu-icon-container">
-      <div
-        class="select-menu-icon"
-        :style="{ transform: activeDropdown ? 'scaleY(-1)' : 'scaleY(1)' }"
-      />
+  <div>
+    <div
+      class="Select-size"
+      @click="activeDropdownSize"
+      :style="{
+        borderBottom: activeDropdown ? 'none' : '',
+        borderRadius: activeDropdown ? '6px 6px 0 0' : ''
+      }"
+    >
+      <span>[사이즈]를 선택하세요.</span>
+      <div class="select-menu-icon-container">
+        <div
+          class="select-menu-icon"
+          :style="{ transform: activeDropdown ? 'scaleY(-1)' : 'scaleY(1)' }"
+        />
+      </div>
+    </div>
+    <div class="dropdown-root">
+      <ul class="size-list" v-if="activeDropdown">
+        <li class="size" v-for="size in sizes" :key="size.id">
+          <div>{{ size.size }}</div>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -14,7 +30,13 @@
 export default {
   data() {
     return {
-      activeDropdown: false
+      activeDropdown: false,
+      sizes: [
+        {
+          id: 1,
+          size: 'Free'
+        }
+      ]
     };
   },
   methods: {
@@ -39,10 +61,6 @@ export default {
   border-radius: 6px;
   font-size: 16px;
 
-  .select-size-dropdown {
-    opacity: 0.3;
-  }
-
   .select-menu-icon-container {
     position: absolute;
     right: 0;
@@ -56,6 +74,31 @@ export default {
       background-repeat: no-repeat;
       background-position: top 5px center;
     }
+  }
+}
+
+.dropdown-root {
+  position: relative;
+}
+
+.size-list {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-height: 300px;
+  border-left: 1px solid #e6e6e6;
+  border-right: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  border-radius: 0 0 6px 6px;
+  background-color: #fff;
+  overflow: scroll;
+  z-index: 5;
+
+  .size {
+    padding: 16px;
+    font-size: 18px;
+    border-top: 1px solid #e6e6e6;
   }
 }
 </style>

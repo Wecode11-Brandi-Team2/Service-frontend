@@ -7,13 +7,13 @@
     />
     <div class="nav-box">
       <div class="brandi-logo">
-        <a class="logo-link" href="/">
+        <router-link class="logo-link" to="/">
           <img
             class="logo"
             src="https://web-staging.brandi.co.kr/static/3.50.6/images/logo@3x.png"
             alt="brandiLogo"
           />
-        </a>
+        </router-link>
       </div>
       <div class="search-box">
         <form class="search-bar">
@@ -46,6 +46,7 @@ export default {
 
 <style scoped lang="scss">
 .Nav {
+  min-width: 1300px;
   .home-banner {
     display: block;
     width: 100%;
@@ -62,12 +63,17 @@ export default {
     .brandi-logo {
       display: flex;
       align-items: center;
+
       .logo-link {
         .logo {
           width: 150px;
           height: 25px;
           cursor: pointer;
         }
+      }
+      transition: all 0.5s ease-in-out;
+      &:hover {
+        transform: matrix(1.1, 0, 0, 1.1, 1.1, 0);
       }
     }
     .search-box {
@@ -115,6 +121,10 @@ export default {
         cursor: pointer;
         line-height: 80px;
         text-align: center;
+        transition: all 0.5s ease-in-out;
+        &:hover {
+          color: #ff204b;
+        }
       }
     }
   }

@@ -3,11 +3,11 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-import adminStore from './modules/adminStore';
+import serviceStore from './modules/serviceStore';
 
 const store = new Vuex.Store({
   modules: {
-    adminStore
+    serviceStore
   }
 });
 

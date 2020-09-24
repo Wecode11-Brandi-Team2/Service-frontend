@@ -61,15 +61,19 @@ export default {
   methods: {
     onSuccess(googleUser) {
       axios
-        .post('http://10.251.1.125:5000/user/google-login', {
+        .post('http://10.251.1.125:5000/api/user/google-login', {
           tokent_type: googleUser.wc.tokent_type,
           access_token: googleUser.wc.access_token
         })
         .then(googleUser => {
-          console.log('LoginSuccess', googleUser);
+          console.log(
+            'LoginSuccess',
+            localStorage.setItem('access_token', googleUser.data.access_token)
+          );
         })
+        .then(res => console.log(res))
         .catch(error => alert(error));
-      console.log(googleUser);
+      console.log(googleUser.wc.access_token);
       // alert('Google Login Success');
       console.log(googleUser.getBasicProfile());
     },

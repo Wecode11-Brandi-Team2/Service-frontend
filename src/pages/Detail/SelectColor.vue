@@ -8,7 +8,7 @@
         borderRadius: activeDropdown ? '6px 6px 0 0' : ''
       }"
     >
-      <span>[컬러]를 선택하세요.</span>
+      <span>{{ selectedColor }}</span>
       <div class="select-menu-icon-container">
         <div
           class="select-menu-icon"
@@ -18,7 +18,12 @@
     </div>
     <div class="dropdown-root">
       <ul class="color-list" v-if="activeDropdown">
-        <li class="color" v-for="color in colors" :key="color.id">
+        <li
+          class="color"
+          @click="selectColor(color)"
+          v-for="color in colors"
+          :key="color.id"
+        >
           <div>{{ color.color }}</div>
         </li>
       </ul>
@@ -31,33 +36,22 @@ export default {
   data() {
     return {
       activeDropdown: false,
-      colors: [
-        {
-          id: 1,
-          color: 'Black'
-        },
-        {
-          id: 2,
-          color: 'Navy'
-        },
-        {
-          id: 3,
-          color: 'White'
-        },
-        {
-          id: 4,
-          color: 'Beige'
-        },
-        {
-          id: 5,
-          color: 'Oatmeal'
-        }
-      ]
+      selectedColor: '[컬러]를 선택하세요.'
     };
   },
   methods: {
     activeDropdownColor() {
       this.activeDropdown = !this.activeDropdown;
+    },
+    selectColor(color) {
+      this.selectedColor = color.color;
+      this.activeDropdown = !this.activeDropdown;
+      this.$store.commit('COLOR_SELECT', true);
+    }
+  },
+  computed: {
+    colors() {
+      return this.$store.state.detailProductInfo.productInfo.color;
     }
   }
 };
@@ -109,7 +103,7 @@ export default {
   border-radius: 0 0 6px 6px;
   background-color: #fff;
   overflow: scroll;
-  z-index: 5;
+  z-index: 10;
 
   .color {
     padding: 16px;

@@ -7,15 +7,15 @@
           <section class="purchase-basic-info">
             <div class="seller-name">
               <i class="fas fa-home" />
-              <span>{{ purchaseInfo.sellerName }}</span>
+              <span>{{ ProductInfo.seller_name }}</span>
               <div class="right-btn"></div>
             </div>
-            <div class="product-name">{{ purchaseInfo.productName }}</div>
+            <div class="product-name">{{ ProductInfo.name }}</div>
             <div class="price-container">
-              <div class="price">{{ purchaseInfo.price }}</div>
+              <div class="price">{{ ProductInfo.price }}</div>
               <span class="won">원</span>
             </div>
-            <div class="quantity">{{ purchaseInfo.quantity }}개 구매중</div>
+            <div class="quantity">{{ ProductInfo.sales_amount }}개 구매중</div>
           </section>
           <section class="option-payment">
             <SelectColor />
@@ -23,7 +23,7 @@
             <div class="total-price-container">
               <div class="total-price-seat">총 상품 금액</div>
               <div class="total-price-wrapper">
-                <div class="total-price">{{ purchaseInfo.totalPrice }}</div>
+                <div class="total-price">0</div>
                 <div class="total-price-won">원</div>
               </div>
             </div>
@@ -40,7 +40,7 @@
           <li>주문정보</li>
         </ul>
         <section class="detail-info-container">
-          <ProductInfo />
+          <ProductInfomation />
           <QA :QA="detailInfoTab.Q_A" />
         </section>
       </section>
@@ -51,7 +51,7 @@
 <script>
 import SelectColor from './SelectColor';
 import SelectSize from './SelectSize';
-import ProductInfo from './ProductInfo';
+import ProductInfomation from './ProductInfomation';
 import QA from './QA';
 import SlideImageWrapper from './SlideImageWrapper';
 
@@ -60,24 +60,22 @@ export default {
   components: {
     SelectColor,
     SelectSize,
-    ProductInfo,
+    ProductInfomation,
     QA,
     SlideImageWrapper
   },
   data() {
     return {
-      purchaseInfo: {
-        sellerName: '알콜',
-        productName: '네츄럴 시스루 단추 니트 (5color)_ 알콜',
-        price: '16,100',
-        quantity: 0,
-        totalPrice: '0'
-      },
       detailInfoTab: {
         review: 0,
         Q_A: 0
       }
     };
+  },
+  computed: {
+    ProductInfo() {
+      return this.$store.state.detailProductInfo.productInfo;
+    }
   }
 };
 </script>

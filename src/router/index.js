@@ -16,6 +16,9 @@ import TimeDeal from '../pages/TimeDeal/TimeDeal';
 import Information from '../pages/Login/Information';
 import Complete from '../pages/Login/Complete';
 import GoogleInformation from '../pages/Login/GoogleInformation';
+import QnA from '../pages/Mypage/Q&A';
+import Refund from '../pages/Mypage/Refund';
+import RefundResult from '../pages/Mypage/RefundResult';
 
 Vue.use(VueRouter);
 
@@ -105,6 +108,26 @@ export const router = new VueRouter({
       path: '/googleinformation',
       name: 'GoogleInformation',
       component: GoogleInformation
+    },
+    {
+      path: '/qna',
+      name: 'qna',
+      component: QnA
+    },
+    {
+      path: '/orderList',
+      name: 'OrderList',
+      component: Mypage
+    },
+    {
+      path: '/refund',
+      name: 'Refund',
+      component: Refund
+    },
+    {
+      path: '/refundResult',
+      name: 'RefundResult',
+      component: RefundResult
     }
   ]
 });

@@ -2,7 +2,7 @@
   <div class="nav">
     <Nav />
     <CategoryNav />
-    <router-view />
+    <router-view :key="$route.fullPath" />
     <Footer />
     <Buttons />
   </div>

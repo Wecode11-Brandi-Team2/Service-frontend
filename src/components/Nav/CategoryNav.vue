@@ -6,12 +6,22 @@
     <nav class="category-nav">
       <ul>
         <li
-          :newkey="CATEGORY"
-          class="modalShowing"
-          :key="String(CATEGORY)"
-          v-for="CATEGORY of navData.map(el => Object.keys(el)[1])"
+          :newkey="String(Object.keys(CATEGORY)[1])"
+          :class="[CATEGORY['active'] ? 'modalActive' : 'modalShowing']"
+          :key="String(CATEGORY['name'])"
+          v-for="CATEGORY in categories.category"
         >
-          <a>{{ CATEGORY }}</a>
+          <div
+            :class="[
+              titles.title === CATEGORY[Object.keys(CATEGORY)[3]] ? 'hello' : ''
+            ]"
+          >
+            <router-link
+              :newkey="String(Object.keys(CATEGORY)[1])"
+              :to="'/' + String(`${CATEGORY[Object.keys(CATEGORY)[3]]}`)"
+              >{{ Object.keys(CATEGORY)[1] }}</router-link
+            >
+          </div>
         </li>
       </ul>
     </nav>
@@ -22,23 +32,33 @@
     >
       <ul>
         <li
-          :key="String(Object.keys(MODAL)[1]) + 'li'"
+          :key="String(Object.keys(MODAL)[1][0]) + 'li'"
           v-for="MODAL in this.showingData"
         >
-          <span>{{ Object.keys(MODAL)[1] }}</span>
-          <a
+          <router-link
             class="category-value"
-            href=""
+            :to="`/category/${navCheckData}/${Object.keys(MODAL)[1]}/null`"
+          >
+            <span @click="cateogoryActiveReChange">{{
+              Object.keys(MODAL)[1]
+            }}</span>
+          </router-link>
+          <router-link
+            :to="
+              `/category/${navCheckData}/${Object.keys(MODAL)[1]}/${Item['id']}`
+            "
+            class="inner-key"
             :key="String(Item['id']) + 'atagKey'"
             v-for="Item of MODAL[Object.keys(MODAL)[1]]"
           >
-            {{ Item['name'] }}
-          </a>
+            <span @click="cateogoryActiveReChange">{{ Item['name'] }}</span>
+          </router-link>
         </li>
       </ul>
+
       <div
-        class="divisionLine"
-        :key="String(line)"
+        class="division-line"
+        :key="String(line) + 'alpha'"
         v-for="line in lines"
         v-bind:style="{ left: (line - 0.5) * (100 / lines.length) + '%' }"
       ></div>
@@ -46,18 +66,20 @@
   </div>
 </template>
 <script>
-// import axios from 'axios';
+import { mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
+const serviceStore = 'serviceStore';
 
 export default {
   name: 'CategoryNav',
   data() {
     return {
+      mainCategoryData: [],
       cateogoryActive: false,
       lines: [1, 2, 3, 4, 5, 6, 7],
       navCheckData: '',
       showingData: '',
       getCategory: '',
-      // navData: []
       navData: [
         {
           id: 1,
@@ -793,27 +815,56 @@ export default {
       ]
     };
   },
-  // mounted() {},
-  // created: function() {
-  //   this.getData();
-  // },
-  methods: {
-    // getData() {
-    //   axios
-    //     .get('/data/maindata.json')
-    //     .then(res => console.log(res.json()))
-    //     .then(data => (this.navData = data));
-    // },
+  mounted() {},
+  created: function() {
+    this.updateCategories({
+      category: this.navData
+        .map(el => ({ ...el, active: false }))
+        .map(el => {
+          if (Object.keys(el)[1] === '홈') {
+            return { ...el, name: '' };
+          } else if (Object.keys(el)[1] === '랭킹') {
+            return { ...el, name: 'ranking' };
+          } else if (Object.keys(el)[1] === '하루배송') {
+            return { ...el, name: 'oneday' };
+          } else if (Object.keys(el)[1] === '쇼핑몰 · 마켓') {
+            return { ...el, name: 'trend' };
+          } else if (Object.keys(el)[1] === '브랜드') {
+            return { ...el, name: 'brand' };
+          } else if (Object.keys(el)[1] === '뷰티') {
+            return { ...el, name: 'beauty' };
+          } else if (Object.keys(el)[1] === '특가') {
+            return { ...el, name: 'timedeal' };
+          } else if (Object.keys(el)[1] === '기획전') {
+            return { ...el, name: 'event' };
+          } else if (Object.keys(el)[1] === '스토어') {
+            return { ...el, name: 'shop' };
+          }
+        })
+    });
+    // this.giveNewValue();
+  },
+  computed: {
+    ...mapGetters(serviceStore, ['getCategories', 'getTitle']),
+    categories() {
+      return this.getCategories;
+    },
+    titles() {
+      return this.getTitle;
+    }
+  },
 
+  methods: {
+    ...mapActions(serviceStore, ['updateCategories']),
     cateogoryActiveChange(event) {
       this.getCategory = event.target.attributes.newkey;
       if (this.getCategory === undefined) {
         return;
       }
       this.navCheckData = this.getCategory.value;
-      for (let i = 0; i < this.navData.length; i++) {
-        if (this.navData[i][this.navCheckData]) {
-          this.showingData = this.navData[i][this.navCheckData];
+      for (let i = 0; i < this.categories.category.length; i++) {
+        if (this.categories.category[i][this.navCheckData]) {
+          this.showingData = this.categories.category[i][this.navCheckData];
           this.cateogoryActive = true;
         }
       }
@@ -827,10 +878,29 @@ export default {
 <style scoped lang="scss">
 @import '../../styles/common.scss';
 
+.give-hover {
+  background-color: red;
+}
+
+.modalActive {
+  text-align: center;
+  width: calc(100% / 10);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px;
+  border-bottom: 3px solid #ff204b;
+  a {
+    color: #ff204b;
+  }
+  cursor: pointer;
+}
+
 .category-nav {
+  min-width: 1300px;
+  height: 60px;
   border-top: 0.5px solid gray;
   border-bottom: 0.5px solid gray;
-  height: 60px;
 
   ul {
     display: flex;
@@ -838,15 +908,17 @@ export default {
     height: 100%;
     margin: 0px auto;
 
-    li {
+    .modalShowing {
       text-align: center;
       width: calc(100% / 10);
-      padding: 19px;
-      display: inline-block;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin: 0 10px;
       border-bottom: 3px solid white;
 
       a {
+        padding: 19px;
         color: black;
       }
 
@@ -862,21 +934,13 @@ export default {
 }
 
 .modal-category {
+  z-index: 100;
   visibility: visible;
   position: absolute;
   right: 0;
   left: 0;
   box-shadow: 0px 3px 5px 2px rgba(0, 0, 0, 0.3);
   background: rgba(255, 255, 255, 0.96);
-
-  .category-value {
-    color: black;
-    transition: all 0.3s ease-in-out;
-
-    &:hover {
-      color: #ff204b;
-    }
-  }
 
   ul {
     display: flex;
@@ -890,30 +954,40 @@ export default {
       padding: 0 3.6%;
       line-height: 40px;
 
-      span {
+      .category-value {
         display: block;
         text-align: center;
         font-weight: 700;
+        color: black;
+        transition: all 0.3s ease-in-out;
+        &:hover {
+          color: #ff204b;
+        }
       }
 
-      a {
+      .inner-key {
         display: block;
-        height: 50px;
+        height: 30px;
         text-align: center;
         font-size: 16px;
+        cursor: pointer;
+        color: black;
+        transition: all 0.3s ease-in-out;
+        &:hover {
+          color: #ff204b;
+        }
       }
     }
   }
-
-  .division-line {
-    position: absolute;
-    top: 0;
-    width: 1px;
-    height: 100%;
-    background: #e1e1e1;
-  }
 }
-
+.division-line {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: #e1e1e1;
+  z-index: 100;
+}
 * {
   box-sizing: border-box;
 }

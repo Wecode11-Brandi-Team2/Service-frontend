@@ -1,11 +1,11 @@
 <template>
-  <div id="mainProduct">
-    <a href="/">
+  <div class="main-product">
+    <router-link to="/detail">
       <img
         alt="productImage"
         src="http://image.brandi.me/cproduct/2020/08/10/17865197_1597044606_image1_M.jpg"
       />
-    </a>
+    </router-link>
     <ul>
       <li><span class="brand">브레스</span></li>
       <li>
@@ -43,7 +43,7 @@ a {
     color: black;
   }
 }
-#mainProduct {
+.main-product {
   &:hover {
     transition: transform 0.4s ease-in-out;
     transform: scale(1.05);
@@ -55,10 +55,12 @@ a {
   justify-content: center;
   align-items: center;
   img {
-    height: 254px;
+    max-height: 254px;
+    width: 100%;
   }
   ul {
-    width: 235px;
+    max-width: 235px;
+    width: 100%;
   }
   li {
     .brand {

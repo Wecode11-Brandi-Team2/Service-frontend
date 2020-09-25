@@ -6,7 +6,8 @@ import Login from '../pages/Login/Login';
 import Mypage from '../pages/Mypage/Mypage';
 import SignUp from '../pages/Login/SignUp';
 import Agreement from '../pages/Login/Agreement.vue';
-import TimeDeal from '../pages/TimeDeal/TimeDeal';
+import Category from '../pages/Category/Category';
+import CategoryNav from '../components/Nav/CategoryNav';
 
 Vue.use(VueRouter);
 
@@ -41,12 +42,20 @@ export const router = new VueRouter({
     {
       path: '/agreement',
       name: 'Agreement',
-      component: Agreement
+      component: Agreement,
+      props: true
     },
     {
-      path: '/timedeal',
-      name: 'TimeDeal',
-      component: TimeDeal
+      path: '/category/:specification/:title/:id',
+      name: 'Category',
+      component: Category,
+      props: true
+    },
+    {
+      path: '/category/:specification/:title/:id',
+      name: 'CategoryNav',
+      component: CategoryNav,
+      props: true
     }
   ]
 });

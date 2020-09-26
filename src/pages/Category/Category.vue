@@ -180,9 +180,7 @@ export default {
     ...mapGetters(serviceStore, ['getCategories']),
     categories() {
       return this.getCategories;
-    },
-
-    ...mapActions(serviceStore, ['updateTitle'])
+    }
   },
 
   mounted() {
@@ -191,12 +189,21 @@ export default {
     this.filteringAsideData(baseData);
   },
 
+  created: function() {
+    this.updateTitle({
+      title: this.$route.params.specification
+    });
+  },
+
   methods: {
+    ...mapActions(serviceStore, ['updateTitle']),
     filteringAsideData(baseData) {
       for (let i = 0; i < baseData.length; i++) {
         let parsedData = JSON.parse(JSON.stringify(baseData[i]));
-        if (parsedData[this.$route.params.specification]) {
-          let filteredData = parsedData[this.$route.params.specification];
+        let nameData = JSON.parse(JSON.stringify(Object.keys(baseData[i])[1]));
+
+        if (parsedData['name'] === this.$route.params.specification) {
+          let filteredData = parsedData[nameData];
           return (this.filteredData = filteredData.map(el =>
             Object.keys(el)[1] === this.$route.params.title
               ? { ...el, active: true }
@@ -204,9 +211,6 @@ export default {
           ));
         }
       }
-      this.updateTitle({
-        title: this.$route.params.specification
-      });
     },
 
     changeModalActive(event) {
@@ -250,7 +254,7 @@ export default {
 }
 
 .picked {
-  background-color: #b2b2b2;
+  background-color: #f2f2f2;
   a {
     color: #ff204b;
   }
@@ -261,8 +265,7 @@ export default {
   width: 19px;
   height: 19px;
   border: 1px solid black;
-  /* left: 12%; */
-  background-color: #b2b2b2;
+  background-color: #f2f2f2;
 }
 
 .changed-small-box {
@@ -270,7 +273,6 @@ export default {
   width: 19px;
   height: 19px;
   border: 1px solid black;
-  /* left: 12%; */
 }
 
 .transition {
@@ -283,7 +285,6 @@ label {
 
 .checked {
   margin-top: 3px;
-
   display: flex;
   justify-content: center;
   align-items: center;

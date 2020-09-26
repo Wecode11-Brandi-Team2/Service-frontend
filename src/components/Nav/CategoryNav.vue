@@ -6,6 +6,7 @@
     <nav class="category-nav">
       <ul>
         <li
+          @click="updateTitleofLi"
           :newkey="String(Object.keys(CATEGORY)[1])"
           :class="[CATEGORY['active'] ? 'modalActive' : 'modalShowing']"
           :key="String(CATEGORY['name'])"
@@ -13,7 +14,9 @@
         >
           <div
             :class="[
-              titles.title === CATEGORY[Object.keys(CATEGORY)[3]] ? 'hello' : ''
+              titles.title === CATEGORY[Object.keys(CATEGORY)[3]]
+                ? 'give-hover'
+                : 'no-hover'
             ]"
           >
             <router-link
@@ -37,7 +40,11 @@
         >
           <router-link
             class="category-value"
-            :to="`/category/${navCheckData}/${Object.keys(MODAL)[1]}/null`"
+            :to="
+              `/category/${titleShowingData['name']}/${
+                Object.keys(MODAL)[1]
+              }/null`
+            "
           >
             <span @click="cateogoryActiveReChange">{{
               Object.keys(MODAL)[1]
@@ -45,7 +52,9 @@
           </router-link>
           <router-link
             :to="
-              `/category/${navCheckData}/${Object.keys(MODAL)[1]}/${Item['id']}`
+              `/category/${titleShowingData['name']}/${Object.keys(MODAL)[1]}/${
+                Item['id']
+              }`
             "
             class="inner-key"
             :key="String(Item['id']) + 'atagKey'"
@@ -74,12 +83,14 @@ export default {
   name: 'CategoryNav',
   data() {
     return {
+      titleShowingData: [],
+      selected: '',
       mainCategoryData: [],
       cateogoryActive: false,
-      lines: [1, 2, 3, 4, 5, 6, 7],
       navCheckData: '',
       showingData: '',
       getCategory: '',
+      lines: [1, 2, 3, 4, 5, 6, 7],
       navData: [
         {
           id: 1,
@@ -815,7 +826,9 @@ export default {
       ]
     };
   },
-  mounted() {},
+  mounted() {
+    console.log('너냐', this.titles.title);
+  },
   created: function() {
     this.updateCategories({
       category: this.navData
@@ -842,7 +855,8 @@ export default {
           }
         })
     });
-    // this.giveNewValue();
+
+    this.giveNewValue();
   },
   computed: {
     ...mapGetters(serviceStore, ['getCategories', 'getTitle']),
@@ -855,7 +869,10 @@ export default {
   },
 
   methods: {
-    ...mapActions(serviceStore, ['updateCategories']),
+    updateTitleofLi() {
+      this.updateTitle({ title: this.titleShowingData['name'] });
+    },
+    ...mapActions(serviceStore, ['updateCategories', 'updateTitle']),
     cateogoryActiveChange(event) {
       this.getCategory = event.target.attributes.newkey;
       if (this.getCategory === undefined) {
@@ -864,10 +881,15 @@ export default {
       this.navCheckData = this.getCategory.value;
       for (let i = 0; i < this.categories.category.length; i++) {
         if (this.categories.category[i][this.navCheckData]) {
+          this.titleShowingData = this.categories.category[i];
           this.showingData = this.categories.category[i][this.navCheckData];
           this.cateogoryActive = true;
         }
       }
+      console.log(
+        'CheckTITLESHOWINGDATA',
+        JSON.parse(JSON.stringify(this.titleShowingData['name']))
+      );
     },
     cateogoryActiveReChange() {
       this.cateogoryActive = false;
@@ -879,7 +901,40 @@ export default {
 @import '../../styles/common.scss';
 
 .give-hover {
-  background-color: red;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 3px solid #ff204b;
+  a {
+    color: #ff204b;
+  }
+
+  &:hover {
+    border-bottom: 3px solid #ff204b;
+    a {
+      color: #ff204b;
+    }
+    cursor: pointer;
+  }
+}
+
+.no-hover {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 3px solid white;
+
+  &:hover {
+    border-bottom: 3px solid #ff204b;
+    a {
+      color: #ff204b;
+    }
+    cursor: pointer;
+  }
 }
 
 .modalActive {
@@ -915,19 +970,9 @@ export default {
       justify-content: center;
       align-items: center;
       margin: 0 10px;
-      border-bottom: 3px solid white;
 
       a {
         padding: 19px;
-        color: black;
-      }
-
-      &:hover {
-        border-bottom: 3px solid #ff204b;
-        a {
-          color: #ff204b;
-        }
-        cursor: pointer;
       }
     }
   }

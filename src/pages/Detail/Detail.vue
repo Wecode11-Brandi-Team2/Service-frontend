@@ -6,20 +6,23 @@
         <section class="purchase-info">
           <section class="purchase-basic-info">
             <div class="seller-name">
-              <i class="fas fa-home" />
-              <span>{{ ProductInfo.seller_name }}</span>
-              <div class="right-btn"></div>
+              <a class="seller-page" :href="apiData.seller_url">
+                <i class="fas fa-home" />
+                <span>{{ apiData.seller_name }}</span>
+                <div class="right-btn"></div>
+              </a>
             </div>
-            <div class="product-name">{{ ProductInfo.name }}</div>
+            <div class="product-name">{{ apiData.name }}</div>
             <div class="price-container">
-              <div class="price">{{ ProductInfo.price }}</div>
+              <div class="price">{{ apiData.price }}</div>
               <span class="won">원</span>
             </div>
-            <div class="quantity">{{ ProductInfo.sales_amount }}개 구매중</div>
+            <div class="quantity">{{ apiData.sales_amount }}개 구매중</div>
           </section>
           <section class="option-payment">
             <SelectColor />
             <SelectSize />
+            <SelectedOptions />
             <div class="total-price-container">
               <div class="total-price-seat">총 상품 금액</div>
               <div class="total-price-wrapper">
@@ -27,7 +30,9 @@
                 <div class="total-price-won">원</div>
               </div>
             </div>
-            <button class="buy-btn">바로 구매</button>
+            <router-link to="/order">
+              <button class="buy-btn">바로 구매</button>
+            </router-link>
           </section>
         </section>
       </div>
@@ -54,6 +59,7 @@ import SelectSize from './SelectSize';
 import ProductInfomation from './ProductInfomation';
 import QA from './QA';
 import SlideImageWrapper from './SlideImageWrapper';
+import SelectedOptions from './SelectedOptions';
 import axios from 'axios';
 
 export default {
@@ -63,7 +69,8 @@ export default {
     SelectSize,
     ProductInfomation,
     QA,
-    SlideImageWrapper
+    SlideImageWrapper,
+    SelectedOptions
   },
   props: ['id'],
   data() {
@@ -75,18 +82,32 @@ export default {
       }
     };
   },
-  // created: function() {
-  //   let URL = `https://sample:5000/detail?id=${this.params.$route.id}`;
-  //   axios.get(URL, {}).then(res => (this.apiData = res));
-  // },
-  mounted() {
-    console.log(this.$route.params.id);
+  created() {
+    let URL = `http://10.251.1.153:5000/api/products/product/${this.$route.params.id}`;
+    axios.get(URL).then(res => {
+      this.apiData = res.data;
+      console.log(this.apiData);
+    });
+    //
+    // 1. created 에서 백엔드와 통신
+    // this.getDetailInfo();
   },
-
+  methods: {
+    // 2. actions 와 연결하기 위한 dispatch
+    // getDetailInfo() {
+    //   this.$store.dispatch('getDetailInfo');
+    // }
+    // -> vuex
+  },
   computed: {
     ProductInfo() {
       return this.$store.state.detailProductInfo.productInfo;
     }
+    // 5. 받아온 api 를 data 에 저장한 후 업데이트 된 정보를 가져온 후 사용
+    // 만약 성공한다면 detail 이외에도 색상, 사이즈 선택 컴포넌트, 슬라이드 이미지 에도 적용할 것
+    // ProductDetail() {
+    //   return this.$store.state.detailProductInfo.productDetail;
+    // }
   }
 };
 </script>
@@ -117,14 +138,19 @@ export default {
           font-size: 22px;
           margin-bottom: 8px;
 
-          .right-btn {
-            display: inline-block;
-            margin-left: 10px;
-            @include setSize(16px, 16px);
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid Meet' width='100' height='100'%3e%3cpath d='M100 5.5c0 1.3-.5 2.6-1.5 3.5L50 57.5 1.5 9c-2-2-2-5.1 0-7.1s5.1-2 7.1 0L50 43.4 91.5 1.9c2-2 5.1-2 7.1 0 .9 1 1.4 2.3 1.4 3.6z'/%3e%3c/svg%3e");
-            background-size: 100%;
-            background-repeat: no-repeat;
-            transform: rotate(-90deg);
+          .seller-page {
+            color: #000;
+            text-decoration: none;
+
+            .right-btn {
+              display: inline-block;
+              margin-left: 10px;
+              @include setSize(16px, 16px);
+              background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid Meet' width='100' height='100'%3e%3cpath d='M100 5.5c0 1.3-.5 2.6-1.5 3.5L50 57.5 1.5 9c-2-2-2-5.1 0-7.1s5.1-2 7.1 0L50 43.4 91.5 1.9c2-2 5.1-2 7.1 0 .9 1 1.4 2.3 1.4 3.6z'/%3e%3c/svg%3e");
+              background-size: 100%;
+              background-repeat: no-repeat;
+              transform: rotate(-90deg);
+            }
           }
         }
 

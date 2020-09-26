@@ -1,7 +1,7 @@
 <template>
   <div :style="{ opacity: opacity }">
-    <i class="fas fa-lock"></i>
-    <span>{{ QA_isSecret ? '비밀글입니다.' : '' }}</span>
+    <i v-if="q_is_private" class="fas fa-lock"></i>
+    <span>{{ q_is_private ? '비밀글입니다.' : q_content }}</span>
   </div>
 </template>
 
@@ -12,8 +12,12 @@ export default {
       type: Number,
       required: false
     },
-    QA_isSecret: {
-      type: Boolean,
+    q_is_private: {
+      type: Number,
+      required: true
+    },
+    q_content: {
+      type: String,
       required: true
     }
   }

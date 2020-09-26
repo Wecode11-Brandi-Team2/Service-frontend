@@ -6,16 +6,20 @@
   >
     <div
       class="product-image"
-      v-for="image in slideImage"
+      v-for="image in apiData"
       :key="image.id"
-      :style="{ backgroundImage: 'url(' + image.image_url + ')' }"
+      :style="{
+        backgroundImage: 'url(' + image.image_url + ')',
+        backgroundSize: '100%',
+        backgroundRepeat: 'no-repeat'
+      }"
     />
   </div>
 </template>
 
 <script>
 export default {
-  props: ['selectedImage'],
+  props: ['selectedImage', 'apiData'],
   methods: {
     calcSlideWidth(width) {
       if (this.selectedImage === 1) return width * 0;

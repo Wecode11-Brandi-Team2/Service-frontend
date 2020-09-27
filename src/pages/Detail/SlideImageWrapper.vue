@@ -1,13 +1,13 @@
 <template>
   <section class="Slide-image-wrapper">
-    <Slide :slideImage="slideImage" :selectedImage="selectedImage" />
+    <Slide :selectedImage="selectedImage" />
     <div class="slider-container">
       <div
         class="image-slide-tab"
         :class="[image.id === selectedImage ? 'active-tab' : '']"
-        v-for="image in slideImage"
+        v-for="image in ProductInfoImage"
         :key="image.id"
-        :style="{ backgroundImage: 'url(' + image.image + ')' }"
+        :style="{ backgroundImage: 'url(' + image.image_url + ')' }"
         @click="imageSlide(image)"
       ></div>
     </div>
@@ -23,39 +23,17 @@ export default {
   },
   data() {
     return {
-      selectedImage: 1,
-      slideImage: [
-        {
-          id: 1,
-          image:
-            'https://image.brandi.me/cproduct/2020/05/07/16132323_1588862781_image1_L.jpg'
-        },
-        {
-          id: 2,
-          image:
-            'https://image.brandi.me/cproduct/2020/05/07/16132323_1588862783_image2_L.jpg'
-        },
-        {
-          id: 3,
-          image:
-            'https://image.brandi.me/cproduct/2020/05/07/16132323_1588862783_image3_L.jpg'
-        },
-        {
-          id: 4,
-          image:
-            'https://image.brandi.me/cproduct/2020/05/07/16132323_1588862784_image4_L.jpg'
-        },
-        {
-          id: 5,
-          image:
-            'https://image.brandi.me/cproduct/2020/05/07/16132323_1588862787_image5_L.jpg'
-        }
-      ]
+      selectedImage: 1
     };
   },
   methods: {
     imageSlide(image) {
       this.selectedImage = image.id;
+    }
+  },
+  computed: {
+    ProductInfoImage() {
+      return this.$store.state.detailProductInfo.productInfo.image;
     }
   }
 };

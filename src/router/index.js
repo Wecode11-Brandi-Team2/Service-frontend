@@ -7,6 +7,8 @@ import Mypage from '../pages/Mypage/Mypage';
 import SignUp from '../pages/Login/SignUp';
 import Agreement from '../pages/Login/Agreement.vue';
 import Category from '../pages/Category/Category';
+import CategoryNav from '../components/Nav/CategoryNav';
+import Order from '../pages/Order/Order.vue';
 
 Vue.use(VueRouter);
 
@@ -49,6 +51,17 @@ export const router = new VueRouter({
       name: 'Category',
       component: Category,
       props: true
+    },
+    {
+      path: '/category/:specification/:title/:id',
+      name: 'CategoryNav',
+      component: CategoryNav,
+      props: true
+    },
+    {
+      path: '/order',
+      name: 'Order',
+      component: Order
     }
   ]
 });

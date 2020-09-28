@@ -9,6 +9,9 @@ import Agreement from '../pages/Login/Agreement.vue';
 import Category from '../pages/Category/Category';
 import CategoryNav from '../components/Nav/CategoryNav';
 import Order from '../pages/Order/Order.vue';
+import Trend from '../pages/Trend/Trend';
+import Brand from '../pages/Brand/Brand';
+import Beauty from '../pages/Beauty/Beauty';
 
 Vue.use(VueRouter);
 
@@ -62,6 +65,21 @@ export const router = new VueRouter({
       path: '/order',
       name: 'Order',
       component: Order
+    },
+    {
+      path: '/trend',
+      name: 'Trend',
+      component: Trend
+    },
+    {
+      path: '/brand',
+      name: 'Brand',
+      component: Brand
+    },
+    {
+      path: '/beauty',
+      name: 'Beauty',
+      component: Beauty
     }
   ]
 });

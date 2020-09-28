@@ -1,10 +1,11 @@
 <template>
   <div class="Main">
-    <div class="advertise">
+    <!-- <div class="advertise">
       <img
         src="http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg"
       />
-    </div>
+    </div> -->
+    <SlideProductCard />
     <div class="product-contents">
       <span>당신을 위한 추천</span>
       <section class="product-section">
@@ -28,6 +29,7 @@
 import ProductCard from '../../components/ProductCard/ProductCard';
 import BannerProduct from './components/BannerProduct';
 import ContentsPlusButton from './components/ContentsPlusButton';
+import SlideProductCard from '../../components/ProductCard/SlideProductCard';
 
 export default {
   name: 'Main',
@@ -38,7 +40,8 @@ export default {
   components: {
     ProductCard,
     BannerProduct,
-    ContentsPlusButton
+    ContentsPlusButton,
+    SlideProductCard
   },
 
   data() {

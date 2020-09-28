@@ -9,43 +9,48 @@
       </div>
       <div class="agreement-container">
         <div class="line" />
-
-        <div id="agree-button" class="whole-click-space">
-          <input class="check-box" type="checkbox" />
-          <label for="agree-button">모두 동의</label>
+        <div class="whole-click-space">
+          <input class="check-box" type="checkbox" id="agree-total" />
+          <label for="agree-total">모두 동의</label>
         </div>
-
         <div class="click-space-wrapper">
-          <div id="agree-button" class="click-space">
+          <div class="click-space">
             <div>
-              <input class="check-box" type="checkbox" />
-              <label for="agree-button">브랜디 약관 동의</label>
+              <input
+                class="check-box"
+                :class="[clickActive ? 'checked' : '']"
+                type="checkbox"
+                id="brandy-argree"
+              />
+              <label for="brandy-argree" @click="checkActive"
+                >브랜디 약관 동의</label
+              >
               <span>(필수)</span>
             </div>
             <a href="">내용보기</a>
           </div>
-          <div id="agree-button" class="click-space">
+          <div class="click-space">
             <div>
-              <input class="check-box" type="checkbox" />
-              <label for="agree-button">
+              <input class="check-box" type="checkbox" id="personal-info" />
+              <label for="personal-info">
                 개인정보수집 및 이용에 대한 안내
               </label>
               <span>(필수)</span>
             </div>
             <a href="">내용보기</a>
           </div>
-          <div id="agree-button" class="click-space">
+          <div class="click-space">
             <div>
-              <input class="check-box" type="checkbox" />
-              <label for="agree-button">이벤트/마케팅 수신 동의</label>
+              <input class="check-box" type="checkbox" id="event-agree" />
+              <label for="event-agree">이벤트/마케팅 수신 동의</label>
               <span>(선택)</span>
             </div>
             <a href="">내용보기</a>
           </div>
-          <div id="agree-button" class="click-space margin-left">
+          <div class="click-space margin-left">
             <div>
-              <input class="check-box" type="checkbox" />
-              <label for="agree-button">야간 혜택 알림 수신 동의 </label>
+              <input class="check-box" type="checkbox" id="alarm-agree" />
+              <label for="alarm-agree">야간 혜택 알림 수신 동의 </label>
               <span>(선택)</span>
             </div>
             <a href="">내용보기</a>
@@ -53,7 +58,9 @@
         </div>
         <div class="line" />
         <div class="button-wrapper">
-          <NextButton word="다음 단계로 이동" />
+          <router-link to="/googleinformation">
+            <NextButton word="다음 단계로 이동" />
+          </router-link>
         </div>
       </div>
     </div>
@@ -66,16 +73,29 @@ import NextButton from './components/NextButton';
 
 export default {
   name: 'SignUp',
+  data() {
+    return {
+      clickActive: false
+    };
+  },
   components: {
     SignUpNav,
     NextButton
   },
-  methods: {}
+  methods: {
+    checkActive() {
+      this.clickActive = !this.clickActive;
+    }
+  }
 };
 </script>
 
 <style scoped lang="scss">
 @import '../../styles/common.scss';
+
+a {
+  text-decoration: none;
+}
 
 .Agreement {
   margin: 70px 0 50px 0;
@@ -143,6 +163,14 @@ export default {
   display: flex;
   justify-content: center;
   margin: 30px;
+}
+
+/* input:checked + label {
+  color: red;
+} */
+
+.checked {
+  background-color: red;
 }
 
 .check-box {

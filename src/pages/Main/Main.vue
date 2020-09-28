@@ -9,18 +9,35 @@
     <div class="product-contents">
       <span>당신을 위한 추천</span>
       <section class="product-section">
-        <ProductCard :key="PRODUCT" v-for="PRODUCT in PRODUCT_SAMPLE" />
+        <ProductCard
+          :product="product"
+          :key="product"
+          v-for="product of productData.slice(0, 26)"
+        />
       </section>
       <BannerProduct />
       <section class="product-section">
-        <ProductCard :key="PRODUCT" v-for="PRODUCT in PRODUCT_SAMPLE" />
+        <ProductCard
+          :product="product"
+          :key="product"
+          v-for="product of productData.slice(27, 52)"
+        />
       </section>
       <BannerProduct />
       <section class="product-section">
-        <ProductCard :key="PRODUCT" v-for="PRODUCT in PRODUCT_SAMPLE" />
+        <ProductCard
+          :product="product"
+          :key="product"
+          v-for="product of productData.slice(53, -2)"
+        />
       </section>
-      <ContentsPlusButton />
-      <div class="buttonWrapper"></div>
+      <div
+        class="buttonWrapper"
+        :class="[buttonShow ? 'hidden' : '']"
+        @click="getMoreData"
+      >
+        <ContentsPlusButton />
+      </div>
     </div>
   </div>
 </template>
@@ -30,6 +47,7 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import BannerProduct from './components/BannerProduct';
 import ContentsPlusButton from './components/ContentsPlusButton';
 import SlideProductCard from '../../components/ProductCard/SlideProductCard';
+import axios from 'axios';
 
 export default {
   name: 'Main',
@@ -47,35 +65,63 @@ export default {
   data() {
     return {
       buttonActive: false,
-      PRODUCT_SAMPLE: [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-      ]
+      // PRODUCT_SAMPLE: [
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {}
+      // ]
+      productData: [],
+      limit: 100,
+      buttonShow: false
     };
   },
   created: function() {
+    let self = this;
+    axios
+      .get(
+        `http://10.251.1.153:5000/api/products?offset=0&limit=${this.limit}`,
+        {}
+      )
+      .then(res => (self.productData = res.data.products));
     window.addEventListener('scroll', this.removeButton);
   },
 
   methods: {
+    getMoreData() {
+      this.limit = this.limit + 20;
+      console.log(this.limit);
+      this.fetchData();
+      if (this.productData.length >= 300) {
+        return (this.buttonShow = true);
+      }
+    },
+
+    fetchData() {
+      axios
+        .get(
+          `http://10.58.2.0:5000/api/products?offset=0&limit=${this.limit}`,
+          {}
+        )
+        .then(res => (this.productData = res.data.products));
+    },
+
     cateogoryActiveChange(event) {
       if (event.target.attributes.newkey.value === '쇼핑몰,마켓') {
         this.cateogoryActive = !this.cateogoryActive;
@@ -99,6 +145,10 @@ export default {
 <style scoped lang="scss">
 * {
   box-sizing: border-box;
+}
+
+.hidden {
+  display: none;
 }
 
 .Main {

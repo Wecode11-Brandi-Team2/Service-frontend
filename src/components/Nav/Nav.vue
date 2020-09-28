@@ -6,13 +6,16 @@
       alt="bannerImg"
     />
     <div class="nav-box">
-      <div class="brandi-logo">
-        <router-link class="logo-link" to="/">
+      <div class="brandi-logo" @click="goHome">
+        <!-- :to="'/' + String(`${CATEGORY[Object.keys(CATEGORY)[3]]}`)" -->
+        <router-link to="/" class="logo-link">
+          <!-- <a class="logo-link"> -->
           <img
             class="logo"
             src="https://web-staging.brandi.co.kr/static/3.50.6/images/logo@3x.png"
             alt="brandiLogo"
           />
+          <!-- </a> -->
         </router-link>
       </div>
       <div class="search-box">
@@ -39,8 +42,30 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
+const serviceStore = 'serviceStore';
+
 export default {
-  name: 'Nav'
+  name: 'Nav',
+
+  computed: {
+    ...mapGetters(serviceStore, ['getCategories', 'getTitle']),
+    categories() {
+      return this.getCategories;
+    },
+    titles() {
+      return this.getTitle;
+    }
+  },
+  methods: {
+    ...mapActions(serviceStore, ['updateCategories', 'updateTitle']),
+
+    goHome() {
+      this.updateTitle({ title: String('/') });
+      console.log(this.titles.title);
+    }
+  }
 };
 </script>
 

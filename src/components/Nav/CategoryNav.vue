@@ -34,7 +34,7 @@
       v-on:mouseleave="cateogoryActiveReChange"
     >
       <ul>
-        <li
+        <!-- <li
           :key="String(Object.keys(MODAL)[1][0]) + 'li'"
           v-for="MODAL in this.showingData"
         >
@@ -43,7 +43,7 @@
             :to="
               `/category/${titleShowingData['name']}/${
                 Object.keys(MODAL)[1]
-              }/null`
+              }/total`
             "
           >
             <span @click="cateogoryActiveReChange">{{
@@ -55,6 +55,29 @@
               `/category/${titleShowingData['name']}/${Object.keys(MODAL)[1]}/${
                 Item['id']
               }`
+            "
+            class="inner-key"
+            :key="String(Item['id']) + 'atagKey'"
+            v-for="Item of MODAL[Object.keys(MODAL)[1]]"
+          >
+            <span @click="cateogoryActiveReChange">{{ Item['name'] }}</span>
+          </router-link>
+        </li> -->
+        <li
+          :key="String(Object.keys(MODAL)[1][0]) + 'li'"
+          v-for="MODAL in this.showingData"
+        >
+          <router-link
+            class="category-value"
+            :to="`/category/${titleShowingData['name']}/${MODAL['id']}/total`"
+          >
+            <span @click="cateogoryActiveReChange">{{
+              Object.keys(MODAL)[1]
+            }}</span>
+          </router-link>
+          <router-link
+            :to="
+              `/category/${titleShowingData['name']}/${MODAL['id']}/${Item['id']}`
             "
             class="inner-key"
             :key="String(Item['id']) + 'atagKey'"
@@ -826,9 +849,6 @@ export default {
       ]
     };
   },
-  mounted() {
-    console.log('너냐', this.titles.title);
-  },
   created: function() {
     this.updateCategories({
       category: this.navData
@@ -855,8 +875,6 @@ export default {
           }
         })
     });
-
-    this.giveNewValue();
   },
   computed: {
     ...mapGetters(serviceStore, ['getCategories', 'getTitle']),
@@ -886,10 +904,6 @@ export default {
           this.cateogoryActive = true;
         }
       }
-      console.log(
-        'CheckTITLESHOWINGDATA',
-        JSON.parse(JSON.stringify(this.titleShowingData['name']))
-      );
     },
     cateogoryActiveReChange() {
       this.cateogoryActive = false;

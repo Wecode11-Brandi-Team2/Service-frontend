@@ -1,47 +1,203 @@
 <template>
-  <section class="">
-    <div class="sign-up">
-      <SignUpNav title="회원가입" />
-      <div class="word-wrapper">
-        <img
-          class="phone-picture"
-          alt="phone-picture"
-          src="https://web-staging.brandi.co.kr/static/2020.7.3/images/h_icon_join_1_confirm_web(245)@3x.png"
-        />
-        <div class="conditions">
-          <span class="autho-title">브랜디 본인 인증</span>
-          <ul>
-            <li>
-              14세미만 회원은 가입이 불가합니다.
-            </li>
-            <li>
-              법인폰 사용자는 휴대폰 인증이 불가합니다.
-            </li>
-          </ul>
+  <div>
+    <section>
+      <div class="sign-up">
+        <SignUpNav title="회원가입" />
+        <div class="word-wrapper">
+          <img
+            class="phone-picture"
+            alt="phone-picture"
+            src="https://web-staging.brandi.co.kr/static/2020.7.3/images/h_icon_join_1_confirm_web(245)@3x.png"
+          />
+          <div class="conditions">
+            <span class="autho-title">브랜디 본인 인증</span>
+            <ul>
+              <li>
+                14세미만 회원은 가입이 불가합니다.
+              </li>
+              <li>
+                법인폰 사용자는 휴대폰 인증이 불가합니다.
+              </li>
+            </ul>
+          </div>
+          <div class="line" />
+          <!-- <router-link to="/agreement"> -->
+          <div @click="showNumberCheck">
+            <NextButton word="휴대폰 인증" />
+          </div>
+          <!-- </router-link> -->
         </div>
-        <div class="line" />
-        <NextButton word="휴대폰 인증" />
       </div>
-    </div>
-  </section>
+    </section>
+    <section :class="[numberCheckActive ? 'number-check' : 'hidden']">
+      <button class="quit-button" @click="showNumberCheck">나가기</button>
+
+      <div class="number-check-container">
+        <span class="explanation"
+          >본인 확인을 위한 휴대폰 정보를 기입해주세요.</span
+        >
+        <div></div>
+
+        <div class="phone-input-container">
+          <div class="phone-input-wrapper">
+            <select name="sltSample" size="1">
+              <option value="0" selected> 선택 </option>
+              <option value="1">SKT</option>
+              <option value="2">KT</option>
+              <option value="3">LG U+</option>
+              <option value="4">알뜰폰</option>
+            </select>
+
+            <input
+              name="phone"
+              v-model="phoneNumber"
+              minlength="11"
+              maxlength="11"
+            />
+          </div>
+          <div class="submit-button">
+            <router-link to="/agreement">
+              <NextButton word="다음 단계로 이동" />
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>
 import SignUpNav from './components/SignUpNav';
 import NextButton from './components/NextButton';
+import axios from 'axios';
 
 export default {
   name: 'SignUp',
+  data() {
+    return {
+      phoneNumber: '',
+      numberCheckActive: false
+    };
+  },
+
   components: {
     SignUpNav,
     NextButton
   },
-  methods: {}
+  watch: {
+    phoneNumber() {
+      return (this.phoneNumber = this.phoneNumber.replace(/[^0-9]/g, ''));
+    }
+  },
+  methods: {
+    fetchData() {
+      let URL = `http://10.58.2.0:5000/api/products?first_category_id=${this.$route.params.title}&second_category_id=${this.$route.params.id}&main_category_id=4&is_promotion=${this.promotion}`;
+      axios.get(URL).then(res => (this.productData = res.data.products));
+    },
+    showNumberCheck() {
+      this.numberCheckActive = !this.numberCheckActive;
+    }
+  }
 };
 </script>
 
 <style scoped lang="scss">
 @import '../../styles/common.scss';
+
+.number-check-container {
+  z-index: 1000;
+  position: relative;
+  top: 25%;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  .explanation {
+    text-align: center;
+    display: block;
+    margin: 50px 0;
+    font-weight: 750;
+    font-size: 25px;
+  }
+  .phone-input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+
+    .phone-input-wrapper {
+      display: flex;
+
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      select {
+        height: 60px;
+        margin-right: 10px;
+        font-size: 18px;
+      }
+      input {
+        font-size: 18px;
+
+        height: 60px;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.submit-button {
+  margin-top: 30px;
+}
+
+.hidden {
+  display: none;
+}
+/* .email-input-container {
+  width: 100%;
+}
+.email-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+} */
+
+.number-check {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.quit-button {
+  font-size: 18px;
+  font-weight: 300;
+  border-radius: 2px;
+  float: right;
+  margin: 2% 2% 0 0;
+  width: 50px;
+  height: 50px;
+  top: 2%;
+  right: 1%;
+  transition: all 0.5s ease-in-out;
+  color: white;
+  background-color: black;
+  border: 1px solid black;
+  &:hover {
+    color: black;
+    background-color: white;
+  }
+}
+
+a {
+  text-decoration: none;
+}
 
 .sign-up {
   margin: 50px 0;

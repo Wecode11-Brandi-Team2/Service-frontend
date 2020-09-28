@@ -54,6 +54,7 @@ import SelectSize from './SelectSize';
 import ProductInfomation from './ProductInfomation';
 import QA from './QA';
 import SlideImageWrapper from './SlideImageWrapper';
+import axios from 'axios';
 
 export default {
   name: 'Detail',
@@ -64,14 +65,24 @@ export default {
     QA,
     SlideImageWrapper
   },
+  props: ['id'],
   data() {
     return {
+      apiData: [],
       detailInfoTab: {
         review: 0,
         Q_A: 0
       }
     };
   },
+  // created: function() {
+  //   let URL = `https://sample:5000/detail?id=${this.params.$route.id}`;
+  //   axios.get(URL, {}).then(res => (this.apiData = res));
+  // },
+  mounted() {
+    console.log(this.$route.params.id);
+  },
+
   computed: {
     ProductInfo() {
       return this.$store.state.detailProductInfo.productInfo;

@@ -6,19 +6,40 @@
     <nav class="category-nav">
       <ul>
         <li
-          @click="updateTitleofLi"
           :newkey="String(Object.keys(CATEGORY)[1])"
           :class="[CATEGORY['active'] ? 'modalActive' : 'modalShowing']"
           :key="String(CATEGORY['name'])"
           v-for="CATEGORY in categories.category"
         >
-          <div
+          <!-- <div
             :class="[
               titles.title === CATEGORY[Object.keys(CATEGORY)[3]]
                 ? 'give-hover'
                 : 'no-hover'
             ]"
+          > -->
+          <div
+            :class="[
+              $route.path.split('/')[1] === 'category'
+                ? [
+                    CATEGORY[Object.keys(CATEGORY)[3]] ===
+                    $route.path.split('/')[2]
+                      ? 'give-hover'
+                      : 'no-hover'
+                  ]
+                : [
+                    CATEGORY[Object.keys(CATEGORY)[3]] ===
+                    $route.path.split('/')[1]
+                      ? 'give-hover'
+                      : 'no-hover'
+                  ]
+            ]"
           >
+            <!-- console.log(this.$route.path.split('/')[1] === 'category' ?
+            (this.$route.path.split('/')[1] === ); -->
+
+            <!-- mainCategoryKeyValue = String(`${CATEGORY[Object.keys(CATEGORY)[0]]}`) -->
+
             <router-link
               :newkey="String(Object.keys(CATEGORY)[1])"
               :to="'/' + String(`${CATEGORY[Object.keys(CATEGORY)[3]]}`)"
@@ -34,37 +55,8 @@
       v-on:mouseleave="cateogoryActiveReChange"
     >
       <ul>
-        <!-- <li
-          :key="String(Object.keys(MODAL)[1][0]) + 'li'"
-          v-for="MODAL in this.showingData"
-        >
-          <router-link
-            class="category-value"
-            :to="
-              `/category/${titleShowingData['name']}/${
-                Object.keys(MODAL)[1]
-              }/total`
-            "
-          >
-            <span @click="cateogoryActiveReChange">{{
-              Object.keys(MODAL)[1]
-            }}</span>
-          </router-link>
-          <router-link
-            :to="
-              `/category/${titleShowingData['name']}/${Object.keys(MODAL)[1]}/${
-                Item['id']
-              }`
-            "
-            class="inner-key"
-            :key="String(Item['id']) + 'atagKey'"
-            v-for="Item of MODAL[Object.keys(MODAL)[1]]"
-          >
-            <span @click="cateogoryActiveReChange">{{ Item['name'] }}</span>
-          </router-link>
-        </li> -->
         <li
-          :key="String(Object.keys(MODAL)[1][0]) + 'li'"
+          :key="String(Object.keys(MODAL)[1]) + 'li'"
           v-for="MODAL in this.showingData"
         >
           <router-link
@@ -887,9 +879,6 @@ export default {
   },
 
   methods: {
-    updateTitleofLi() {
-      this.updateTitle({ title: this.titleShowingData['name'] });
-    },
     ...mapActions(serviceStore, ['updateCategories', 'updateTitle']),
     cateogoryActiveChange(event) {
       this.getCategory = event.target.attributes.newkey;
@@ -901,6 +890,7 @@ export default {
         if (this.categories.category[i][this.navCheckData]) {
           this.titleShowingData = this.categories.category[i];
           this.showingData = this.categories.category[i][this.navCheckData];
+          this.updateTitle({ title: this.titleShowingData });
           this.cateogoryActive = true;
         }
       }

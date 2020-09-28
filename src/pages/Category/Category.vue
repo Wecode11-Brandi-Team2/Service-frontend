@@ -55,7 +55,14 @@
           <div class="category-summary">
             <span>CATEGORIES</span>
           </div>
-          <span class="all-categories"> 전체 </span>
+          <div @click="changeAllStatus">
+            <router-link
+              class="all-categories"
+              :to="`/category/${$route.params.specification}/total/total`"
+            >
+              <span> 전체 </span>
+            </router-link>
+          </div>
           <div class="category-key-wrapper">
             <div class="category-key">
               <div
@@ -92,6 +99,7 @@
                 >
                   <span class="detail-key">
                     <router-link
+                      @click="reChangeAllStatus"
                       :to="
                         `/category/${$route.params.specification}/${MODAL['id']}/total`
                       "
@@ -99,6 +107,7 @@
                     >
                   </span>
                   <li
+                    @click="reChangeAllStatus"
                     v-bind:class="[
                       $route.params.id == Item['id'] ? 'picked' : 'not-picked'
                     ]"
@@ -151,17 +160,7 @@
                 {{ value.name }}
               </span>
             </div>
-            <!-- <div :class="[filterActive ? 'filter-sample' : 'hidden']">
-              <span @click="filterValueChange">판매량순</span>
-              <span @click="filterValueChange">최신순</span>
-            </div> -->
           </section>
-          <!-- <select name="sltSample" size="1">
-            <option value="1"
-              ><span @click="changePromoOption">판매량순</span></option
-            >
-            <option value="2">최신순</option>
-          </select> -->
         </div>
         <section class="product-section">
           <ProductCard
@@ -176,7 +175,6 @@
 </template>
 <script>
 import ProductCard from '../../components/ProductCard/ProductCard';
-import { mapActions } from 'vuex';
 import { mapGetters } from 'vuex';
 import axios from 'axios';
 
@@ -189,84 +187,50 @@ export default {
   },
   data() {
     return {
-      saleCheckActive: false,
       navCheckData: [],
       filteredData: {},
       productData: [],
-      // PRODUCT_SAMPLE: [
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {}
-      // ],
       modalActive: false,
-      promotion: 0,
+
       filteringValue: [
         { id: 0, name: '판매량순' },
         { id: 1, name: '최신순' }
       ],
       filterValue: '판매량순',
       filterActive: false,
-      dropDownFilterValue: 0
+      saleCheckActive: false,
+      promotion: 0,
+      dropDownFilterValue: 0,
+      allStatus: 0
     };
   },
 
   computed: {
-    ...mapGetters(serviceStore, ['getCategories']),
+    ...mapGetters(serviceStore, ['getCategories', 'getTitle']),
     categories() {
       return this.getCategories;
+    },
+    titles() {
+      return this.getTitle;
     }
   },
 
   mounted() {
     let baseData = Object.entries(this.categories.category).map(el => el[1]);
-
     this.filteringAsideData(baseData);
+    console.log('?', this.titles.title['id']);
   },
 
   created: function() {
-    this.updateTitle({
-      title: this.$route.params.specification
-    });
-    // URL2 is test case
-    // let first =
-    //   this.$route.params.title != 'total'
-    //     ? `'first_category_id='${this.$route.params.title}`
-    //     : null;
-    // let second =
-    //   this.$route.params.id != 0
-    //     ? `&second_category_id=${this.$route.params.id}`
-    //     : 0;
-    // let main =
-    //   this.$route.params.id != 0
-    //     ? `&main_category_id=${this.$route.params.specification}`
-    //     : 0;
-    // let promo = `&is_promotion=${this.promotion}`;
-    // let URL2 = `http://10.58.2.0:5000/api/products?${first}${second}${main}${promo}`;
-    // URL2 is test case
-
-    let URL = `http://10.58.2.0:5000/api/products?first_category_id=${this.$route.params.title}&second_category_id=${this.$route.params.id}&main_category_id=4&is_promotion=${this.promotion}`;
-    axios.get(URL).then(res => (this.productData = res.data.products));
+    // this.updateTitle({
+    //   title: this.$route.params.specification
+    // });
+    this.fetchData();
   },
 
   methods: {
-    ...mapActions(serviceStore, ['updateTitle']),
+    // ...mapActions(serviceStore, ['updateTitle']),
+
     filteringAsideData(baseData) {
       for (let i = 0; i < baseData.length; i++) {
         let parsedData = JSON.parse(JSON.stringify(baseData[i]));
@@ -282,66 +246,98 @@ export default {
         }
       }
     },
+
     fetchData() {
-      let URL = `http://10.251.1.153:5000/api/products?first_category_id=${this.$route.params.title}&second_category_id=${this.$route.params.id}&main_category_id=4&is_promotion=${this.promotion}`;
-      axios.get(URL).then(res => (this.productData = res.data.products));
+      let madeURL = this.makeFetchData();
+      console.log('FILTERINGURL', madeURL);
+      axios.get(madeURL).then(res => (this.productData = res.data.products));
     },
 
-    changeModalActive(event) {
-      let filteredData = JSON.parse(JSON.stringify(this.filteredData));
-
-      this.filteredData = filteredData.map(el => {
-        if (
-          el.id === +event.target.attributes.newkey.value &&
-          el.active === false
-        ) {
-          return { ...el, active: true };
-        } else if (
-          el.id != +event.target.attributes.newkey.value &&
-          el.active === true
-        )
-          return { ...el, active: false };
-        else if (
-          el.id === +event.target.attributes.newkey.value &&
-          el.active === true
-        )
-          return { ...el, active: false };
-        return el;
-      });
-      return this.filteredData;
+    makeFetchData() {
+      let URL = `http://10.251.1.153:5000/api/products?`;
+      if (this.$route.params.title != 'total') {
+        URL = URL + '&' + `first_category_id=${this.$route.params.title}`;
+      }
+      if (this.$route.params.id != 'total') {
+        URL = URL + '&' + `second_category_id=${this.$route.params.id}`;
+      }
+      if (this.promotion != 0) {
+        URL = URL + '&' + `is_promotion=${this.promotion}`;
+      }
+      if (this.dropDownFilterValue != 0) {
+        URL = URL + '&' + `select=${this.dropDownFilterValue}`;
+      }
+      if (this.titles.title['id'] != 0 && this.allStatus === 1) {
+        URL =
+          URL +
+          '&' +
+          `main_category_id=${this.titles.title['id']}` +
+          '&' +
+          `all_items=${this.allStatus}`;
+      }
+      return (
+        URL.slice(0, URL.indexOf('?') + 1) +
+        URL.slice(URL.indexOf('?') + 2, URL.length)
+      );
+    },
+    changeAllStatus() {
+      this.allStatus = 1;
+      this.fetchData();
+    },
+    reChangeAllStatus() {
+      this.allStatus = 0;
+      this.fetchData();
     },
 
     ChangeSaleCheckActive() {
       this.saleCheckActive = !this.saleCheckActive;
-    },
-    changePromoOption(e) {
-      console.log('????', e.target.childNodes);
       this.promotion === 0 ? (this.promotion = 1) : (this.promotion = 0);
-      console.log('HElo', this.promotion);
+      console.log('PromoValue', this.promotion);
       this.fetchData();
-    },
-
-    filterChange() {
-      this.filterActive = !this.filterActive;
     },
 
     filterValueChange(e) {
       this.filterValue = e.target.innerHTML;
       this.filterActive = !this.filterActive;
       this.dropDownFilterValue = e.target.attributes.newkey.value;
-      console.log(this.dropDownFilterValue);
-      // if (this.filterValue === '판매량순') {
-      //   this.dropDownFilterValue = 0;
-      // } else if (this.filterValue === '최신순') {
-      //   this.dropDownFilterValue = 1;
-      // }
+      console.log('selectValue', this.dropDownFilterValue);
       this.fetchData();
+    },
+
+    changeModalActive(event) {
+      let filteredData = JSON.parse(JSON.stringify(this.filteredData));
+      let checkEvent = event.target.attributes.newkey;
+      if (checkEvent === undefined) {
+        return;
+      }
+      this.filteredData = filteredData.map(el => {
+        if (el.id === +checkEvent.value && el.active === false) {
+          return { ...el, active: true };
+        } else if (el.id != +checkEvent.value && el.active === true)
+          return { ...el, active: false };
+        else if (el.id === +checkEvent.value && el.active === true)
+          return { ...el, active: false };
+        return el;
+      });
+      return this.filteredData;
+    },
+
+    filterChange() {
+      this.filterActive = !this.filterActive;
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
+.all-categories {
+  color: black;
+  text-decoration: none;
+  transition: all 0.3s ease-in;
+  &:hover {
+    color: #ff204b;
+  }
+}
 .dropdown-filter-container {
   display: flex;
   justify-content: flex-end;

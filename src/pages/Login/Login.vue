@@ -16,7 +16,9 @@
         </div>
         <div>
           <button class="login-button">로그인</button>
-          <button class="login-button ">회원가입</button>
+          <router-link to="/signup">
+            <button class="login-button ">회원가입</button>
+          </router-link>
         </div>
         <div class="find-id-pw">
           <a href="">아이디 찾기</a>
@@ -27,6 +29,7 @@
         <GoogleLogin
           class="google-login-button"
           :params="params"
+          b
           :onSuccess="onSuccess"
           :onFailure="onFailure"
         >
@@ -58,24 +61,31 @@ export default {
       }
     };
   },
+
   methods: {
     onSuccess(googleUser) {
       axios
-        .post('http://10.251.1.125:5000/api/user/google-login', {
-          tokent_type: googleUser.wc.tokent_type,
+        .post('http://10.251.1.139:5000/api/user/googleLogin', {
           access_token: googleUser.wc.access_token
         })
+        .then(console.log('GOOGLE', googleUser.wc.access_token))
         .then(googleUser => {
-          console.log(
-            'LoginSuccess',
-            localStorage.setItem('access_token', googleUser.data.access_token)
-          );
+          localStorage.setItem('access_token', googleUser.data.access_token);
+
+          console.log('LoginSuccess', googleUser);
+          alert('Google Login Success');
         })
         .then(res => console.log(res))
         .catch(error => alert(error));
-      console.log(googleUser.wc.access_token);
-      // alert('Google Login Success');
+
+      // localStorage.setItem('access_token', googleUser.data.access_token);
+      // console'd be delete
       console.log(googleUser.getBasicProfile());
+      // console'd be delete
+
+      // alert('Google Login Success');
+      // console.log(googleUser);
+      // console.log(googleUser.getBasicProfile());
     },
 
     onFailure(googleUser) {

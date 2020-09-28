@@ -93,9 +93,7 @@
                   <span class="detail-key">
                     <router-link
                       :to="
-                        `/category/${$route.params.specification}/${
-                          Object.keys(MODAL)[1]
-                        }/total`
+                        `/category/${$route.params.specification}/${MODAL['id']}/total`
                       "
                       >전체</router-link
                     >
@@ -110,9 +108,7 @@
                   >
                     <router-link
                       :to="
-                        `/category/${$route.params.specification}/${
-                          Object.keys(MODAL)[1]
-                        }/${Item['id']}`
+                        `/category/${$route.params.specification}/${MODAL['id']}/${Item['id']}`
                       "
                       >{{ Item['name'] }}</router-link
                     >
@@ -124,10 +120,54 @@
         </div>
       </div>
       <div class="product-section-wrapper">
+        <div class="dropdown-filter-container">
+          <section class="dropdown-filter">
+            <div class="picked-filter" @click="filterChange">
+              <span>{{ filterValue }}</span>
+              <svg
+                v-bind:class="[
+                  filterActive
+                    ? 'reverse-direction transition'
+                    : 'direction transition'
+                ]"
+                viewBox="0 0 10px 10px"
+                role="presentation"
+              >
+                <svg id="chevron-left" viewBox="0 0 10px 10px">
+                  <polygon
+                    class="st0"
+                    points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
+                  ></polygon>
+                </svg>
+              </svg>
+            </div>
+            <div :class="[filterActive ? 'filter-sample' : 'hidden']">
+              <span
+                v-for="value of filteringValue"
+                :key="value.name"
+                :newkey="value.id"
+                @click="filterValueChange"
+              >
+                {{ value.name }}
+              </span>
+            </div>
+            <!-- <div :class="[filterActive ? 'filter-sample' : 'hidden']">
+              <span @click="filterValueChange">판매량순</span>
+              <span @click="filterValueChange">최신순</span>
+            </div> -->
+          </section>
+          <!-- <select name="sltSample" size="1">
+            <option value="1"
+              ><span @click="changePromoOption">판매량순</span></option
+            >
+            <option value="2">최신순</option>
+          </select> -->
+        </div>
         <section class="product-section">
           <ProductCard
-            :key="String(PRODUCT) + 'Product'"
-            v-for="PRODUCT in PRODUCT_SAMPLE"
+            :product="product"
+            :key="product"
+            v-for="product of productData"
           />
         </section>
       </div>
@@ -138,6 +178,8 @@
 import ProductCard from '../../components/ProductCard/ProductCard';
 import { mapActions } from 'vuex';
 import { mapGetters } from 'vuex';
+import axios from 'axios';
+
 const serviceStore = 'serviceStore';
 
 export default {
@@ -150,29 +192,38 @@ export default {
       saleCheckActive: false,
       navCheckData: [],
       filteredData: {},
-      PRODUCT_SAMPLE: [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
+      productData: [],
+      // PRODUCT_SAMPLE: [
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {}
+      // ],
+      modalActive: false,
+      promotion: 0,
+      filteringValue: [
+        { id: 0, name: '판매량순' },
+        { id: 1, name: '최신순' }
       ],
-      modalActive: false
+      filterValue: '판매량순',
+      filterActive: false,
+      dropDownFilterValue: 0
     };
   },
 
@@ -193,6 +244,25 @@ export default {
     this.updateTitle({
       title: this.$route.params.specification
     });
+    // URL2 is test case
+    // let first =
+    //   this.$route.params.title != 'total'
+    //     ? `'first_category_id='${this.$route.params.title}`
+    //     : null;
+    // let second =
+    //   this.$route.params.id != 0
+    //     ? `&second_category_id=${this.$route.params.id}`
+    //     : 0;
+    // let main =
+    //   this.$route.params.id != 0
+    //     ? `&main_category_id=${this.$route.params.specification}`
+    //     : 0;
+    // let promo = `&is_promotion=${this.promotion}`;
+    // let URL2 = `http://10.58.2.0:5000/api/products?${first}${second}${main}${promo}`;
+    // URL2 is test case
+
+    let URL = `http://10.58.2.0:5000/api/products?first_category_id=${this.$route.params.title}&second_category_id=${this.$route.params.id}&main_category_id=4&is_promotion=${this.promotion}`;
+    axios.get(URL).then(res => (this.productData = res.data.products));
   },
 
   methods: {
@@ -205,12 +275,16 @@ export default {
         if (parsedData['name'] === this.$route.params.specification) {
           let filteredData = parsedData[nameData];
           return (this.filteredData = filteredData.map(el =>
-            Object.keys(el)[1] === this.$route.params.title
+            el['id'] === Number(this.$route.params.title)
               ? { ...el, active: true }
               : { ...el, active: false }
           ));
         }
       }
+    },
+    fetchData() {
+      let URL = `http://10.251.1.153:5000/api/products?first_category_id=${this.$route.params.title}&second_category_id=${this.$route.params.id}&main_category_id=4&is_promotion=${this.promotion}`;
+      axios.get(URL).then(res => (this.productData = res.data.products));
     },
 
     changeModalActive(event) {
@@ -239,12 +313,73 @@ export default {
 
     ChangeSaleCheckActive() {
       this.saleCheckActive = !this.saleCheckActive;
+    },
+    changePromoOption(e) {
+      console.log('????', e.target.childNodes);
+      this.promotion === 0 ? (this.promotion = 1) : (this.promotion = 0);
+      console.log('HElo', this.promotion);
+      this.fetchData();
+    },
+
+    filterChange() {
+      this.filterActive = !this.filterActive;
+    },
+
+    filterValueChange(e) {
+      this.filterValue = e.target.innerHTML;
+      this.filterActive = !this.filterActive;
+      this.dropDownFilterValue = e.target.attributes.newkey.value;
+      console.log(this.dropDownFilterValue);
+      // if (this.filterValue === '판매량순') {
+      //   this.dropDownFilterValue = 0;
+      // } else if (this.filterValue === '최신순') {
+      //   this.dropDownFilterValue = 1;
+      // }
+      this.fetchData();
     }
   }
 };
 </script>
 
 <style scoped lang="scss">
+.dropdown-filter-container {
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
+
+  .dropdown-filter {
+    width: 130px;
+    height: 45px;
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    .picked-filter {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #e7e7e7;
+      height: 25px;
+    }
+    .filter-sample {
+      position: absolute;
+      width: 130px;
+      height: 25px;
+      span {
+        display: block;
+        border: 1px solid #e7e7e7;
+        width: 130px;
+        height: 25px;
+        text-align: left;
+        cursor: pointer;
+        &:hover {
+          color: #ff204b;
+          border-bottom: 1px solid #ff204b;
+          transition: all 0.3s ease-in;
+        }
+      }
+    }
+  }
+}
 * {
   font-family: 'Spoqa Han Sans', Sans-serif;
 }

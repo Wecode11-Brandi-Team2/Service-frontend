@@ -1,26 +1,34 @@
 <template>
   <div class="main-product">
     <router-link to="/detail">
-      <img
-        alt="productImage"
-        src="http://image.brandi.me/cproduct/2020/08/10/17865197_1597044606_image1_M.jpg"
-      />
+      <img alt="productImage" :src="product.image" />
     </router-link>
     <ul>
-      <li><span class="brand">브레스</span></li>
+      <li>
+        <span class="brand">{{ product.seller_name || '브랜디' }}</span>
+      </li>
       <li>
         <a href="">
-          <span>[국내제작]</span>
-          <span class="productname">도로시 롱 원피스 </span>
+          <span class="productname">{{ product.name || 23232 }} </span>
         </a>
       </li>
       <li>
-        <span class="discount"> 9%</span>
-        <span class="price">7,000</span>
-        <span class="discountPrice">6,370</span>
+        <span :class="[product.discount_rate === 0 ? 'hidden' : 'discount']">
+          {{ product.discount_rate || 2222 }}%</span
+        >
+        <span class="price"
+          >{{ product.price.toLocaleString('en') || 2222 }}원</span
+        >
+        <span
+          :class="[product.discount_rate === 0 ? 'hidden' : 'discountPrice']"
+          >{{ product.discount_price.toLocaleString('en') || 2222 }}원</span
+        >
       </li>
       <li>
-        <span class="count">7,871개 구매 중</span>
+        <span class="count"
+          >{{ product.sales_amount.toLocaleString('en') || 2222 }}개 구매
+          중</span
+        >
       </li>
       <li></li>
     </ul>
@@ -30,11 +38,21 @@
 <script>
 export default {
   name: 'MainProduct',
-  props: {}
+  props: ['product'],
+  data() {
+    return {};
+  },
+  created() {},
+
+  method: {}
 };
 </script>
 
 <style scoped lang="scss">
+.hidden {
+  display: none;
+}
+
 a {
   text-decoration: none;
   color: black;

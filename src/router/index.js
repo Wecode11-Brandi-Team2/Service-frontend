@@ -12,6 +12,10 @@ import Order from '../pages/Order/Order.vue';
 import Trend from '../pages/Trend/Trend';
 import Brand from '../pages/Brand/Brand';
 import Beauty from '../pages/Beauty/Beauty';
+import TimeDeal from '../pages/TimeDeal/TimeDeal';
+import Information from '../pages/Login/Information';
+import Complete from '../pages/Login/Complete';
+import GoogleInformation from '../pages/Login/GoogleInformation';
 
 Vue.use(VueRouter);
 
@@ -80,6 +84,24 @@ export const router = new VueRouter({
       path: '/beauty',
       name: 'Beauty',
       component: Beauty
+      path: '/information',
+      name: 'Information',
+      component: Information
+    },
+    {
+      path: '/complete',
+      name: 'Complete',
+      component: Complete
+    },
+    {
+      path: '/timedeal',
+      name: 'TimeDeal',
+      component: TimeDeal
+    },
+    {
+      path: '/googleinformation',
+      name: 'GoogleInformation',
+      component: GoogleInformation
     }
   ]
 });

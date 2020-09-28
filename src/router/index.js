@@ -28,9 +28,10 @@ export const router = new VueRouter({
       component: Main
     },
     {
-      path: '/detail',
+      path: '/detail/:id',
       name: 'Detail',
-      component: Detail
+      component: Detail,
+      props: true
     },
     {
       path: '/login',
@@ -84,6 +85,8 @@ export const router = new VueRouter({
       path: '/beauty',
       name: 'Beauty',
       component: Beauty
+    },
+    {
       path: '/information',
       name: 'Information',
       component: Information

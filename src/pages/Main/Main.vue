@@ -88,25 +88,24 @@ export default {
       //   {}
       // ]
       productData: [],
-      limit: 100,
+      offset: 0,
       buttonShow: false
     };
   },
   created: function() {
-    let self = this;
     axios
       .get(
-        `http://10.251.1.153:5000/api/products?offset=0&limit=${this.limit}`,
+        `http://10.251.1.153:5000/api/products?offset=${this.offset}&limit=100`,
         {}
       )
-      .then(res => (self.productData = res.data.products));
+      .then(res => (this.productData = res.data.products));
     window.addEventListener('scroll', this.removeButton);
   },
 
   methods: {
     getMoreData() {
-      this.limit = this.limit + 20;
-      console.log(this.limit);
+      this.offset = this.offset + 101;
+      console.log(this.offset);
       this.fetchData();
       if (this.productData.length >= 300) {
         return (this.buttonShow = true);
@@ -116,10 +115,12 @@ export default {
     fetchData() {
       axios
         .get(
-          `http://10.58.2.0:5000/api/products?offset=0&limit=${this.limit}`,
+          `http://10.251.1.153:5000/api/products?offset=${this.offset}&limit=100`,
           {}
         )
-        .then(res => (this.productData = res.data.products));
+        .then(
+          res => (this.productData = this.productData.concat(res.data.products))
+        );
     },
 
     cateogoryActiveChange(event) {

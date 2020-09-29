@@ -3,10 +3,15 @@ export default {
   state: {
     categories: {
       category: []
-      // title: ''
     },
     titles: {
       title: ''
+    },
+    accesses: {
+      access: ''
+    },
+    phones: {
+      phone: 0
     }
   },
 
@@ -16,6 +21,12 @@ export default {
     },
     getTitle(state) {
       return state.titles;
+    },
+    getAccess(state) {
+      return state.accesses;
+    },
+    getPhone(state) {
+      return state.phones;
     }
   },
 
@@ -25,16 +36,24 @@ export default {
         category
       };
       state.categories = newCategories;
-      // const newTitle = {
-      //   title
-      // };
-      // state.title = newTitle;
     },
     updateTitle(state, title) {
       const newTitles = {
         title
       };
       state.titles = newTitles;
+    },
+    updateAccess(state, access) {
+      const newAccess = {
+        access
+      };
+      state.accesses = newAccess;
+    },
+    updatePhone(state, phone) {
+      const newPhone = {
+        phone
+      };
+      state.phones = newPhone;
     }
   },
 
@@ -44,6 +63,12 @@ export default {
     },
     updateTitle({ commit }, { title }) {
       commit('updateTitle', title);
+    },
+    updateAccess({ commit }, { access }) {
+      commit('updateAccess', access);
+    },
+    updatePhone({ commit }, { phone }) {
+      commit('updatePhone', phone);
     }
   }
 };

@@ -31,7 +31,9 @@
         ㅣ
         <a class="menu" href="/mypage">마이페이지</a>
         ㅣ
-        <a class="menu" href="/login">로그인</a>
+        <span @click="changeRoute" class="menu" href="/login">{{
+          loginStatus
+        }}</span>
         ㅣ
         <a class="menu" href="http://wwww.brandiinc.com/brandi" target="_blank"
           >입점문의</a
@@ -48,7 +50,16 @@ const serviceStore = 'serviceStore';
 
 export default {
   name: 'Nav',
-
+  data() {
+    return {
+      token: '',
+      loginStatus: '로그인'
+    };
+  },
+  created() {
+    this.token = localStorage.getItem('access_token');
+    console.log('thisTOKEN', this.token);
+  },
   computed: {
     ...mapGetters(serviceStore, ['getCategories', 'getTitle']),
     categories() {
@@ -58,12 +69,25 @@ export default {
       return this.getTitle;
     }
   },
+  watch() {
+    this.changeRoute();
+  },
   methods: {
     ...mapActions(serviceStore, ['updateCategories', 'updateTitle']),
 
     goHome() {
       this.updateTitle({ title: String('/') });
       console.log(this.titles.title);
+    },
+    changeRoute() {
+      if (this.token != undefined) {
+        localStorage.removeItem('access_token');
+        this.loginStatus = '로그아웃';
+        this.$router.push('/');
+      } else {
+        this.$router.push('/login');
+        this.loginStatus = '로그인';
+      }
     }
   }
 };

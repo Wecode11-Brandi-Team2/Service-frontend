@@ -53,6 +53,7 @@
               v-model="phoneNumber"
               minlength="11"
               maxlength="11"
+              @keydown="numberCheck"
             />
           </div>
           <div class="submit-button" @click="goToAgreement">
@@ -67,7 +68,8 @@
 <script>
 import SignUpNav from './components/SignUpNav';
 import NextButton from './components/NextButton';
-import axios from 'axios';
+import { mapActions } from 'vuex';
+const serviceStore = 'serviceStore';
 
 export default {
   name: 'SignUp',
@@ -76,6 +78,20 @@ export default {
       phoneNumber: '',
       numberCheckActive: false,
       selected: '선택',
+      allowKey: [
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '7',
+        '8',
+        '9',
+        'Backspace',
+        'ArrowRight',
+        'ArrowLeft'
+      ],
       options: [
         { id: 0, text: 'SKT', value: 'option1' },
         { id: 0, text: 'KT', value: 'option2' },
@@ -89,22 +105,35 @@ export default {
     SignUpNav,
     NextButton
   },
-  watch: {
-    phoneNumber() {
-      return (this.phoneNumber = this.phoneNumber.replace(/[^0-9]/g, ''));
-    }
-  },
+  // watch: {
+  //   phoneNumber() {
+  //     return (
+  //       (this.phoneNumber = this.phoneNumber.replace(/[^0-9]/g, '')),
+  //     );
+  //   }
+  // },
   methods: {
-    fetchData() {
-      let URL = `http://10.58.2.0:5000/api/products?first_category_id=${this.$route.params.title}&second_category_id=${this.$route.params.id}&main_category_id=4&is_promotion=${this.promotion}`;
-      axios.get(URL).then(res => (this.productData = res.data.products));
+    ...mapActions(serviceStore, ['updatePhone']),
+
+    numberCheck(event) {
+      console.log(event.key);
+      if (!this.allowKey.includes(event.key)) {
+        event.preventDefault();
+        return false;
+      }
+      return true;
     },
+    // fetchData() {
+    //   let URL = `http://10.58.2.0:5000/api/products?first_category_id=${this.$route.params.title}&second_category_id=${this.$route.params.id}&main_category_id=4&is_promotion=${this.promotion}`;
+    //   axios.get(URL).then(res => (this.productData = res.data.products));
+    // },
     showNumberCheck() {
       this.numberCheckActive = !this.numberCheckActive;
     },
     goToAgreement() {
       console.log(this.selected);
       if (this.phoneNumber.length >= 11 && this.selected != '선택') {
+        this.updatePhone({ phone: this.phoneNumber });
         alert('저장되었습니다');
         this.$router.push('/agreement');
       }

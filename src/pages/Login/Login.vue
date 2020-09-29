@@ -31,7 +31,6 @@
           :params="params"
           b
           :onSuccess="onSuccess"
-          :onFailure="onFailure"
         >
           <img
             alt="googleLogin"
@@ -48,6 +47,8 @@
 <script>
 import GoogleLogin from 'vue-google-login';
 import axios from 'axios';
+import { mapActions } from 'vuex';
+const serviceStore = 'serviceStore';
 
 export default {
   name: 'Login',
@@ -63,7 +64,9 @@ export default {
   },
 
   methods: {
+    ...mapActions(serviceStore, ['updateAccess']),
     onSuccess(googleUser) {
+      this.updateAccess({ access: googleUser.wc.access_token });
       axios
         .post('http://10.251.1.139:5000/api/user/googleLogin', {
           access_token: googleUser.wc.access_token
@@ -74,47 +77,16 @@ export default {
 
           console.log('LoginSuccess', googleUser);
           alert('Google Login Success');
+          this.$router.push('/');
         })
         .then(res => console.log(res))
-        .catch(error => alert(error));
-
-      // localStorage.setItem('access_token', googleUser.data.access_token);
-      // console'd be delete
-      console.log(googleUser.getBasicProfile());
-      // console'd be delete
-
-      // alert('Google Login Success');
-      // console.log(googleUser);
-      // console.log(googleUser.getBasicProfile());
-    },
-
-    onFailure(googleUser) {
-      alert('Google Login Fail');
-      console.log(googleUser);
+        .catch(error => {
+          if (error.response.status === 401) {
+            alert('비회원이므로 회원가입 페이지로 이동합니다!');
+            this.$router.push('/signup');
+          }
+        });
     }
-    // GoogleLoginSuccess(googleUser) {
-    //   if (localStorage.getItem('JWT_token')) return alert('로그인됨');
-    //   Google.GoogleLoginSuccess(googleUser);
-    // },
-    // GoogleLoginFailure() {
-    //   Google.LoginFailure();
-    //   console.log('fail');
-    // },
-
-    // fetchData() {
-    //   fetch('http://10.251.1.125:5000/user/google_login', {
-    //     method: 'POST',
-    //     body: JSON.stringify({
-    //       name: sessionStorage.getItem()
-    //     })
-    //   })
-    //     .then(res => res.json())
-    //     .then(res => {
-    //       if (res.success) {
-    //         alert('저장 완료');
-    //       }
-    //     });
-    // }
   }
 };
 </script>

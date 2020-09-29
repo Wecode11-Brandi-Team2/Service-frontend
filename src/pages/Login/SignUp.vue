@@ -21,11 +21,9 @@
             </ul>
           </div>
           <div class="line" />
-          <!-- <router-link to="/agreement"> -->
           <div @click="showNumberCheck">
             <NextButton word="휴대폰 인증" />
           </div>
-          <!-- </router-link> -->
         </div>
       </div>
     </section>
@@ -40,13 +38,15 @@
 
         <div class="phone-input-container">
           <div class="phone-input-wrapper">
-            <select name="sltSample" size="1">
-              <option value="0" selected> 선택 </option>
-              <option value="1">SKT</option>
-              <option value="2">KT</option>
-              <option value="3">LG U+</option>
-              <option value="4">알뜰폰</option>
-            </select>
+            <select v-model="selected">
+              <option selected>선택</option>
+              <option
+                v-for="option in options"
+                :key="option.id + 'Hello'"
+                :value="option.value"
+                >{{ option.text }}
+              </option></select
+            >
 
             <input
               name="phone"
@@ -55,10 +55,8 @@
               maxlength="11"
             />
           </div>
-          <div class="submit-button">
-            <router-link to="/agreement">
-              <NextButton word="다음 단계로 이동" />
-            </router-link>
+          <div class="submit-button" @click="goToAgreement">
+            <NextButton word="다음 단계로 이동" />
           </div>
         </div>
       </div>
@@ -76,7 +74,14 @@ export default {
   data() {
     return {
       phoneNumber: '',
-      numberCheckActive: false
+      numberCheckActive: false,
+      selected: '선택',
+      options: [
+        { id: 0, text: 'SKT', value: 'option1' },
+        { id: 0, text: 'KT', value: 'option2' },
+        { id: 0, text: 'LGU+', value: 'option3' },
+        { id: 0, text: '알뜰폰', value: 'option4' }
+      ]
     };
   },
 
@@ -96,6 +101,23 @@ export default {
     },
     showNumberCheck() {
       this.numberCheckActive = !this.numberCheckActive;
+    },
+    goToAgreement() {
+      console.log(this.selected);
+      if (this.phoneNumber.length >= 11 && this.selected != '선택') {
+        alert('저장되었습니다');
+        this.$router.push('/agreement');
+      }
+      if (this.phoneNumber.length < 11) {
+        console.log(this.selected);
+
+        alert('휴대폰번호 11자리를 기입해주세요');
+      }
+      if (this.selected === '선택') {
+        console.log(this.selected);
+
+        alert('통신사를 선택해주세요');
+      }
     }
   }
 };
@@ -156,14 +178,6 @@ export default {
 .hidden {
   display: none;
 }
-/* .email-input-container {
-  width: 100%;
-}
-.email-input-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-} */
 
 .number-check {
   position: fixed;

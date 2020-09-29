@@ -10,50 +10,38 @@
       <div class="agreement-container">
         <div class="line" />
         <div class="whole-click-space">
-          <input class="check-box" type="checkbox" id="agree-total" />
+          <input
+            v-model="allSelected"
+            :value="checkedNames"
+            @click="allAgree"
+            class="check-box"
+            type="checkbox"
+            id="agree-total"
+          />
           <label for="agree-total">모두 동의</label>
         </div>
         <div class="click-space-wrapper">
-          <div class="click-space">
+          <div
+            :newkey="agreement.id"
+            class="click-space"
+            :key="agreement.title"
+            v-for="agreement of agreementData"
+          >
             <div>
               <input
+                @click="selectAgree"
                 class="check-box"
-                :class="[clickActive ? 'checked' : '']"
                 type="checkbox"
-                id="brandy-argree"
+                :id="`brandy-argree${agreement.id}`"
+                :value="agreement.title"
+                v-model="checkedNames"
               />
-              <label for="brandy-argree" @click="checkActive"
-                >브랜디 약관 동의</label
-              >
-              <span>(필수)</span>
+              <label :for="`brandy-argree${agreement.id}`">{{
+                agreement.title
+              }}</label>
+              <span>({{ agreement.choice }})</span>
             </div>
-            <a href="">내용보기</a>
-          </div>
-          <div class="click-space">
-            <div>
-              <input class="check-box" type="checkbox" id="personal-info" />
-              <label for="personal-info">
-                개인정보수집 및 이용에 대한 안내
-              </label>
-              <span>(필수)</span>
-            </div>
-            <a href="">내용보기</a>
-          </div>
-          <div class="click-space">
-            <div>
-              <input class="check-box" type="checkbox" id="event-agree" />
-              <label for="event-agree">이벤트/마케팅 수신 동의</label>
-              <span>(선택)</span>
-            </div>
-            <a href="">내용보기</a>
-          </div>
-          <div class="click-space margin-left">
-            <div>
-              <input class="check-box" type="checkbox" id="alarm-agree" />
-              <label for="alarm-agree">야간 혜택 알림 수신 동의 </label>
-              <span>(선택)</span>
-            </div>
-            <a href="">내용보기</a>
+            <a :href="agreement.detailLink">내용보기</a>
           </div>
         </div>
         <div class="line" />
@@ -75,16 +63,54 @@ export default {
   name: 'SignUp',
   data() {
     return {
-      clickActive: false
+      agreementData: [
+        { id: 1, title: '브랜디 약관 동의', detailLink: '', choice: '필수' },
+        {
+          id: 2,
+          title: '개인정보수집 및 이용에 대한 안내',
+          detailLink: '',
+          choice: '필수'
+        },
+        {
+          id: 3,
+          title: '이벤트/마케팅 수신 동의',
+          detailLink: '',
+          choice: '선택'
+        },
+        {
+          id: 4,
+          title: '야간 혜택 알림 수신 동의',
+          detailLink: '',
+          choice: '선택'
+        }
+      ],
+      selected: [],
+      allSelected: false,
+      id: [],
+      checkedNames: []
     };
   },
   components: {
     SignUpNav,
     NextButton
   },
+
   methods: {
-    checkActive() {
-      this.clickActive = !this.clickActive;
+    allAgree() {
+      if (this.allSelected) {
+        this.checkedNames = [];
+      } else {
+        for (let agreement of this.agreementData) {
+          this.checkedNames = this.checkedNames.concat(agreement.title);
+        }
+      }
+    },
+    selectAgree(e) {
+      this.allSelected = false;
+
+      if (e.target.defaultValue === '야간 혜택 알림 수신 동의') {
+        this.checkedNames = this.checkedNames.concat('이벤트/마케팅 수신 동의');
+      }
     }
   }
 };
@@ -132,6 +158,10 @@ a {
       @include setFlex(space-between, center, null);
       margin-bottom: 12px;
 
+      &:nth-child(4) {
+        margin-left: 30px;
+      }
+
       input {
         @include setSize(20px, 20px);
       }
@@ -170,7 +200,7 @@ a {
 } */
 
 .checked {
-  background-color: red;
+  color: red;
 }
 
 .check-box {
@@ -181,9 +211,5 @@ a {
   height: 1px;
   margin: 20px 0;
   background-color: #dfdfdf;
-}
-
-.margin-left {
-  margin-left: 30px;
 }
 </style>

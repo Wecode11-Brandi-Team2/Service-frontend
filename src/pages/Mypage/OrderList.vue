@@ -42,19 +42,29 @@
         </div>
       </div>
     </div>
-    <div class="btn-wrapper">
-      <button class="cancel-btn">주문취소</button>
+    <div class="order-btn-wrapper">
+      <button @click="request">환불요청</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['productInfo']
+  props: ['productInfo'],
+  methods: {
+    request() {
+      let answer = confirm('선택하신 주문을 환불하시겠습니까?');
+      if (answer == true) {
+        this.$router.push('refund');
+      }
+    }
+  }
 };
 </script>
 
 <style scoped lang="scss">
+@import '../../styles/common.scss';
+
 .orderitem-wrapper {
   margin: 0 70px;
   padding: 0 20px;
@@ -76,11 +86,9 @@ export default {
       line-height: 0;
     }
     .btn-showdetail {
-      font-size: 24px;
+      @include setFont(24px, #000000, bold);
       margin-top: 3px;
       text-decoration: none;
-      color: #000000;
-      font-weight: bold;
       cursor: pointer;
 
       .order-arrow {
@@ -95,11 +103,10 @@ export default {
     }
   }
   .delivery-wrapper {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #e1e1e1;
 
     .seller-title {
-      font-weight: bold;
-      font-size: 26px;
+      @include setFont(26px, null, bold);
       padding-top: 20px;
       padding-bottom: 20px;
       border-bottom: 1px solid #000;
@@ -111,20 +118,17 @@ export default {
         height: 64px;
 
         .shop-name {
+          @include setFont(17px, #000000, bold);
           width: 126px;
           padding: 19px 10px;
-          color: #000000;
           cursor: pointer;
           text-decoration: none;
-          font-size: 17px;
-          font-weight: bold;
         }
         .empty {
           width: 673px;
         }
         .data {
-          font-weight: 400;
-          font-size: 16px;
+          @include setFont(16px, null, 400);
           letter-spacing: 0.7;
           text-align: center;
           width: 252px;
@@ -139,9 +143,9 @@ export default {
 
         .item-image {
           padding: 15px 10px;
+
           img {
-            width: 95px;
-            height: 95px;
+            @include setSize(95px, 95px);
             margin-right: 10px;
             cursor: pointer;
           }
@@ -151,8 +155,7 @@ export default {
           padding: 10px;
 
           .item-name {
-            font-weight: 400;
-            font-size: 1em;
+            @include setFont(1em, null, 400);
             margin-bottom: 4px;
           }
           .order-data {
@@ -175,22 +178,22 @@ export default {
       }
     }
   }
-  .btn-wrapper {
+  .order-btn-wrapper {
     display: flex;
-    justify-content: center;
-
-    .cancel-btn {
-      margin-top: 30px;
-      background: #000000;
-      padding: 19px 0;
-      font-size: 20px;
-      width: 45%;
-      display: inline-block;
-      color: #ffffff;
-      cursor: pointer;
-      font-weight: lighter;
+    justify-content: flex-end;
+    border-bottom: 1px solid black;
+    button {
+      font-size: 14px;
+      margin: 10px 5px 7px 0;
+      padding: 10px 25px;
+      height: 42px;
+      overflow: hidden;
       text-align: center;
-      letter-spacing: 1;
+      color: #000;
+      border: solid 1px #000;
+      background: #fff;
+      display: inline-block;
+      cursor: pointer;
     }
   }
 }

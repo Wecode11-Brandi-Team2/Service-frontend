@@ -1,3 +1,5 @@
+// import axios from 'axios';
+
 export default {
   state: {
     productInfo: {
@@ -67,11 +69,27 @@ export default {
         }
       ]
     },
-    isColorSelected: false
+    isColorSelected: false,
+    // ---
+    // 실제 api 통신할 부분
+    productDetail: {}
   },
   mutations: {
     COLOR_SELECT(state, Selected) {
       state.isColorSelected = Selected;
     }
+    // 4. 받아온 api 를 data 에 집어 넣는 과정
+    // SET_DETAIL_INFO(state, detail) {
+    //   state.productDetail = detail;
+    // }
+  },
+  actions: {
+    // 3. 백엔드에서 api 를 받아와서 정보를 mutations 를 통해 올리기 전 과정
+    // api 주소만 입력하면 됨
+    // getDetailInfo({ commit }) {
+    //   axios.get('').then(res => {
+    //     commit('SET_DETAIL_INFO', res.data);
+    //   });
+    // }
   }
 };

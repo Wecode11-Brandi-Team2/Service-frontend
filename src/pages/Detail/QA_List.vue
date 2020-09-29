@@ -1,14 +1,20 @@
 <template>
   <tr>
-    <td>{{ QA_type }}</td>
+    <td>{{ q_type }}</td>
     <td>
-      <span class="state-icon">{{ QA_state ? '답변완료' : '답변대기' }}</span>
+      <span :class="[q_is_answered ? 'state-icon' : 'state-icon-waiting']">{{
+        q_is_answered ? '답변완료' : '답변대기'
+      }}</span>
     </td>
     <td class="contents" @click="activeContents">
-      <SecretContents :QA_isSecret="QA_isSecret" />
+      <SecretContents :q_content="q_content" :q_is_private="q_is_private" />
     </td>
     <div class="detail-active" v-if="isActiveContents">
-      <SecretContents :opacity="Opacity" :QA_isSecret="QA_isSecret" />
+      <SecretContents
+        :opacity="Opacity"
+        :q_content="q_content"
+        :q_is_private="q_is_private"
+      />
       <div class="answer-wrapper">
         <div class="answer">
           답변
@@ -16,12 +22,12 @@
         <SecretContents :opacity="Opacity" :QA_isSecret="QA_isSecret" />
         <div class="answered-by">
           <span class="writer">브랜디</span>
-          <span class="date">{{ date }}</span>
+          <span class="date">{{ a_created_at }}</span>
         </div>
       </div>
     </div>
-    <td>{{ writer }}</td>
-    <td>{{ date }}</td>
+    <td>{{ q_user }}</td>
+    <td>{{ a_created_at }}</td>
   </tr>
 </template>
 
@@ -33,23 +39,27 @@ export default {
     SecretContents
   },
   props: {
-    QA_type: {
+    q_type: {
       type: String,
       required: true
     },
-    QA_state: {
-      type: Boolean,
+    q_is_answered: {
+      type: Number,
       required: true
     },
-    QA_isSecret: {
-      type: Boolean,
+    q_is_private: {
+      type: Number,
       required: true
     },
-    writer: {
+    q_content: {
       type: String,
       required: true
     },
-    date: {
+    q_user: {
+      type: String,
+      required: true
+    },
+    a_created_at: {
       type: String,
       required: true
     }
@@ -87,6 +97,18 @@ td {
     border: 1px solid #1e88e5;
     color: #1e88e5;
   }
+
+  .state-icon-waiting {
+    display: inline-block;
+    min-width: 80px;
+    padding: 3px 4px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    border-radius: 14px;
+    border: solid 1px #9a9a9e;
+    color: #a4a4a8;
+  }
 }
 
 .contents {
@@ -97,7 +119,8 @@ td {
 
 .detail-active {
   padding: 20px 36px 20px 365px;
-  margin: 0 -329px 0 -331px;
+  // margin: 0 -329px 0 -331px;
+  margin: 0 -299px 0 -361px;
   background-color: #f7f7f7;
   font-size: 18px;
 

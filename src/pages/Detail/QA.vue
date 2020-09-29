@@ -28,7 +28,7 @@
                 borderRadius: activeDropdownQuestType ? '6px 6px 0 0' : null
               }"
             >
-              질문유형을 선택하세요.
+              {{ selectedQuestType }}
             </div>
             <div class="dropdown-icon-container">
               <div
@@ -49,6 +49,7 @@
                   class="quest-type"
                   v-for="quest in questTypes"
                   :key="quest.id"
+                  @click="selectQuestType(quest)"
                 >
                   {{ quest.quest }}
                 </li>
@@ -59,6 +60,7 @@
         <li class="question-line">
           <div class="question-contents">내용</div>
           <textarea
+            v-model="qnaContents"
             class="question-area"
             placeholder="내용을 입력해 주세요."
           ></textarea>
@@ -94,13 +96,14 @@
       <tbody>
         <QA_List
           v-show="!myWroteIsActive"
-          v-for="QA in QA_list"
-          :key="QA.id"
-          :QA_type="QA.type"
-          :QA_state="QA.state"
-          :QA_isSecret="QA.isSecret"
-          :writer="QA.writer"
-          :date="QA.date"
+          v-for="QA in apiData"
+          :key="QA.q_id"
+          :q_type="QA.q_type"
+          :q_is_answered="QA.q_is_answered"
+          :q_is_private="QA.q_is_private"
+          :q_content="QA.q_content"
+          :q_user="QA.q_user"
+          :a_created_at="QA.a_created_at"
         />
         <tr v-show="myWroteIsActive">
           <td class="no-data" colspan="5">
@@ -117,6 +120,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import QA_List from './QA_List';
 
 export default {
@@ -129,12 +133,18 @@ export default {
       required: true
     }
   },
+  beforeUpdate() {
+    console.log(this.qnaContents);
+  },
   data() {
     return {
       myWroteIsActive: false,
       activeQuestArea: false,
       activeDropdownQuestType: false,
       isPrivate: false,
+      selectedQuestType: '질문유형을 선택하세요.',
+      qnaContents: '',
+      apiData: [],
       questTypes: [
         {
           id: 1,
@@ -261,6 +271,16 @@ export default {
       ]
     };
   },
+  created() {
+    let URL = `http://10.251.1.153:5000/api/qnas?product_id=${this.$route.params.id}`;
+    axios.get(URL).then(res => {
+      this.apiData = res.data;
+      console.log(this.apiData);
+    });
+    //
+    // 1. created 에서 백엔드와 통신
+    // this.getDetailInfo();
+  },
   methods: {
     myWroteActive() {
       this.myWroteIsActive = !this.myWroteIsActive;
@@ -273,6 +293,9 @@ export default {
     },
     setPrivate() {
       this.isPrivate = !this.isPrivate;
+    },
+    selectQuestType(quest) {
+      this.selectedQuestType = quest.quest;
     }
   }
 };

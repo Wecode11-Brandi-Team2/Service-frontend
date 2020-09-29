@@ -21,7 +21,7 @@
         <li
           class="color"
           @click="selectColor(color)"
-          v-for="color in colors"
+          v-for="color in apiData"
           :key="color.id"
         >
           <div>{{ color.color }}</div>
@@ -32,12 +32,22 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
+      apiData: [],
       activeDropdown: false,
       selectedColor: '[컬러]를 선택하세요.'
     };
+  },
+  created() {
+    let URL = `http://10.251.1.153:5000/api/products/product/${this.$route.params.id}`;
+    axios.get(URL).then(res => {
+      this.apiData = res.data.color;
+      console.log(this.apiData);
+    });
   },
   methods: {
     activeDropdownColor() {
@@ -47,6 +57,7 @@ export default {
       this.selectedColor = color.color;
       this.activeDropdown = !this.activeDropdown;
       this.$store.commit('COLOR_SELECT', true);
+      console.log(this.selectedColor);
     }
   },
   computed: {

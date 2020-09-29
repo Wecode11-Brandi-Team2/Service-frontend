@@ -1,11 +1,11 @@
 <template>
   <section class="Slide-image-wrapper">
-    <Slide :selectedImage="selectedImage" />
+    <Slide :selectedImage="selectedImage" :apiData="apiData" />
     <div class="slider-container">
       <div
         class="image-slide-tab"
         :class="[image.id === selectedImage ? 'active-tab' : '']"
-        v-for="image in ProductInfoImage"
+        v-for="image in apiData"
         :key="image.id"
         :style="{ backgroundImage: 'url(' + image.image_url + ')' }"
         @click="imageSlide(image)"
@@ -16,6 +16,7 @@
 
 <script>
 import Slide from './Slide';
+import axios from 'axios';
 
 export default {
   components: {
@@ -23,8 +24,20 @@ export default {
   },
   data() {
     return {
-      selectedImage: 1
+      selectedImage: 1,
+      apiData: []
     };
+  },
+  created() {
+    let URL = `http://10.251.1.153:5000/api/products/product/${this.$route.params.id}`;
+    axios.get(URL).then(
+      res =>
+        // console.log(res.data.image)
+        (this.apiData = res.data.image)
+    );
+    //
+    // 1. created 에서 백엔드와 통신
+    // this.getDetailInfo();
   },
   methods: {
     imageSlide(image) {

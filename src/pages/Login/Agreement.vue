@@ -29,7 +29,7 @@
           >
             <div>
               <input
-                @click="selectAgree"
+                @click="selectAgree('agreement.title')"
                 class="check-box"
                 type="checkbox"
                 :id="`brandy-argree${agreement.id}`"
@@ -94,6 +94,8 @@ export default {
     SignUpNav,
     NextButton
   },
+  // computed() {getter,setter}, 알아보깅 (함수에 곧바로 인자값 넣어주는 것 활용하기)
+  // 로딩 나타내는 스피너 만들기
 
   methods: {
     allAgree() {

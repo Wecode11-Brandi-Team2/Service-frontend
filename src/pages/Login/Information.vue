@@ -48,11 +48,13 @@ export default {
       let URL = 'http://10.251.1.139:5000/api/user/googleSignup';
       axios
         .post(URL, {
+          headers: {},
           access_token: localStorage.getItem('access_token'),
           phone_number: this.phoneNumber,
           login_id: this.loginId
         })
-        .then(res => (this.productData = res.data.products));
+        .then(res => localStorage.setItem(res.access_token));
+      this.$router.push('');
     }
   }
 };

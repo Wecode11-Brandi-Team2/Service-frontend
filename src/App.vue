@@ -5,7 +5,7 @@
     <router-view :key="$route.fullPath" />
     <Footer />
     <Buttons />
-    <Spinner v-show="!isLoading" />
+    <!-- <Spinner v-show="!isLoading" /> -->
   </div>
 </template>
 
@@ -15,10 +15,16 @@ import CategoryNav from './components/Nav/CategoryNav';
 import Footer from './components/Footer/Footer';
 import Buttons from './components/Button/Buttons';
 import axios from 'axios';
-import Spinner from './components/Spinner/Spinner';
+// import Spinner from './components/Spinner/Spinner';
 
 export default {
-  components: { CategoryNav, Nav, Footer, Buttons, Spinner },
+  components: {
+    CategoryNav,
+    Nav,
+    Footer,
+    Buttons
+    // Spinner
+  },
   created() {
     axios.interceptors.request.use(
       config => {
@@ -43,7 +49,6 @@ export default {
   },
   data() {
     return {
-      // isLoading: true
       isLoading: false
     };
   },

@@ -2,8 +2,8 @@
   <div class="orderitem-wrapper">
     <div class="orderitem-titlebox">
       <h2>
-        {{ productInfo.date }}<span class="divider"></span
-        >{{ productInfo.orderNumber }}
+        {{ createdAt }}<span class="divider"></span
+        >{{ productInfo.order_detail_id }}
       </h2>
       <div class="detail-btn">
         <a class="btn-showdetail"
@@ -18,7 +18,7 @@
       <div class="ordered-item">
         <div class="shop-info">
           <div class="shop-name">
-            <a>{{ productInfo.company }}</a>
+            <a>{{ productInfo.korean_name }}</a>
           </div>
           <div class="empty"></div>
           <div class="data">주문금액</div>
@@ -26,36 +26,138 @@
         </div>
         <div class="order-info">
           <div class="image">
-            <a class="item-image"> <img :src="productInfo.image"/></a>
+            <a class="item-image"> <img :src="productInfo.main_img"/></a>
           </div>
           <div class="orderinfo-box">
             <div class="item-name">
-              <a>{{ productInfo.productName }}</a>
+              <a>{{ productInfo.name }}</a>
             </div>
             <div class="order-data">{{ productInfo.option }}</div>
-            <div class="order-data">{{ productInfo.amount }} 개</div>
+            <div class="order-data">{{ productInfo.units }} 개</div>
           </div>
           <div class="data1-wrapper">
-            <div class="data1">{{ productInfo.price }} 원</div>
-            <div class="data1">{{ productInfo.status }}</div>
+            <div class="data1">{{ productInfo.price.toLocaleString() }} 원</div>
+            <div class="data1">
+              {{ getShipStatus() }}
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="order-btn-wrapper">
-      <button @click="request">환불요청</button>
+    <div class="order-btn-wrapper" @click="changeID(newkey)">
+      <button
+        @click="request(productInfo)"
+        :class="[this.productInfo.order_status_id === 6 ? 'hidden' : '']"
+      >
+        {{ createButton() }}
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+// import { mapGetters } from 'vuex';
+const myPageStore = 'myPageStore';
+
 export default {
+  name: 'OrderList',
   props: ['productInfo'],
+  data() {
+    return {
+      createdAt: 0,
+      buttonTitle: ''
+    };
+  },
+  created() {
+    window.addEventListener('click', this.checkFunction);
+    this.updateProducts({ product: this.productInfo });
+    this.findDate(this.productInfo.created_at);
+    this.createButton();
+  },
+  mounted() {
+    this.getShipStatus();
+    // console.log('PROPSCHECK', this.productInfo);
+    // this.updateProducts({ product: this.productInfo });
+  },
+
+  // computed: {
+  //   ...mapGetters(serviceStore, ['getProducts'])
+  // },
   methods: {
-    request() {
-      let answer = confirm('선택하신 주문을 환불하시겠습니까?');
-      if (answer == true) {
-        this.$router.push('refund');
+    ...mapActions(myPageStore, ['updateProducts']),
+    checkFunction() {
+      console.log('chekckck', this.products.product);
+    },
+    createButton() {
+      let statusOfShip = this.productInfo.order_status_id;
+
+      if (statusOfShip === 1 || statusOfShip === 2) {
+        return (this.buttonTitle = '주문취소');
+      }
+      if (statusOfShip === 3 || statusOfShip === 4) {
+        return (this.buttonTitle = '환불요청');
+      }
+      if (statusOfShip === 7) {
+        return (this.buttonTitle = '환불요청취소');
+      }
+      if (statusOfShip === 5 || statusOfShip === 6 || statusOfShip === 8) {
+        return (this.buttonTitle = '');
+      }
+    },
+
+    findDate(date) {
+      const fulldate = date;
+      const convert = new Date(fulldate);
+      const year = convert.getFullYear();
+      const month = convert.getMonth() + 1;
+      let day = convert.getDate();
+      if (day < 10) {
+        day = '0' + day;
+      }
+      this.createdAt = `${year}.${month}.${day}`;
+    },
+
+    getShipStatus() {
+      let statusOfShip = this.productInfo.order_status_id;
+
+      if (statusOfShip === 1) {
+        return '결제완료';
+      }
+      if (statusOfShip === 2) {
+        return '상품준비';
+      }
+      if (statusOfShip === 3) {
+        return '배송중';
+      }
+      if (statusOfShip === 4) {
+        return '배송완료';
+      }
+      if (statusOfShip === 5) {
+        return '구매확정';
+      }
+      if (statusOfShip === 6) {
+        return '주문취소완료';
+      }
+      if (statusOfShip === 7) {
+        return '환불요청';
+      }
+      if (statusOfShip === 8) {
+        return '환불완료';
+      }
+    },
+
+    request(info) {
+      this.updateProducts({ product: info });
+
+      if (this.buttonTitle === '환불요청') {
+        let answer = confirm('선택하신 주문을 환불하시겠습니까?');
+
+        answer ? this.$router.push('refund') : '';
+      }
+      if (this.buttonTitle === '주문취소') {
+        let answer = confirm('선택하신 주문을 취소하시겠습니까?');
+        answer ? this.$router.push('Cancel') : '';
       }
     }
   }
@@ -64,6 +166,10 @@ export default {
 
 <style scoped lang="scss">
 @import '../../styles/common.scss';
+
+.hidden {
+  display: none;
+}
 
 .orderitem-wrapper {
   margin: 0 70px;
@@ -182,6 +288,8 @@ export default {
     display: flex;
     justify-content: flex-end;
     border-bottom: 1px solid black;
+    height: 60px;
+
     button {
       font-size: 14px;
       margin: 10px 5px 7px 0;
@@ -192,7 +300,6 @@ export default {
       color: #000;
       border: solid 1px #000;
       background: #fff;
-      display: inline-block;
       cursor: pointer;
     }
   }

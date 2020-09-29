@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="btn-wrapper">
-        <button>주문/배송조회로 이동</button>
+        <button @click="moveToMypage">주문/배송조회로 이동</button>
       </div>
     </div>
   </div>
@@ -50,6 +50,11 @@ export default {
         amount: 910
       }
     };
+  },
+  methods: {
+    moveToMypage() {
+      this.$router.push('/mypage');
+    }
   }
 };
 </script>

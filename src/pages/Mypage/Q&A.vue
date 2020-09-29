@@ -69,7 +69,13 @@ export default {
   data() {
     return {
       activeContents: false,
-      checkedButton: 1
+      checkedButton: 1,
+      qnaHeader: {
+        status: '미답변',
+        qnaTitle: '안녕하세요',
+        writer: '',
+        date: 20200924
+      }
     };
   },
   methods: {

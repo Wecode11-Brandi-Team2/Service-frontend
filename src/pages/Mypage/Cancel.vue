@@ -1,7 +1,8 @@
+<!-- 주문취소 페이지 -->
 <template>
   <div class="refund">
     <div class="page-title">
-      <h1>환불요청</h1>
+      <h1>주문취소</h1>
     </div>
     <div class="page-frame">
       <h2 class="order-detail-info">
@@ -45,40 +46,14 @@
           </div>
         </div>
       </div>
-      <h2>환불사유</h2>
-      <div class="refund-data-box">
-        <div class="select-reason">
-          <div class="reason">사유</div>
-          <div class="select">
-            <select v-model="selected">
-              <option selected>사유를 선택하세요.</option>
-              <option
-                v-for="option in options"
-                :key="option.id"
-                :value="option.value"
-                >{{ option.text }}</option
-              >
-            </select>
-          </div>
-        </div>
-        <div class="select-reason">
-          <div class="reason">환불사유</div>
-          <div class="textarea-wrapper">
-            <textarea
-              class="text-area"
-              placeholder="(선택) 세부 내용을 입력하세요."
-            ></textarea>
-          </div>
-        </div>
-      </div>
-      <h2 class="refund-info">환불정보</h2>
+      <h2 class="refund-info">주문 취소 정보</h2>
       <div class="refund-info-box">
-        <div class="refund-info-title">총 환불예정금액</div>
+        <div class="refund-info-title">총 주문취소금액</div>
         <div class="amount">{{ orderInfo.price }}원</div>
       </div>
       <div class="btn-wrapper">
-        <button @click="requestRefund" class="refund-btn">
-          환불요청하기
+        <button @click="requestCancel" class="refund-btn">
+          주문취소하기
         </button>
       </div>
     </div>
@@ -91,6 +66,7 @@ import axios from 'axios';
 
 const myPageStore = 'myPageStore';
 export default {
+  name: 'Cancel',
   props: ['productInfo'],
   computed: {
     ...mapGetters(myPageStore, ['getProducts']),
@@ -98,9 +74,9 @@ export default {
       return this.products;
     }
   },
-  created() {
-    window.addEventListener('click', this.checkFunction);
-  },
+  // created() {
+  //   window.addEventListener('click', this.checkFunction);
+  // },
   mounted() {
     this.productsData = this.products.product;
     console.log('storeCheck', this.productsData);
@@ -108,7 +84,7 @@ export default {
   data() {
     return {
       productsData: {},
-      selected: '사유를 선택하세요.',
+      selected: '선택하신 주문을 취소하시겠습니까?',
       orderInfo: {
         orderDate: '2020.09.24',
         orderNumber: 202020202020,
@@ -134,8 +110,8 @@ export default {
     fetchData() {
       axios
         .post(
-          'http://10.251.1.113:5000/api/order/refund',
-          { order_detail_id: '202010050782', refund_reason_id: 1 },
+          'http://10.251.1.113:5000/api/order/cancel',
+          { order_detail_id: '202010050784' },
           {
             headers: {
               Authorization: localStorage.getItem('access_token')
@@ -145,22 +121,20 @@ export default {
         .then(res => console.log(res));
     },
 
-    requestRefund() {
-      if (this.selected === '사유를 선택하세요.') {
-        alert('환불사유를 선택해주세요.');
-      }
-      if (this.selected !== '사유를 선택하세요.') {
-        let answer = confirm('해당 상품을 환불요청하시겠습니까?');
+    requestCancel() {
+      let answer = confirm('선택하신 주문을 취소하시겠습니까?');
+      if (this.selected === '선택하신 주문을 취소하시겠습니까?') {
         if (answer === true) {
-          this.$router.push('/refundResult');
+          alert('주문 취소가 완료되었습니다.');
+          this.$router.push('/');
         }
       }
       this.fetchData();
-    },
-    checkFunction() {
-      console.log('productsData', this.productsData);
-      console.log('products', this.products.product);
     }
+    // checkFunction() {
+    //   console.log('productsData', this.productsData);
+    //   console.log('products', this.products.product);
+    // }
   }
 };
 </script>

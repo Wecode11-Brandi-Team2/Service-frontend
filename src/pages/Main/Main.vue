@@ -104,7 +104,7 @@ export default {
 
   methods: {
     getMoreData() {
-      this.offset = this.offset + 101;
+      this.offset = this.offset + 100;
       console.log(this.offset);
       this.fetchData();
       if (this.productData.length >= 300) {

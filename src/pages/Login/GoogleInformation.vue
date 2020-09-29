@@ -7,7 +7,7 @@
       <div class="email-input-container">
         <div class="email-input-wrapper">
           <input type="text" placeholder="아이디 입력" v-model="loginId" />
-          {{ loginId }}
+          <!-- {{ loginId }} -->
           <span class="explanation"
             >브랜디에서 사용할 아이디 정보를 입력해주세요.</span
           >
@@ -34,27 +34,49 @@
 import SignUpNav from './components/SignUpNav';
 import NextButton from './components/NextButton';
 import axios from 'axios';
+import { mapGetters } from 'vuex';
+const serviceStore = 'serviceStore';
 
 export default {
   name: 'GoogleInformation',
+
   components: { SignUpNav, NextButton },
+
   data() {
     return { loginId: 'inputId' };
   },
+
   created: function() {},
+
+  computed: {
+    ...mapGetters(serviceStore, ['getAccess', 'getPhone']),
+    accesses() {
+      return this.getAccess;
+    },
+    phones() {
+      return this.getPhone;
+    }
+  },
   mounted() {
     console.log(localStorage.getItem('access_token'));
   },
   methods: {
     fetchData() {
       console.log('login?');
+      console.log(this.accesses.access, this.phones.phone, this.loginId);
       let URL = 'http://10.251.1.139:5000/api/user/googleSignup';
-      axios.post(URL, {
-        access_token:
-          'ya29.a0AfH6SMArHreBmlFYUuNDY2GcWOpBnOuGh5b46pNb20dSYqfQk-inrK9YnZYMe3Zqi2hh-tQYMiNPtJX_JwzxDXkf8VvNaihhbxdtC_bIry7O3SpqFuvu8MXVgaYCQ8OWwb5x8qDLVSg7K-pt0WZtAYyrTI4Aq_hXR8Vd',
-        phone_number: '01092082770',
-        login_id: 'brandi'
-      });
+      axios
+        .post(URL, {
+          access_token: this.accesses.access,
+          phone_number: this.phones.phone,
+          login_id: this.loginId
+        })
+        .then(res => console.log(res))
+        .then(res =>
+          localStorage.setItem('access_token', res.data.access_token)
+        );
+      this.$router.push('/complete');
+      console.log(localStorage);
     }
   }
 };

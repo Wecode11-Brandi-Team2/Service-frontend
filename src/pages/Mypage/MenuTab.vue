@@ -80,9 +80,9 @@ export default {
     selectItem(idx) {
       this.activeItem = idx;
       if (this.activeItem === 3) {
-        this.$router.push('/QnA');
+        this.$router.push('/qna');
       } else if (this.activeItem === 0) {
-        this.$router.push('/orderList');
+        this.$router.push('/myPage');
       }
     }
   }

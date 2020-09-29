@@ -42,15 +42,23 @@
         </div>
       </div>
     </div>
-    <div class="btn-wrapper">
-      <button class="cancel-btn">주문취소</button>
+    <div class="order-btn-wrapper">
+      <button @click="request">환불요청</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['productInfo']
+  props: ['productInfo'],
+  methods: {
+    request() {
+      let answer = confirm('선택하신 주문을 환불하시겠습니까?');
+      if (answer == true) {
+        this.$router.push('refund');
+      }
+    }
+  }
 };
 </script>
 
@@ -95,7 +103,7 @@ export default {
     }
   }
   .delivery-wrapper {
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #e1e1e1;
 
     .seller-title {
       @include setFont(26px, null, bold);
@@ -170,17 +178,21 @@ export default {
       }
     }
   }
-  .btn-wrapper {
-    @include setFlex(center, null, null);
-
-    .cancel-btn {
-      @include setFont(20px, #ffffff, lighter);
-      @include setSize(45%, 67px);
-      margin-top: 30px;
-      padding: 19px 0;
-      background: #000000;
+  .order-btn-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    border-bottom: 1px solid black;
+    button {
+      font-size: 14px;
+      margin: 10px 5px 7px 0;
+      padding: 10px 25px;
+      height: 42px;
+      overflow: hidden;
       text-align: center;
-      letter-spacing: 1;
+      color: #000;
+      border: solid 1px #000;
+      background: #fff;
+      display: inline-block;
       cursor: pointer;
     }
   }

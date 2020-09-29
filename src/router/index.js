@@ -115,11 +115,6 @@ export const router = new VueRouter({
       component: QnA
     },
     {
-      path: '/orderList',
-      name: 'OrderList',
-      component: Mypage
-    },
-    {
       path: '/refund',
       name: 'Refund',
       component: Refund

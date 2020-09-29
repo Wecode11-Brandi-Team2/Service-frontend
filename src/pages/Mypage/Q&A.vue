@@ -9,17 +9,32 @@
             <div
               class="check-button"
               id="1"
-              :class="{ 'active-button': true }"
+              @click="checkedToggle(1)"
+              :class="{ 'active-button': checkedButton === 1 }"
             ></div>
-            <div class="qna-filter">전체</div>
+            <div class="qna-filter">
+              전체
+            </div>
           </div>
           <div class="button-wrapper">
-            <div class="check-button"></div>
-            <div class="qna-filter">답변</div>
+            <div
+              class="check-button"
+              @click="checkedToggle(2)"
+              :class="{ 'active-button': checkedButton === 2 }"
+            ></div>
+            <div class="qna-filter">
+              답변
+            </div>
           </div>
           <div class="button-wrapper">
-            <div class="check-button"></div>
-            <div class="qna-filter">미답변</div>
+            <div
+              class="check-button"
+              @click="checkedToggle(3)"
+              :class="{ 'active-button': checkedButton === 3 }"
+            ></div>
+            <div class="qna-filter">
+              미답변
+            </div>
           </div>
         </div>
       </div>
@@ -31,15 +46,15 @@
       </div>
       <ul class="qna-title" @click="dropdownContents">
         <li class="aa">미답변</li>
-        <li class="bb">블라블라</li>
-        <li class="cc"></li>
-        <li class="dd">날짜</li>
+        <li class="bb">test</li>
+        <li class="aa"></li>
+        <li class="aa">2020.09.25</li>
       </ul>
-      <ul class="qna-title2" v-if="activeContents">
-        <li class="aa">미답변</li>
-        <li class="bb">블라블라</li>
-        <li class="cc"></li>
-        <li class="dd">날짜</li>
+      <ul class="qna-answer" v-if="activeContents">
+        <li class="aa"></li>
+        <li class="bb">test</li>
+        <li class="aa"></li>
+        <li class="aa">2020.09.25</li>
       </ul>
     </div>
   </div>
@@ -49,17 +64,21 @@
 import MenuTab from './MenuTab.vue';
 
 export default {
+  name: 'qna',
   components: { MenuTab },
   data() {
     return {
       activeContents: false,
-      checkedButton: '1'
+      checkedButton: 1
     };
   },
   methods: {
     dropdownContents() {
       this.activeContents = !this.activeContents;
       console.log(this.activeContents);
+    },
+    checkedToggle(id) {
+      this.checkedButton = id;
     }
   }
 };
@@ -160,19 +179,23 @@ export default {
       padding: 10px 5px;
       width: 683px;
     }
-    .cc {
-      text-align: center;
-      padding: 10px 5px;
-      width: 179px;
-    }
-    .dd {
-      text-align: center;
-      padding: 10px 5px;
-      width: 179px;
-    }
   }
-  .qna-title2 {
-    background-color: red;
+  .qna-answer {
+    display: flex;
+    align-items: center;
+    height: 42px;
+    background: #f7f8fa;
+    border-bottom: 1px solid #dddddd;
+    .aa {
+      text-align: center;
+      padding: 10px 5px;
+      width: 179px;
+    }
+    .bb {
+      text-align: center;
+      padding: 10px 5px;
+      width: 683px;
+    }
   }
 }
 </style>

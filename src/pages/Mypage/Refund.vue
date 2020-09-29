@@ -103,7 +103,10 @@ export default {
         alert('환불사유를 선택해주세요.');
       }
       if (this.selected !== '사유를 선택하세요.') {
-        this.$router.push('/refundResult');
+        let answer = confirm('해당 상품을 환불요청하시겠습니까?');
+        if (answer === true) {
+          this.$router.push('/refundResult');
+        }
       }
     }
   }

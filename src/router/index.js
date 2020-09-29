@@ -19,6 +19,7 @@ import GoogleInformation from '../pages/Login/GoogleInformation';
 import QnA from '../pages/Mypage/Q&A';
 import Refund from '../pages/Mypage/Refund';
 import RefundResult from '../pages/Mypage/RefundResult';
+import Shop from '../pages/Shop/Shop.vue';
 
 Vue.use(VueRouter);
 
@@ -123,6 +124,11 @@ export const router = new VueRouter({
       path: '/refundResult',
       name: 'RefundResult',
       component: RefundResult
+    },
+    {
+      path: '/shop',
+      name: 'Shop',
+      component: Shop
     }
   ]
 });

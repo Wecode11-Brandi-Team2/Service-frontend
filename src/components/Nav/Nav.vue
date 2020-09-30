@@ -20,7 +20,7 @@
       </div>
       <div class="search-box">
         <form class="search-bar">
-          <button class="search-btn"></button>
+          <button @click="testToken" class="search-btn"></button>
           <input class="search-input" type="text" />
         </form>
       </div>
@@ -31,8 +31,10 @@
         ㅣ
         <a class="menu" href="/mypage">마이페이지</a>
         ㅣ
-        <span @click="changeRoute" class="menu" href="/login">{{
-          loginStatus
+        <span @click="changeRoute" class="menu">{{
+          this.token != undefined
+            ? (loginStatus = '로그아웃')
+            : (loginStatus = '로그인')
         }}</span>
         ㅣ
         <a class="menu" href="http://wwww.brandiinc.com/brandi" target="_blank"
@@ -70,15 +72,16 @@ export default {
     }
   },
   watch() {
-    this.changeRoute();
+    this.logout();
   },
   methods: {
     ...mapActions(serviceStore, ['updateCategories', 'updateTitle']),
 
-    goHome() {
-      this.updateTitle({ title: String('/') });
-      console.log(this.titles.title);
+    //토큰임의로 만드는 함수 돋보기 버튼
+    testToken() {
+      localStorage.setItem('access_token', '???');
     },
+    //토큰 유무에 따른 경로변경용
     changeRoute() {
       if (this.token != undefined) {
         localStorage.removeItem('access_token');
@@ -88,6 +91,17 @@ export default {
         this.$router.push('/login');
         this.loginStatus = '로그인';
       }
+    },
+    logout() {
+      if (this.token != undefined) {
+        localStorage.removeItem('access_token');
+        this.loginStatus = '로그인';
+      }
+    },
+
+    goHome() {
+      this.updateTitle({ title: String('/') });
+      console.log(this.titles.title);
     }
   }
 };

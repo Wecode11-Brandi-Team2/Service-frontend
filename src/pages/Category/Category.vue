@@ -26,29 +26,8 @@
         <div class="category-option">
           <span>상품옵션</span>
         </div>
-        <div class="options" @click="ChangeSaleCheckActive">
-          <div
-            v-bind:class="[
-              saleCheckActive
-                ? 'small-box transition'
-                : 'changed-small-box transition'
-            ]"
-          ></div>
-          <svg
-            v-bind:class="[
-              saleCheckActive ? 'checked transition' : 'not-checked transition'
-            ]"
-            viewBox="0 0 10px 10px"
-            role="presentation"
-          >
-            <svg id="chevron-left" viewBox="0 0 10px 10px">
-              <polygon
-                class="st0"
-                points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
-              ></polygon>
-            </svg>
-          </svg>
-          <span>세일</span>
+        <div @click="ChangeSaleCheckActive">
+          <SaleCheckButton v-bind:saleCheckActive="saleCheckActive" />
         </div>
 
         <div class="categories">
@@ -175,6 +154,7 @@
 </template>
 <script>
 import ProductCard from '../../components/ProductCard/ProductCard';
+import SaleCheckButton from '../../components/Button/SaleCheckButton';
 import { mapGetters } from 'vuex';
 import axios from 'axios';
 
@@ -183,7 +163,8 @@ const serviceStore = 'serviceStore';
 export default {
   name: 'Category',
   components: {
-    ProductCard
+    ProductCard,
+    SaleCheckButton
   },
   data() {
     return {

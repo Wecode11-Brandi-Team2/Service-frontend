@@ -72,10 +72,9 @@ export default {
           phone_number: this.phones.phone,
           login_id: this.loginId
         })
-        .then(res =>
-          localStorage.setItem('access_token', res.data.access_token)
-        );
-
+        .then(res => {
+          localStorage.setItem('access_token', res.data.access_token);
+        });
       this.$router.push('/complete');
     }
   }

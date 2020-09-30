@@ -73,6 +73,7 @@ export default {
   border: 1px solid #e6e6e6;
   border-radius: 6px;
   font-size: 16px;
+  cursor: pointer;
 
   .select-menu-icon-container {
     position: absolute;

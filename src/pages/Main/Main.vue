@@ -5,7 +5,9 @@
         src="http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg"
       />
     </div> -->
+
     <SlideProductCard />
+
     <div class="product-contents">
       <span>당신을 위한 추천</span>
       <section class="product-section">

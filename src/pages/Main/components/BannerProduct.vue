@@ -1,8 +1,10 @@
 <template>
   <section id="banner-product">
-    <img
-      src="http://image.brandi.me/home/banner/bannerImage_159860_1593396179.jpg"
-    />
+    <div>
+      <img
+        src="http://image.brandi.me/home/banner/bannerImage_159860_1593396179.jpg"
+      />
+    </div>
   </section>
 </template>
 

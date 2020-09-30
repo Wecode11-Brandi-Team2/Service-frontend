@@ -2,8 +2,11 @@
   <div class="Selected-options">
     <div class="selected-option-box">
       <div class="color-size">
-        <span>White / Free</span>
-        <i class="fas fa-times" />
+        <span
+          >{{ option.selectedColor.color }} /
+          {{ option.selectedSize.size }}</span
+        >
+        <i @click="deleteOption" class="fas fa-times" />
       </div>
       <div class="quantity-price-container">
         <div class="quantity">
@@ -16,7 +19,7 @@
           </button>
         </div>
         <div class="selected-price">
-          <div>16,100</div>
+          <div>{{ optionPrice.toLocaleString() }}</div>
           <div>원</div>
         </div>
       </div>
@@ -26,24 +29,40 @@
 
 <script>
 export default {
+  props: ['option', 'apiDataPrice'],
   data() {
     return {
-      purchaseQuantity: 1
+      purchaseQuantity: 1,
+      optionPrice: this.apiDataPrice
     };
   },
+  created() {
+    this.$emit('option-price', this.optionPrice);
+  },
+  updated() {
+    this.$emit('update-price', this.optionPrice);
+  },
   methods: {
-    deleteitem() {
-      console.log('delete');
-    },
     minus() {
       this.purchaseQuantity--;
-      if (this.purchaseQuantity < 1) {
-        alert('최소 구매 수량은 1개 입니다.');
+      this.optionPrice = this.optionPrice - this.apiDataPrice;
+      if (this.purchaseQuantity === 0) {
         this.purchaseQuantity = 1;
+        this.optionPrice = this.apiDataPrice;
+        alert('최소 구매 수량은 1개 입니다.');
       }
     },
     plus() {
       this.purchaseQuantity++;
+      this.optionPrice = this.optionPrice + this.apiDataPrice;
+      if (this.purchaseQuantity === 21) {
+        this.purchaseQuantity = 20;
+        this.optionPrice = this.apiDataPrice * 20;
+        alert('최대 구매 수량은 20개 입니다.');
+      }
+    },
+    deleteOption() {
+      this.$store.commit('DELETE_OPTION');
     }
   }
 };

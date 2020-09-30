@@ -26,7 +26,7 @@
         <li
           @click="selectSize(size)"
           class="size"
-          v-for="size in apiData"
+          v-for="size in apiDataSize"
           :key="size.id"
         >
           <div>{{ size.size }}</div>
@@ -37,21 +37,13 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
+  props: ['apiDataSize'],
   data() {
     return {
       apiData: [],
       activeDropdown: false
     };
-  },
-  created() {
-    let URL = `http://10.251.1.153:5000/api/products/product/${this.$route.params.id}`;
-    axios.get(URL).then(res => {
-      this.apiData = res.data.size;
-      console.log(this.apiData);
-    });
   },
   methods: {
     activeDropdownSize() {
@@ -59,14 +51,15 @@ export default {
         this.activeDropdown = !this.activeDropdown;
       }
     },
-    selectSize() {
+    selectSize(size) {
       this.activeDropdown = !this.activeDropdown;
+      this.$store.commit('USER_SIZE_SELECT', size);
     }
   },
   computed: {
-    sizes() {
-      return this.$store.state.detailProductInfo.productInfo.size;
-    },
+    // sizes() {
+    //   return this.$store.state.detailProductInfo.productInfo.size;
+    // },
     isColorSelected() {
       return this.$store.state.detailProductInfo.isColorSelected;
     }

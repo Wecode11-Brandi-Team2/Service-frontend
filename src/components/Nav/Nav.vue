@@ -20,24 +20,22 @@
       </div>
       <div class="search-box">
         <form class="search-bar">
-          <button class="search-btn"></button>
+          <button @click="testToken" class="search-btn"></button>
           <input class="search-input" type="text" />
         </form>
       </div>
       <div class="upper-menubox">
-        <a class="menu" href="#">찜</a>
+        <a class="menu">찜</a>
         ㅣ
-        <a class="menu" href="/cart">장바구니</a>
+        <a class="menu">장바구니</a>
         ㅣ
-        <a class="menu" href="/mypage">마이페이지</a>
+        <a class="menu" @click="goLogin">마이페이지</a>
         ㅣ
-        <span @click="changeRoute" class="menu" href="/login">{{
-          loginStatus
+        <span @click="changeRoute" class="menu">{{
+          this.token ? '로그아웃' : '로그인'
         }}</span>
         ㅣ
-        <a class="menu" href="http://wwww.brandiinc.com/brandi" target="_blank"
-          >입점문의</a
-        >
+        <a class="menu">입점문의</a>
       </div>
     </div>
   </div>
@@ -52,13 +50,11 @@ export default {
   name: 'Nav',
   data() {
     return {
-      token: '',
-      loginStatus: '로그인'
+      token: ''
     };
   },
   created() {
     this.token = localStorage.getItem('access_token');
-    console.log('thisTOKEN', this.token);
   },
   computed: {
     ...mapGetters(serviceStore, ['getCategories', 'getTitle']),
@@ -69,24 +65,31 @@ export default {
       return this.getTitle;
     }
   },
-  watch() {
-    this.changeRoute();
-  },
   methods: {
     ...mapActions(serviceStore, ['updateCategories', 'updateTitle']),
 
+    testToken() {
+      localStorage.setItem('access_token', '???');
+    },
+    changeRoute() {
+      if (localStorage.getItem('access_token')) {
+        localStorage.removeItem('access_token');
+        this.token = '';
+        this.$router.push('/');
+      } else {
+        this.$router.push('/login');
+      }
+    },
     goHome() {
       this.updateTitle({ title: String('/') });
       console.log(this.titles.title);
     },
-    changeRoute() {
-      if (this.token != undefined) {
-        localStorage.removeItem('access_token');
-        this.loginStatus = '로그아웃';
-        this.$router.push('/');
-      } else {
+    goLogin() {
+      if (localStorage.getItem('access_token') == undefined) {
+        alert('로그인을 해주세요.');
         this.$router.push('/login');
-        this.loginStatus = '로그인';
+      } else {
+        this.$router.push('/mypage');
       }
     }
   }
@@ -94,29 +97,30 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '../../styles/common.scss';
+
 .Nav {
   min-width: 1300px;
+
   .home-banner {
     display: block;
     width: 100%;
     margin: 0 auto;
   }
   .nav-box {
-    display: flex;
-    justify-content: center;
+    @include setFlex(center, null, null);
     max-width: 1300px;
     margin: 0 auto;
     padding: 20px 40px;
     letter-spacing: -0.05em;
     font-family: 'Spoqa Han Sans', Sans-serif;
+
     .brandi-logo {
-      display: flex;
-      align-items: center;
+      @include setFlex(null, center, null);
 
       .logo-link {
         .logo {
-          width: 150px;
-          height: 25px;
+          @include setSize(150px, 25px);
           cursor: pointer;
         }
       }
@@ -128,15 +132,15 @@ export default {
     .search-box {
       margin-top: 20px;
       padding: 0 8%;
+
       .search-bar {
+        @include setSize(505px, 40px);
         display: flex;
         border-radius: 20px;
         background-color: #eee;
-        width: 505px;
-        height: 40px;
+
         .search-btn {
-          width: 30px;
-          height: 30px;
+          @include setSize(30px, 30px);
           margin: 5px;
           margin-left: 15px;
           padding: 10px 0;
@@ -162,15 +166,15 @@ export default {
     .upper-menubox {
       line-height: 80px;
       text-align: center;
+
       .menu {
+        @include setFont(14px, #000000, null);
         letter-spacing: -0.05em;
-        color: #000000;
-        font-size: 14px;
         text-decoration: none;
-        cursor: pointer;
         line-height: 80px;
         text-align: center;
         transition: all 0.5s ease-in-out;
+        cursor: pointer;
         &:hover {
           color: #ff204b;
         }

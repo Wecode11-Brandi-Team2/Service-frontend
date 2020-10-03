@@ -29,7 +29,7 @@
           >
             <div>
               <input
-                @click="selectAgree('agreement.title')"
+                @click="selectAgree(agreement.title)"
                 class="check-box"
                 type="checkbox"
                 :id="`brandy-argree${agreement.id}`"
@@ -107,11 +107,22 @@ export default {
         }
       }
     },
-    selectAgree(e) {
+    selectAgree(agreement) {
       this.allSelected = false;
+      console.log(agreement);
 
-      if (e.target.defaultValue === '야간 혜택 알림 수신 동의') {
+      if (
+        agreement === '야간 혜택 알림 수신 동의' &&
+        this.checkedNames.includes('이벤트/마케팅 수신 동의') === false
+      ) {
+        console.log('HEllo?');
         this.checkedNames = this.checkedNames.concat('이벤트/마케팅 수신 동의');
+      }
+      if (agreement === '이벤트/마케팅 수신 동의') {
+        this.checkedNames = this.checkedNames.concat(
+          '야간 혜택 알림 수신 동의',
+          '이벤트/마케팅 수신 동의'
+        );
       }
     }
   }
@@ -196,10 +207,6 @@ a {
   justify-content: center;
   margin: 30px;
 }
-
-/* input:checked + label {
-  color: red;
-} */
 
 .checked {
   color: red;

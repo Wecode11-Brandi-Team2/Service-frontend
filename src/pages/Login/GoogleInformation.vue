@@ -72,8 +72,9 @@ export default {
           login_id: this.loginId
         })
         .then(res => console.log(res))
-        .then(res =>
-          localStorage.setItem('access_token', res.data.access_token)
+        .then(
+          res => localStorage.setItem('access_token', res.data.access_token),
+          localStorage.setItem('login_id', this.loginId)
         );
       this.$router.push('/complete');
       console.log(localStorage);

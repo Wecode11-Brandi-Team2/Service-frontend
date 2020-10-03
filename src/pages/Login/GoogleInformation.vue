@@ -64,20 +64,18 @@ export default {
     fetchData() {
       console.log('login?');
       console.log(this.accesses.access, this.phones.phone, this.loginId);
-      let URL = 'http://10.251.1.139:5000/api/user/googleSignup';
+      let URL = 'http://10.58.2.70:5000/api/user/googleSignup';
       axios
         .post(URL, {
           access_token: this.accesses.access,
           phone_number: this.phones.phone,
           login_id: this.loginId
         })
-        .then(res => console.log(res))
-        .then(
-          res => localStorage.setItem('access_token', res.data.access_token),
-          localStorage.setItem('login_id', this.loginId)
+        .then(res =>
+          localStorage.setItem('access_token', res.data.access_token)
         );
+
       this.$router.push('/complete');
-      console.log(localStorage);
     }
   }
 };

@@ -20,37 +20,44 @@
       </div>
     </div>
     <section class="product-section">
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
+      <ProductCard
+        :product="product"
+        :key="product.id"
+        :id="index"
+        v-for="(product, index) in this.trendProductData.slice(0, -4)"
+      />
     </section>
-    <div class="plus-button-wrapper">
-      <ContentsPlusButton />
-    </div>
   </div>
 </template>
 
 <script>
-import ContentsPlusButton from '../Main/components/ContentsPlusButton';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import SlideProductCard from '../../components/ProductCard/SlideProductCard';
+import axios from 'axios';
 
 export default {
   name: 'Trend',
   props: {
     msg: String
   },
+  data() {
+    return {
+      trendProductData: []
+    };
+  },
+  created: function() {
+    axios
+      .get('http://10.58.2.76:5000/api/products?main_category_id=4', {})
+      .then(res => (this.trendProductData = res.data.products));
+    // .then(this.updateSpinner({ spinner: true }));
+    window.addEventListener('scroll', this.removeButton);
+  },
+  mounted() {
+    console.log(this.trendProductData);
+  },
 
   components: {
     ProductCard,
-    ContentsPlusButton,
     SlideProductCard
   }
 };

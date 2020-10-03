@@ -12,6 +12,9 @@ export default {
     },
     phones: {
       phone: 0
+    },
+    spinners: {
+      spinner: false
     }
   },
 
@@ -27,6 +30,9 @@ export default {
     },
     getPhone(state) {
       return state.phones;
+    },
+    getSpinner(state) {
+      return state.spinners;
     }
   },
 
@@ -54,6 +60,12 @@ export default {
         phone
       };
       state.phones = newPhone;
+    },
+    updateSpinner(state, spinner) {
+      const newSpinner = {
+        spinner
+      };
+      state.spinners = newSpinner;
     }
   },
 
@@ -69,6 +81,9 @@ export default {
     },
     updatePhone({ commit }, { phone }) {
       commit('updatePhone', phone);
+    },
+    updateSpinner({ commit }, { spinner }) {
+      commit('updateSpinner', spinner);
     }
   }
 };

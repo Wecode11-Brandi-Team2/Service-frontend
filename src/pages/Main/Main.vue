@@ -1,11 +1,5 @@
 <template>
   <div class="Main">
-    <!-- <div class="advertise">
-      <img
-        src="http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg"
-      />
-    </div> -->
-
     <SlideProductCard />
 
     <div class="product-contents">
@@ -50,12 +44,16 @@ import BannerProduct from './components/BannerProduct';
 import ContentsPlusButton from './components/ContentsPlusButton';
 import SlideProductCard from '../../components/ProductCard/SlideProductCard';
 import axios from 'axios';
+import { mapActions } from 'vuex';
+const serviceStore = 'serviceStore';
+
+function randInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 
 export default {
   name: 'Main',
-  props: {
-    msg: String
-  },
+  props: {},
 
   components: {
     ProductCard,
@@ -67,44 +65,29 @@ export default {
   data() {
     return {
       buttonActive: false,
-      // PRODUCT_SAMPLE: [
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {},
-      //   {}
-      // ]
+      spinnerActivity: false,
       productData: [],
       offset: 0,
-      buttonShow: false
+      buttonShow: false,
+      msg: ''
     };
   },
   created: function() {
+    let URL = `http://10.58.2.76:5000/api/products`;
     axios
-      .get(
-        `http://10.251.1.153:5000/api/products?offset=${this.offset}&limit=100`,
-        {}
-      )
-      .then(res => (this.productData = res.data.products));
+      .get(`${URL}?offset=${this.offset}&limit=100`, {})
+      .then(res => (this.productData = res.data.products))
+      .then(users => {
+        const i = randInt(users.length);
+        this.msg = users[i];
+      });
+    // .then(this.updateSpinner({ spinner: true }));
     window.addEventListener('scroll', this.removeButton);
   },
 
   methods: {
+    ...mapActions(serviceStore, ['updateSpinner']),
+
     getMoreData() {
       this.offset = this.offset + 100;
       console.log(this.offset);
@@ -115,13 +98,14 @@ export default {
     },
 
     fetchData() {
+      let URL = `http://10.58.2.76:5000/api/products`;
       axios
-        .get(
-          `http://10.251.1.153:5000/api/products?offset=${this.offset}&limit=100`,
-          {}
-        )
+        .get(`${URL}?offset=${this.offset}&limit=100`, {})
         .then(
           res => (this.productData = this.productData.concat(res.data.products))
+        )
+        .then(res =>
+          res ? (this.spinnerActivity = true) : (this.spinnerActivity = false)
         );
     },
 

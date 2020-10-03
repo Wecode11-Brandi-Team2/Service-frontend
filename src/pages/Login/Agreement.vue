@@ -11,9 +11,8 @@
         <div class="line" />
         <div class="whole-click-space">
           <input
+            @click="getAllSelect"
             v-model="allSelected"
-            :value="checkedNames"
-            @click="allAgree"
             class="check-box"
             type="checkbox"
             id="agree-total"
@@ -22,19 +21,17 @@
         </div>
         <div class="click-space-wrapper">
           <div
-            :newkey="agreement.id"
             class="click-space"
             :key="agreement.title"
             v-for="agreement of agreementData"
           >
             <div>
               <input
-                @click="selectAgree(agreement.title)"
+                @click="checkExcept(agreement)"
                 class="check-box"
                 type="checkbox"
                 :id="`brandy-argree${agreement.id}`"
-                :value="agreement.title"
-                v-model="checkedNames"
+                v-model="agreement.checked"
               />
               <label :for="`brandy-argree${agreement.id}`">{{
                 agreement.title
@@ -63,29 +60,8 @@ export default {
   name: 'SignUp',
   data() {
     return {
-      agreementData: [
-        { id: 1, title: '브랜디 약관 동의', detailLink: '', choice: '필수' },
-        {
-          id: 2,
-          title: '개인정보수집 및 이용에 대한 안내',
-          detailLink: '',
-          choice: '필수'
-        },
-        {
-          id: 3,
-          title: '이벤트/마케팅 수신 동의',
-          detailLink: '',
-          choice: '선택'
-        },
-        {
-          id: 4,
-          title: '야간 혜택 알림 수신 동의',
-          detailLink: '',
-          choice: '선택'
-        }
-      ],
+      agreementData: [],
       selected: [],
-      allSelected: false,
       id: [],
       checkedNames: []
     };
@@ -94,29 +70,94 @@ export default {
     SignUpNav,
     NextButton
   },
-  // computed() {getter,setter}, 알아보깅 (함수에 곧바로 인자값 넣어주는 것 활용하기)
-  // 로딩 나타내는 스피너 만들기
+
+  computed: {
+    allSelected: {
+      get() {
+        for (let i = 0; i < this.agreementData.length; i++) {
+          if (!this.agreementData[i].checked) return false;
+        }
+        return true;
+      },
+      set(value) {
+        console.log('VALUE', value);
+        this.agreementData.map(el => ({ ...el, checked: value }));
+      }
+    }
+  },
+
+  created() {
+    let agreementData = [
+      { id: 1, title: '브랜디 약관 동의', detailLink: '', choice: '필수' },
+      {
+        id: 2,
+        title: '개인정보수집 및 이용에 대한 안내',
+        detailLink: '',
+        choice: '필수'
+      },
+      {
+        id: 3,
+        title: '이벤트/마케팅 수신 동의',
+        detailLink: '',
+        choice: '선택'
+      },
+      {
+        id: 4,
+        title: '야간 혜택 알림 수신 동의',
+        detailLink: '',
+        choice: '선택'
+      }
+    ].map(el => ({ ...el, checked: false }));
+    this.agreementData = agreementData;
+  },
 
   methods: {
-    allAgree() {
-      if (this.allSelected) {
-        this.checkedNames = [];
+    getAllSelect() {
+      if (!this.allSelected) {
+        this.agreementData = this.agreementData.map(el => ({
+          ...el,
+          checked: true
+        }));
       } else {
-        for (let agreement of this.agreementData) {
-          this.checkedNames = this.checkedNames.concat(agreement.title);
-        }
+        this.agreementData = this.agreementData.map(el => ({
+          ...el,
+          checked: false
+        }));
       }
     },
-    selectAgree(agreement) {
-      this.allSelected = false;
-      console.log(agreement);
+
+    checkExcept(agreement) {
+      console.log(agreement.title, agreement.checked);
+      if (
+        agreement.title === '이벤트/마케팅 수신 동의' &&
+        agreement.checked === true
+      ) {
+        this.agreementData.map(el => {
+          el.title === '야간 혜택 알림 수신 동의' && el.checked === true
+            ? (el.checked = false)
+            : el;
+        });
+      }
 
       if (
-        agreement === '야간 혜택 알림 수신 동의' &&
-        this.checkedNames.includes('이벤트/마케팅 수신 동의') === false
+        agreement.title === '이벤트/마케팅 수신 동의' &&
+        agreement.checked != true
       ) {
-        console.log('HEllo?');
-        this.checkedNames = this.checkedNames.concat('이벤트/마케팅 수신 동의');
+        this.agreementData.map(el => {
+          el.title === '야간 혜택 알림 수신 동의' && el.checked != true
+            ? (el.checked = true)
+            : el;
+        });
+      }
+      if (
+        agreement.title === '야간 혜택 알림 수신 동의' &&
+        agreement.checked != true
+      ) {
+        this.agreementData.map(el => {
+          el.title === '이벤트/마케팅 수신 동의' && el.checked != true
+            ? (el.checked = true)
+            : el;
+        });
       }
       if (agreement === '이벤트/마케팅 수신 동의') {
         this.checkedNames = this.checkedNames.concat(

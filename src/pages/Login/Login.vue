@@ -68,13 +68,12 @@ export default {
     onSuccess(googleUser) {
       this.updateAccess({ access: googleUser.wc.access_token });
       axios
-        .post('http://10.251.1.139:5000/api/user/googleLogin', {
+        .post('http://10.58.2.70:5000/api/user/googleLogin', {
           access_token: googleUser.wc.access_token
         })
         .then(console.log('GOOGLE', googleUser.wc.access_token))
         .then(googleUser => {
           localStorage.setItem('access_token', googleUser.data.access_token);
-
           console.log('LoginSuccess', googleUser);
           alert('Google Login Success');
           this.$router.push('/');

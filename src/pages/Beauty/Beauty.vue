@@ -24,10 +24,10 @@
         :index="index"
         :key="PRODUCT"
         class="numbering-wrapper"
-        v-for="(PRODUCT, index) in PRODUCT_SAMPLE"
+        v-for="(PRODUCT, index) in this.beautyProduct['best_items']"
       >
         <span class="ranking-number">{{ index + 1 }}</span>
-        <ProductCard />
+        <ProductCard :product="PRODUCT" />
       </div>
       <div class="line" />
     </section>
@@ -41,10 +41,10 @@
           :index="index"
           :key="PRODUCT"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in PRODUCT_SAMPLE.slice(0, 5)"
+          v-for="(PRODUCT, index) in this.beautyProduct['brand_items']"
         >
           <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard />
+          <ProductCard :product="PRODUCT" />
         </div>
         <div class="line" />
       </section>
@@ -76,10 +76,10 @@
           :index="index"
           :key="PRODUCT"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in PRODUCT_SAMPLE.slice(0, 5)"
+          v-for="(PRODUCT, index) in this.beautyProduct['brand_items']"
         >
           <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard />
+          <ProductCard :product="PRODUCT" />
         </div>
         <div class="line" />
       </section>
@@ -109,10 +109,12 @@
           :index="index"
           :key="PRODUCT"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in PRODUCT_SAMPLE.slice(0, 5)"
+          v-for="(PRODUCT, index) in this.beautyProduct['category_items'][0][
+            'products'
+          ]"
         >
           <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard />
+          <ProductCard :product="PRODUCT" />
         </div>
         <div class="line" />
       </section>
@@ -142,10 +144,12 @@
           :index="index"
           :key="PRODUCT"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in PRODUCT_SAMPLE.slice(0, 5)"
+          v-for="(PRODUCT, index) in this.beautyProduct['category_items'][1][
+            'products'
+          ]"
         >
           <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard />
+          <ProductCard :product="PRODUCT" />
         </div>
         <div class="line" />
       </section>
@@ -175,10 +179,12 @@
           :index="index"
           :key="PRODUCT"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in PRODUCT_SAMPLE.slice(0, 5)"
+          v-for="(PRODUCT, index) in this.beautyProduct['category_items'][2][
+            'products'
+          ]"
         >
           <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard />
+          <ProductCard :product="PRODUCT" />
         </div>
       </section>
     </section>
@@ -207,10 +213,12 @@
           :index="index"
           :key="PRODUCT"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in PRODUCT_SAMPLE.slice(0, 5)"
+          v-for="(PRODUCT, index) in this.beautyProduct['category_items'][3][
+            'products'
+          ]"
         >
           <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard />
+          <ProductCard :product="PRODUCT" />
         </div>
         <div class="line" />
       </section>
@@ -240,10 +248,12 @@
           :index="index"
           :key="PRODUCT"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in PRODUCT_SAMPLE.slice(0, 5)"
+          v-for="(PRODUCT, index) in this.beautyProduct['category_items'][4][
+            'products'
+          ]"
         >
           <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard />
+          <ProductCard :product="PRODUCT" />
         </div>
         <div class="line" />
       </section>
@@ -273,10 +283,10 @@
           :index="index"
           :key="PRODUCT"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in PRODUCT_SAMPLE"
+          v-for="(PRODUCT, index) in this.beautyProduct['recommended_items']"
         >
           <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard />
+          <ProductCard :product="PRODUCT" />
         </div>
       </section>
     </section>
@@ -291,6 +301,7 @@
 // import ContentsPlusButton from '../Main/components/ContentsPlusButton';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import SlideProductCard from '../../components/ProductCard/SlideProductCard';
+import axios from 'axios';
 
 export default {
   name: 'Beauty',
@@ -299,10 +310,27 @@ export default {
   },
   data() {
     return {
+      beautyProduct: [],
       PRODUCT_SAMPLE: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]
     };
   },
+  created: function() {
+    axios
+      .get('http://10.58.2.76:5000/api/products?main_category_id=6', {})
+      // .then(res => console.log('HELELEO', res.data['best_items']));
+      .then(res => (this.beautyProduct = res.data));
 
+    console.log('HGEDKDKD', this.beautyProduct['best_items']);
+    console.log('category', this.beautyProduct['category_items']);
+    // .then(res => console.log(res.data));
+
+    document.addEventListener('click', this.CheckITem);
+  },
+  methods: {
+    CheckITem() {
+      console.log('category', this.beautyProduct['recommended_items']);
+    }
+  },
   components: {
     ProductCard,
     // ContentsPlusButton,

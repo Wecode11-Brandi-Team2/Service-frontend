@@ -150,6 +150,7 @@
         </section>
       </div>
     </div>
+    <Spinner />
   </div>
 </template>
 <script>
@@ -235,7 +236,7 @@ export default {
     },
 
     makeFetchData() {
-      let URL = `http://10.251.1.153:5000/api/products?`;
+      let URL = `http://10.58.2.76:5000/api/products?`;
       if (this.$route.params.title != 'total') {
         URL = URL + '&' + `first_category_id=${this.$route.params.title}`;
       }

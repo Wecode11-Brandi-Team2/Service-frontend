@@ -5,6 +5,7 @@
     <router-view :key="$route.fullPath" />
     <Footer />
     <Buttons />
+    <Spinner v-show="!isLoading" />
   </div>
 </template>
 
@@ -13,9 +14,57 @@ import Nav from './components/Nav/Nav';
 import CategoryNav from './components/Nav/CategoryNav';
 import Footer from './components/Footer/Footer';
 import Buttons from './components/Button/Buttons';
+import axios from 'axios';
+import Spinner from './components/Spinner/Spinner';
 
 export default {
-  components: { CategoryNav, Nav, Footer, Buttons }
+  components: { CategoryNav, Nav, Footer, Buttons, Spinner },
+  created() {
+    axios.interceptors.request.use(
+      config => {
+        this.setLoading(false);
+        return config;
+      },
+      error => {
+        this.setLoading(false);
+        return Promise.reject(error);
+      }
+    ),
+      axios.interceptors.response.use(
+        response => {
+          this.setLoading(true);
+          return response;
+        },
+        error => {
+          this.setLoading(false);
+          return Promise.reject(error);
+        }
+      );
+  },
+  data() {
+    return {
+      refCount: 0,
+      // isLoading: true
+      isLoading: false
+    };
+  },
+  methods: {
+    setLoading(isLoading) {
+      console.log('thisisLOADING', isLoading);
+      if (isLoading) {
+        this.refCount++;
+        this.isLoading = true;
+        console.log('inIf', isLoading);
+        console.log(this.refCount);
+      } else if (this.refCount > 0) {
+        this.refCount--;
+        this.isLoading = this.refCount > 0;
+      }
+      if (!isLoading) {
+        this.isLoading = false;
+      }
+    }
+  }
 };
 </script>
 

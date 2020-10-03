@@ -1,19 +1,59 @@
 <template>
   <section class="slide-product-card">
-    <button class="left-button" @click="goLeft">left</button>
+    <button class="left-button" @click="goLeft">
+      <i class="fas fa-angle-left"></i>
+    </button>
     <div class="slider-container">
       <div
         class="slider-swiper"
         :style="{
-          transform: `translateX(${-1 * (picCount - 1) * 1440}px)`
+          transform: `translateX(${-1 * picCount * onePhotoWidth}px)`,
+          transition: 'all 0.5s ease-in-out',
+          width: `${onePhotoWidth * (imageData.length + 2)}`,
+          height: `${sliderHeight}`
         }"
       >
-        <div class="slider-card" :key="data.id" v-for="data of imageData">
-          <img :src="data.src" />
+        <!--last copy -->
+        <div
+          :style="{ width: onePhotoWidth, height: `${sliderHeight}` }"
+          class="slider-card"
+          :id="14"
+        >
+          <img
+            :src="imageData[imageData.length - 1].src"
+            :style="{ width: onePhotoWidth, height: `${sliderHeight}` }"
+          />
+        </div>
+        <!--MainSlider -->
+        <div
+          :style="{ width: onePhotoWidth, height: `${sliderHeight}` }"
+          class="slider-card"
+          :key="data.id"
+          v-for="data of imageData"
+          :id="data.id"
+        >
+          <img
+            :src="data.src"
+            :style="{ width: onePhotoWidth, height: `${sliderHeight}` }"
+          />
+        </div>
+
+        <!--firstcopy -->
+        <div
+          :style="{ width: onePhotoWidth, height: `${sliderHeight}` }"
+          class="slider-card"
+          :id="1"
+        >
+          <img
+            :src="imageData[0].src"
+            :style="{ width: onePhotoWidth, height: `${sliderHeight}` }"
+          />
         </div>
       </div>
     </div>
-    <button class="right-button" @click="goRight">right</button>
+    <button class="right-button" @click="goRight">
+      <i class="fas fa-angle-right"></i>
+    </button>
     <div class="dot-button-container">
       <span
         class="dot-button"
@@ -30,29 +70,33 @@ export default {
   name: 'SildeProductCard',
   data() {
     return {
+      sliderHeight: Math.ceil(document.documentElement.clientWidth / 3.92),
+      onePhotoWidth: document.documentElement.clientWidth,
       imageData: [
         {
           id: '1',
           src:
-            'http://image.brandi.me/home/banner/bannerImage_159860_1593396179.jpg'
+            'https://image.brandi.me/home/banner/bannerImage_193302_1601517502.jpg'
         },
         {
           id: '2',
           src:
-            'http://image.brandi.me/home/banner/bannerImage_159860_1593396179.jpg'
+            'https://image.brandi.me/home/banner/bannerImage_193507_1601517624.jpg'
         },
         {
           id: '3',
-          src: 'http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg'
+          src:
+            'https://image.brandi.me/home/banner/bannerImage_193059_1601348483.jpg'
         },
         {
           id: '4',
           src:
-            'http://image.brandi.me/home/banner/bannerImage_159860_1593396179.jpg'
+            'https://image.brandi.me/home/banner/bannerImage_1_1601344943.jpg'
         },
         {
           id: '5',
-          src: 'http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg'
+          src:
+            'https://image.brandi.me/home/banner/bannerImage_193375_1601517602.jpg'
         },
         {
           id: '6',
@@ -90,37 +134,68 @@ export default {
         },
         {
           id: '14',
-          src: 'http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg'
+          src:
+            'https://image.brandi.me/home/banner/bannerImage_193375_1601517602.jpg'
         }
       ],
       picCount: 1
+      // firstClone: {},
+      // lastClone: {},
+      // firstChild: {},
+      // lastChild: {}
     };
   },
-  watch() {
-    this.goRight();
+
+  mounted() {
+    // this.createNewCard();
+    setInterval(() => this.goRight(), 4000);
+    window.addEventListener('resize', this.checkFunction);
   },
 
   methods: {
+    checkFunction() {
+      this.onePhotoWidth = document.documentElement.clientWidth;
+      this.sliderHeight = Math.ceil(
+        document.documentElement.clientWidth / 3.92
+      );
+    },
+    keepSliding() {
+      setInterval(this.goRight(), 200);
+    },
+    // createNewCard() {
+    //   let slideList = document.querySelector('.slider-swiper');
+    //   let firstChild = slideList.firstElementChild;
+    //   let LastChild = slideList.lastElementChild;
+    //   let clonedFirst = firstChild.cloneNode(true);
+    //   let clonedLast = LastChild.cloneNode(true);
+    //   this.slideList = document.querySelector('.slider-swiper');
+    //   this.firstChild = this.slideList.firstElementChild;
+    //   this.lastChild = this.slideList.lastElementChild;
+    //   this.clonedFirst = this.firstChild.cloneNode(true);
+    //   this.clonedLast = this.lastChild.cloneNode(true);
+    //   this.firstClone = this.slideList.appendChild(this.clonedFirst);
+    //   this.lastClone = this.slideList.insertBefore(
+    //     this.clonedLast,
+    //     this.firstChild
+    //   );
+    // },
+
     goRight() {
       let slideList = document.querySelector('.slider-swiper');
-      // const slideContents = document.querySelectorAll('.slider-card');
 
-      let firstChild = slideList.firstElementChild;
-      let LastChild = slideList.lastElementChild;
-      let clonedFirst = firstChild.cloneNode(true);
-      let clonedLast = LastChild.cloneNode(true);
-
-      slideList.appendChild(clonedFirst);
-      slideList.insertBefore(clonedLast, slideList.firstElementChild);
       if (this.picCount === this.imageData.length) {
+        console.log('sliderLength Check', this.imageData.length + 1);
+        let Len = this.imageData.length + 1;
+        let photoWidth = this.onePhotoWidth;
         setTimeout(function() {
           slideList.style.transform =
-            'translate3d(-' + (1440 * 14 + 1) + 'px, 0px, 0px)';
+            'translate3d(-' + (photoWidth * Len + 1) + 'px, 0px, 0px)';
         }, 0.01);
 
         setTimeout(function() {
           slideList.style.transition = 'none';
-          slideList.style.transform = 'translate3d(0px, 0px, 0px)';
+          slideList.style.transform =
+            'translate3d(-' + photoWidth + 'px, 0px, 0px)';
         }, 600);
 
         this.picCount = 1;
@@ -133,23 +208,21 @@ export default {
     goLeft() {
       let slideList = document.querySelector('.slider-swiper');
 
-      let firstChild = slideList.firstElementChild;
-      let LastChild = slideList.lastElementChild;
-      let clonedFirst = firstChild.cloneNode(true);
-      let clonedLast = LastChild.cloneNode(true);
-
       if (this.picCount === 1) {
-        this.picCount = this.imageData.length;
-        slideList.appendChild(clonedLast);
-        slideList.insertBefore(clonedFirst, slideList.firstElementChild);
+        let lengthOfWrapper = this.imageData.length;
+        let photoWidth = this.onePhotoWidth;
         setTimeout(function() {
-          slideList.style.transform = 'translate3d(' + 1440 + 'px, 0px, 0px)';
+          slideList.style.transform = 'translate3d(0px, 0px, 0px)';
         }, 0.01);
 
         setTimeout(function() {
           slideList.style.transition = 'none';
-          slideList.style.transform = 'translate3d(-18720px, 0px,0px)';
-        }, 500);
+          slideList.style.transform =
+            'translate3d(-' + photoWidth * lengthOfWrapper + 'px, 0px, 0px)';
+        }, 600);
+        setTimeout(function() {
+          slideList.style.transition = 'all 0.5s ease-in-out';
+        }, 800);
 
         this.picCount = this.imageData.length;
       } else {
@@ -167,23 +240,48 @@ export default {
 .left-button {
   position: absolute;
   left: 0;
-  top: 50%;
+  top: 45%;
   width: 32px;
   height: 32px;
   z-index: 100;
-  border: 1px solid black;
+  border: 0.2px solid #e7e7e7;
   border-radius: 100%;
   cursor: pointer;
+  background-color: transparent;
+  i {
+    transition: all 0.5s ease-in-out;
+    color: #e7e7e7;
+  }
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    background-color: #e7e7e7;
+    i {
+      color: black;
+    }
+  }
 }
 .right-button {
   right: 0;
   position: absolute;
-  top: 50%;
+  top: 45%;
   width: 32px;
   height: 32px;
   z-index: 100;
-  border: 1px solid black;
+  border: 0.2px solid #e7e7e7;
   border-radius: 100%;
+  cursor: pointer;
+  background-color: transparent;
+  i {
+    transition: all 0.5s ease-in-out;
+    color: #e7e7e7;
+  }
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    background-color: #e7e7e7;
+    i {
+      color: black;
+    }
+  }
 }
 .dot-button-container {
   margin-top: 20px;
@@ -218,17 +316,16 @@ export default {
     position: relative;
     overflow: hidden;
     .slider-swiper {
+      transition-duration: 0ms;
       display: flex;
       overflow: hidden;
-      transition: all 0.5s ease-in-out;
-      /* min-width: 100%;
-      max-width: 100%; */
-      width: 21600px;
-      /* transition-duration: 0ms; */
-      /* transform: translate3d(-2880px, 0px, 0px); */
-      height: 368px;
+
+      /* width: 23040px; */
+
+      /* height: 368px; */
       .slider-card {
-        width: 1440px;
+        /* width: 1440px; */
+        height: 100%;
         img {
           max-width: 100%;
           margin-top: 0;

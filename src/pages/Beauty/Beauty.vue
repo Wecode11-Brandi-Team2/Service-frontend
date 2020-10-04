@@ -84,10 +84,14 @@
         <div class="line" />
       </section>
     </section>
-    <!-- 스킨케어 -->
-    <section class="recommend-seller">
+
+    <section
+      class="recommend-seller"
+      :key="PRODUCT + 'lala' + index"
+      v-for="(PRODUCT, index) in this.beautyProduct['category_items']"
+    >
       <div class="comment-wrapper">
-        <span class="comment">스킨케어</span>
+        <span class="comment">{{ PRODUCT['category_name'] }}</span>
         <div class="more-button">
           <router-link
             class="more-button-comment"
@@ -107,157 +111,16 @@
       <section class="product-section">
         <div
           :index="index"
-          :key="PRODUCT"
+          :key="Data"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in this.beautyProduct['category_items'][0][
-            'products'
-          ]"
+          v-for="(Data, index) in PRODUCT['products']"
         >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
+          <ProductCard :product="Data" />
         </div>
         <div class="line" />
       </section>
     </section>
-    <!-- 메이크업 -->
-    <section class="recommend-seller">
-      <div class="comment-wrapper">
-        <span class="comment">메이크업</span>
-        <div class="more-button">
-          <router-link
-            class="more-button-comment"
-            to="/category/brand/total/total"
-            >더보기</router-link
-          >
-          <svg class="direction" viewBox="0 0 10px 10px" role="presentation">
-            <svg id="chevron-left" viewBox="0 0 10px 10px">
-              <polygon
-                class="st0"
-                points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
-              ></polygon>
-            </svg>
-          </svg>
-        </div>
-      </div>
-      <section class="product-section">
-        <div
-          :index="index"
-          :key="PRODUCT"
-          class="numbering-wrapper"
-          v-for="(PRODUCT, index) in this.beautyProduct['category_items'][1][
-            'products'
-          ]"
-        >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
-        </div>
-        <div class="line" />
-      </section>
-    </section>
-    <!-- 바디케어 -->
-    <section class="recommend-seller">
-      <div class="comment-wrapper">
-        <span class="comment">바디케어</span>
-        <div class="more-button">
-          <router-link
-            class="more-button-comment"
-            to="/category/brand/total/total"
-            >더보기</router-link
-          >
-          <svg class="direction" viewBox="0 0 10px 10px" role="presentation">
-            <svg id="chevron-left" viewBox="0 0 10px 10px">
-              <polygon
-                class="st0"
-                points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
-              ></polygon>
-            </svg>
-          </svg>
-        </div>
-      </div>
-      <section class="product-section">
-        <div
-          :index="index"
-          :key="PRODUCT"
-          class="numbering-wrapper"
-          v-for="(PRODUCT, index) in this.beautyProduct['category_items'][2][
-            'products'
-          ]"
-        >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
-        </div>
-      </section>
-    </section>
-    <!-- 헤어케어 -->
-    <section class="recommend-seller">
-      <div class="comment-wrapper">
-        <span class="comment">헤어케어</span>
-        <div class="more-button">
-          <router-link
-            class="more-button-comment"
-            to="/category/brand/total/total"
-            >더보기</router-link
-          >
-          <svg class="direction" viewBox="0 0 10px 10px" role="presentation">
-            <svg id="chevron-left" viewBox="0 0 10px 10px">
-              <polygon
-                class="st0"
-                points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
-              ></polygon>
-            </svg>
-          </svg>
-        </div>
-      </div>
-      <section class="product-section">
-        <div
-          :index="index"
-          :key="PRODUCT"
-          class="numbering-wrapper"
-          v-for="(PRODUCT, index) in this.beautyProduct['category_items'][3][
-            'products'
-          ]"
-        >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
-        </div>
-        <div class="line" />
-      </section>
-    </section>
-    <!-- 미용소품 -->
-    <section class="recommend-seller">
-      <div class="comment-wrapper">
-        <span class="comment">미용소품</span>
-        <div class="more-button">
-          <router-link
-            class="more-button-comment"
-            to="/category/brand/total/total"
-            >더보기</router-link
-          >
-          <svg class="direction" viewBox="0 0 10px 10px" role="presentation">
-            <svg id="chevron-left" viewBox="0 0 10px 10px">
-              <polygon
-                class="st0"
-                points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
-              ></polygon>
-            </svg>
-          </svg>
-        </div>
-      </div>
-      <section class="product-section">
-        <div
-          :index="index"
-          :key="PRODUCT"
-          class="numbering-wrapper"
-          v-for="(PRODUCT, index) in this.beautyProduct['category_items'][4][
-            'products'
-          ]"
-        >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
-        </div>
-        <div class="line" />
-      </section>
-    </section>
+
     <!--추천상품-->
     <section class="recommend-seller">
       <div class="comment-wrapper">
@@ -302,6 +165,7 @@
 import ProductCard from '../../components/ProductCard/ProductCard';
 import SlideProductCard from '../../components/ProductCard/SlideProductCard';
 import axios from 'axios';
+import URL from '../../../src/assets/mock/URL';
 
 export default {
   name: 'Beauty',
@@ -316,7 +180,7 @@ export default {
   },
   created: function() {
     axios
-      .get('http://10.58.2.76:5000/api/products?main_category_id=6', {})
+      .get(`${URL.PRODUCT_URL}/api/products?main_category_id=6`, {})
       // .then(res => console.log('HELELEO', res.data['best_items']));
       .then(res => (this.beautyProduct = res.data));
 

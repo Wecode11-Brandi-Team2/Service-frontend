@@ -43,7 +43,6 @@
           class="numbering-wrapper"
           v-for="(PRODUCT, index) in brandProduct['best_items'].slice(0, 5)"
         >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
           <ProductCard :product="PRODUCT" />
         </div>
         <div class="line" />
@@ -84,10 +83,14 @@
         <div class="line" />
       </section>
     </section>
-    <!-- 아우터 -->
-    <section class="recommend-seller">
+
+    <section
+      class="recommend-seller"
+      :key="PRODUCT + 'lala' + index"
+      v-for="(PRODUCT, index) in this.brandProduct['category_items']"
+    >
       <div class="comment-wrapper">
-        <span class="comment">아우터</span>
+        <span class="comment">{{ PRODUCT['category_name'] }}</span>
         <div class="more-button">
           <router-link
             class="more-button-comment"
@@ -107,223 +110,16 @@
       <section class="product-section">
         <div
           :index="index"
-          :key="PRODUCT"
+          :key="Data"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in this.brandProduct['category_items'][0][
-            'products'
-          ]"
+          v-for="(Data, index) in PRODUCT['products']"
         >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
+          <ProductCard :product="Data" />
         </div>
         <div class="line" />
       </section>
     </section>
-    <!-- 상의 -->
-    <section class="recommend-seller">
-      <div class="comment-wrapper">
-        <span class="comment">상의</span>
-        <div class="more-button">
-          <router-link
-            class="more-button-comment"
-            to="/category/brand/total/total"
-            >더보기</router-link
-          >
-          <svg class="direction" viewBox="0 0 10px 10px" role="presentation">
-            <svg id="chevron-left" viewBox="0 0 10px 10px">
-              <polygon
-                class="st0"
-                points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
-              ></polygon>
-            </svg>
-          </svg>
-        </div>
-      </div>
-      <section class="product-section">
-        <div
-          :index="index"
-          :key="PRODUCT"
-          class="numbering-wrapper"
-          v-for="(PRODUCT, index) in this.brandProduct['category_items'][1][
-            'products'
-          ]"
-        >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
-        </div>
-        <div class="line" />
-      </section>
-    </section>
-    <!-- 원피스 -->
-    <section class="recommend-seller">
-      <div class="comment-wrapper">
-        <span class="comment">원피스</span>
-        <div class="more-button">
-          <router-link
-            class="more-button-comment"
-            to="/category/brand/total/total"
-            >더보기</router-link
-          >
-          <svg class="direction" viewBox="0 0 10px 10px" role="presentation">
-            <svg id="chevron-left" viewBox="0 0 10px 10px">
-              <polygon
-                class="st0"
-                points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
-              ></polygon>
-            </svg>
-          </svg>
-        </div>
-      </div>
-      <section class="product-section">
-        <div
-          :index="index"
-          :key="PRODUCT"
-          class="numbering-wrapper"
-          v-for="(PRODUCT, index) in this.brandProduct['category_items'][2][
-            'products'
-          ]"
-        >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
-        </div>
-      </section>
-    </section>
-    <!-- 스커트 -->
-    <section class="recommend-seller">
-      <div class="comment-wrapper">
-        <span class="comment">스커트</span>
-        <div class="more-button">
-          <router-link
-            class="more-button-comment"
-            to="/category/brand/total/total"
-            >더보기</router-link
-          >
-          <svg class="direction" viewBox="0 0 10px 10px" role="presentation">
-            <svg id="chevron-left" viewBox="0 0 10px 10px">
-              <polygon
-                class="st0"
-                points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
-              ></polygon>
-            </svg>
-          </svg>
-        </div>
-      </div>
-      <section class="product-section">
-        <div
-          :index="index"
-          :key="PRODUCT"
-          class="numbering-wrapper"
-          v-for="(PRODUCT, index) in this.brandProduct['category_items'][3][
-            'products'
-          ]"
-        >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
-        </div>
-        <div class="line" />
-      </section>
-    </section>
-    <!-- 신발 -->
-    <section class="recommend-seller">
-      <div class="comment-wrapper">
-        <span class="comment">신발</span>
-        <div class="more-button">
-          <router-link
-            class="more-button-comment"
-            to="/category/brand/total/total"
-            >더보기</router-link
-          >
-          <svg class="direction" viewBox="0 0 10px 10px" role="presentation">
-            <svg id="chevron-left" viewBox="0 0 10px 10px">
-              <polygon
-                class="st0"
-                points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
-              ></polygon>
-            </svg>
-          </svg>
-        </div>
-      </div>
-      <section class="product-section">
-        <div
-          :index="index"
-          :key="PRODUCT"
-          class="numbering-wrapper"
-          v-for="(PRODUCT, index) in this.brandProduct['category_items'][4][
-            'products'
-          ]"
-        >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
-        </div>
-        <div class="line" />
-      </section>
-    </section>
-    <!-- 가방 -->
-    <section class="recommend-seller">
-      <div class="comment-wrapper">
-        <span class="comment">가방</span>
-        <div class="more-button">
-          <router-link
-            class="more-button-comment"
-            to="/category/brand/total/total"
-            >더보기</router-link
-          >
-          <svg class="direction" viewBox="0 0 10px 10px" role="presentation">
-            <svg id="chevron-left" viewBox="0 0 10px 10px">
-              <polygon
-                class="st0"
-                points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
-              ></polygon>
-            </svg>
-          </svg>
-        </div>
-      </div>
-      <section class="product-section">
-        <div
-          :index="index"
-          :key="PRODUCT"
-          class="numbering-wrapper"
-          v-for="(PRODUCT, index) in PRODUCT_SAMPLE.slice(0, 5)"
-        >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
-        </div>
-        <div class="line" />
-      </section>
-    </section>
-    <!-- 잡화 -->
-    <section class="recommend-seller">
-      <div class="comment-wrapper">
-        <span class="comment">잡화</span>
-        <div class="more-button">
-          <router-link
-            class="more-button-comment"
-            to="/category/brand/total/total"
-            >더보기</router-link
-          >
-          <svg class="direction" viewBox="0 0 10px 10px" role="presentation">
-            <svg id="chevron-left" viewBox="0 0 10px 10px">
-              <polygon
-                class="st0"
-                points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
-              ></polygon>
-            </svg>
-          </svg>
-        </div>
-      </div>
-      <section class="product-section">
-        <div
-          :index="index"
-          :key="PRODUCT"
-          class="numbering-wrapper"
-          v-for="(PRODUCT, index) in PRODUCT_SAMPLE.slice(0, 5)"
-        >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
-          <ProductCard :product="PRODUCT" />
-        </div>
-        <div class="line" />
-      </section>
-    </section>
+
     <section class="recommend-seller">
       <div class="comment-wrapper">
         <span class="comment">추천상품</span>
@@ -350,7 +146,6 @@
           class="numbering-wrapper"
           v-for="(PRODUCT, index) in this.brandProduct['recommended_items']"
         >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
           <ProductCard :product="PRODUCT" />
         </div>
       </section>
@@ -362,6 +157,7 @@
 import ProductCard from '../../components/ProductCard/ProductCard';
 import SlideProductCard from '../../components/ProductCard/SlideProductCard';
 import axios from 'axios';
+import URL from '../../../src/assets/mock/URL';
 
 export default {
   name: 'Brand',
@@ -376,27 +172,19 @@ export default {
     };
   },
 
-  //   {best_items: Array(10), brand_items: Array(5), category_items: Array(5), recommended_items: Array(25)}
-  // best_items: (10) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-  // brand_items: (5) [{…}, {…}, {…}, {…}, {…}]
-  // category_items: (5) [{…}, {…}, {…}, {…}, {…}]
-  // recommended_items: (25) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-  // __proto__: Object
   created: function() {
     axios
-      .get('http://10.58.2.76:5000/api/products?main_category_id=5', {})
-      // .then(res => console.log('HELELEO', res.data['best_items']));
+      .get(`${URL.PRODUCT_URL}/api/products?main_category_id=5`, {})
       .then(res => (this.brandProduct = res.data));
 
     console.log('HGEDKDKD', this.brandProduct['best_items']);
     console.log('category', this.brandProduct['category_items']);
-    // .then(res => console.log(res.data));
 
     document.addEventListener('click', this.CheckITem);
   },
   methods: {
     CheckITem() {
-      console.log('category', this.brandProduct['category_items']);
+      console.log('category', URL.PRODUCT_URL, URL.LOGIN_URL);
     }
   },
   components: {

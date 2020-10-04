@@ -25,6 +25,18 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  img {
+    opacity: 1;
+    animation: opacity 2s linear infinite;
+    @keyframes opacity {
+      0% {
+        opacity: 90%;
+      }
+      100% {
+        opacity: 10%;
+      }
+    }
+  }
 }
 .hidden {
   display: none;

@@ -162,23 +162,6 @@ export default {
     keepSliding() {
       setInterval(this.goRight(), 200);
     },
-    // createNewCard() {
-    //   let slideList = document.querySelector('.slider-swiper');
-    //   let firstChild = slideList.firstElementChild;
-    //   let LastChild = slideList.lastElementChild;
-    //   let clonedFirst = firstChild.cloneNode(true);
-    //   let clonedLast = LastChild.cloneNode(true);
-    //   this.slideList = document.querySelector('.slider-swiper');
-    //   this.firstChild = this.slideList.firstElementChild;
-    //   this.lastChild = this.slideList.lastElementChild;
-    //   this.clonedFirst = this.firstChild.cloneNode(true);
-    //   this.clonedLast = this.lastChild.cloneNode(true);
-    //   this.firstClone = this.slideList.appendChild(this.clonedFirst);
-    //   this.lastClone = this.slideList.insertBefore(
-    //     this.clonedLast,
-    //     this.firstChild
-    //   );
-    // },
 
     goRight() {
       let slideList = document.querySelector('.slider-swiper');
@@ -319,9 +302,7 @@ export default {
       transition-duration: 0ms;
       display: flex;
       overflow: hidden;
-
       /* width: 23040px; */
-
       /* height: 368px; */
       .slider-card {
         /* width: 1440px; */

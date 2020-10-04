@@ -45,6 +45,7 @@ import ContentsPlusButton from './components/ContentsPlusButton';
 import SlideProductCard from '../../components/ProductCard/SlideProductCard';
 import axios from 'axios';
 import { mapActions } from 'vuex';
+import URL from '../../../src/assets/mock/URL';
 const serviceStore = 'serviceStore';
 
 function randInt(max) {
@@ -73,9 +74,9 @@ export default {
     };
   },
   created: function() {
-    let URL = `http://10.58.2.76:5000/api/products`;
+    let GETURL = `${URL.PRODUCT_URL}/api/products`;
     axios
-      .get(`${URL}?offset=${this.offset}&limit=100`, {})
+      .get(`${GETURL}?offset=${this.offset}&limit=100`, {})
       .then(res => (this.productData = res.data.products))
       .then(users => {
         const i = randInt(users.length);
@@ -98,9 +99,9 @@ export default {
     },
 
     fetchData() {
-      let URL = `http://10.58.2.76:5000/api/products`;
+      let GETURL = `${URL.PRODUCT_URL}/api/products`;
       axios
-        .get(`${URL}?offset=${this.offset}&limit=100`, {})
+        .get(`${GETURL}?offset=${this.offset}&limit=100`, {})
         .then(
           res => (this.productData = this.productData.concat(res.data.products))
         )

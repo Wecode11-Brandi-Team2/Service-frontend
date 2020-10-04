@@ -1,15 +1,17 @@
 <template>
   <ul class="store-list">
-    <li class="number">{{ storeList.id }}</li>
-    <li>
-      <img alt="seller_image" :src="storeList.image" />
-    </li>
+    <li class="number">{{ index + 1 }}</li>
+    <a :href="`${storeList.site_url}`">
+      <li>
+        <img alt="seller_image" :src="storeList.image_url" />
+      </li>
+    </a>
     <li class="seller-content">
-      <div class="seller-title">{{ storeList.seller_name }}</div>
+      <div class="seller-title">{{ storeList.name }}</div>
       <div class="store-tag">
-        <span>#{{ storeList.tag_first }}</span>
+        <!-- <span>#{{ storeList.tag_first }}</span>
         <span>#{{ storeList.tag_second }}</span>
-        <span>#{{ storeList.tag_third }}</span>
+        <span>#{{ storeList.tag_third }}</span> -->
       </div>
     </li>
     <li
@@ -28,7 +30,7 @@
 
 <script>
 export default {
-  props: ['storeList'],
+  props: ['storeList', 'index'],
   data() {
     return {
       isLikeThisSeller: false

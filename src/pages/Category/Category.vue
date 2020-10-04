@@ -158,6 +158,7 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import SaleCheckButton from '../../components/Button/SaleCheckButton';
 import { mapGetters } from 'vuex';
 import axios from 'axios';
+import URL from '../../../src/assets/mock/URL';
 
 const serviceStore = 'serviceStore';
 
@@ -236,30 +237,32 @@ export default {
     },
 
     makeFetchData() {
-      let URL = `http://10.58.2.76:5000/api/products?`;
+      let ChangeURL = `${URL.PRODUCT_URL}/api/products?`;
       if (this.$route.params.title != 'total') {
-        URL = URL + '&' + `first_category_id=${this.$route.params.title}`;
+        ChangeURL =
+          ChangeURL + '&' + `first_category_id=${this.$route.params.title}`;
       }
       if (this.$route.params.id != 'total') {
-        URL = URL + '&' + `second_category_id=${this.$route.params.id}`;
+        ChangeURL =
+          ChangeURL + '&' + `second_category_id=${this.$route.params.id}`;
       }
       if (this.promotion != 0) {
-        URL = URL + '&' + `is_promotion=${this.promotion}`;
+        ChangeURL = ChangeURL + '&' + `is_promotion=${this.promotion}`;
       }
       if (this.dropDownFilterValue != 0) {
-        URL = URL + '&' + `select=${this.dropDownFilterValue}`;
+        ChangeURL = ChangeURL + '&' + `select=${this.dropDownFilterValue}`;
       }
       if (this.titles.title['id'] != 0 && this.allStatus === 1) {
-        URL =
-          URL +
+        ChangeURL =
+          ChangeURL +
           '&' +
           `main_category_id=${this.titles.title['id']}` +
           '&' +
           `all_items=${this.allStatus}`;
       }
       return (
-        URL.slice(0, URL.indexOf('?') + 1) +
-        URL.slice(URL.indexOf('?') + 2, URL.length)
+        ChangeURL.slice(0, ChangeURL.indexOf('?') + 1) +
+        ChangeURL.slice(ChangeURL.indexOf('?') + 2, ChangeURL.length)
       );
     },
     changeAllStatus() {

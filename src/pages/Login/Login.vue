@@ -49,6 +49,7 @@ import GoogleLogin from 'vue-google-login';
 import axios from 'axios';
 import { mapActions } from 'vuex';
 const serviceStore = 'serviceStore';
+import URL from '../../../src/assets/mock/URL';
 
 export default {
   name: 'Login',
@@ -68,7 +69,7 @@ export default {
     onSuccess(googleUser) {
       this.updateAccess({ access: googleUser.wc.access_token });
       axios
-        .post('http://10.58.2.70:5000/api/user/googleLogin', {
+        .post(`${URL.LOGIN_URL}/api/user/googleLogin`, {
           access_token: googleUser.wc.access_token
         })
         .then(console.log('GOOGLE', googleUser.wc.access_token))
@@ -78,7 +79,6 @@ export default {
           alert('Google Login Success');
           this.$router.push('/');
         })
-        .then(res => console.log(res))
         .catch(error => {
           if (error.response.status === 401) {
             alert('비회원이므로 회원가입 페이지로 이동합니다!');

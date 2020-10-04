@@ -20,6 +20,7 @@ import QnA from '../pages/Mypage/Q&A';
 import Refund from '../pages/Mypage/Refund';
 import RefundResult from '../pages/Mypage/RefundResult';
 import Shop from '../pages/Shop/Shop.vue';
+import Search from '../pages/Mypage/Search';
 
 Vue.use(VueRouter);
 
@@ -129,6 +130,11 @@ export const router = new VueRouter({
       path: '/shop',
       name: 'Shop',
       component: Shop
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search
     }
   ]
 });

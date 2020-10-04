@@ -36,6 +36,7 @@ import NextButton from './components/NextButton';
 import axios from 'axios';
 import { mapGetters } from 'vuex';
 const serviceStore = 'serviceStore';
+import URL from '../../../src/assets/mock/URL';
 
 export default {
   name: 'GoogleInformation',
@@ -64,9 +65,9 @@ export default {
     fetchData() {
       console.log('login?');
       console.log(this.accesses.access, this.phones.phone, this.loginId);
-      let URL = 'http://10.58.2.70:5000/api/user/googleSignup';
+      let MADE_URL = `${URL.LOGIN_URL}/api/user/googleSignup`;
       axios
-        .post(URL, {
+        .post(MADE_URL, {
           access_token: this.accesses.access,
           phone_number: this.phones.phone,
           login_id: this.loginId

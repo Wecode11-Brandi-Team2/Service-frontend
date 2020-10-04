@@ -14,7 +14,7 @@
       </li>
       <li>
         <span :class="[product.discount_rate === 0 ? 'hidden' : 'discount']">
-          {{ product.discount_rate || 2222 }}%</span
+          {{ product.discount_rate }}%</span
         >
         <span class="price"
           >{{ product.price.toLocaleString('en') || 2222 }}원</span
@@ -74,6 +74,7 @@ a {
   align-items: center;
   img {
     max-height: 254px;
+    min-height: 254px;
     width: 100%;
   }
   ul {
@@ -85,9 +86,16 @@ a {
       font-size: 15px;
     }
     .productname {
+      min-height: 35px;
       font-size: 16px;
       font-weight: 500;
       color: #000;
+      padding: 1%;
+      width: 220px;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .discount {
       font-size: 20px;
@@ -108,8 +116,15 @@ a {
       color: #757575;
     }
     margin: 5px 0;
-    span {
-      margin: 0 5px;
+    /* span {
+      display: inline-block;
+      width: 220px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    } */
+    &:nth-child(2) {
+      min-height: 35px;
     }
   }
 }

@@ -34,6 +34,7 @@
 import ProductCard from '../../components/ProductCard/ProductCard';
 import SlideProductCard from '../../components/ProductCard/SlideProductCard';
 import axios from 'axios';
+import URL from '../../../src/assets/mock/URL';
 
 export default {
   name: 'Trend',
@@ -47,9 +48,8 @@ export default {
   },
   created: function() {
     axios
-      .get('http://10.58.2.76:5000/api/products?main_category_id=4', {})
+      .get(`${URL.PRODUCT_URL}/api/products?main_category_id=4`, {})
       .then(res => (this.trendProductData = res.data.products));
-    // .then(this.updateSpinner({ spinner: true }));
     window.addEventListener('scroll', this.removeButton);
   },
   mounted() {

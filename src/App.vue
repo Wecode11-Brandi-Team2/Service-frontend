@@ -43,7 +43,6 @@ export default {
   },
   data() {
     return {
-      refCount: 0,
       // isLoading: true
       isLoading: false
     };
@@ -52,13 +51,8 @@ export default {
     setLoading(isLoading) {
       console.log('thisisLOADING', isLoading);
       if (isLoading) {
-        this.refCount++;
         this.isLoading = true;
         console.log('inIf', isLoading);
-        console.log(this.refCount);
-      } else if (this.refCount > 0) {
-        this.refCount--;
-        this.isLoading = this.refCount > 0;
       }
       if (!isLoading) {
         this.isLoading = false;

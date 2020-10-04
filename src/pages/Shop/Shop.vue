@@ -3,9 +3,9 @@
     <div class="shop-frame">
       <ul class="classification">
         <li
-          :class="{ 'active-tab': idx === activeTab }"
-          @click="setActiveTab(idx)"
-          v-for="(part, idx) in classification"
+          :class="{ 'active-tab': part.id === activeTab }"
+          @click="setActiveTab(part.id)"
+          v-for="part in classification"
           :key="part.id"
         >
           {{ part.name }}
@@ -35,8 +35,9 @@
       <div class="store-list-container">
         <StoreList
           :storeList="list"
-          v-for="list in storeLists"
+          v-for="(list, index) in storeLists"
           :key="list.id"
+          :index="index"
         />
       </div>
       <div class="more-pagination-container">
@@ -48,6 +49,8 @@
 
 <script>
 import StoreList from './StoreList';
+import axios from 'axios';
+import URL from '../../../src/assets/mock/URL';
 
 export default {
   components: {
@@ -57,107 +60,66 @@ export default {
     return {
       classification: [
         {
-          id: 0,
+          id: 4,
           name: '쇼핑몰 · 마켓'
         },
         {
-          id: 1,
+          id: 5,
           name: '브랜드'
         },
         {
-          id: 2,
+          id: 6,
           name: '뷰티'
         }
       ],
       arrangeDropdownList: [
         {
           id: 0,
-          order: '추천순'
-        },
-        {
-          id: 1,
-          order: '인기순'
-        },
-        {
-          id: 2,
           order: '최신순'
-        }
-      ],
-      storeLists: [
+        },
         {
           id: 1,
-          image:
-            'https://image.brandi.me/seller/room302_profile_1522297392_S.jpg',
-          seller_name: '302호',
-          tag_first: '20대초반',
-          tag_second: '심플베이직',
-          tag_third: '마켓',
-          like_amount: '43.4k'
-        },
-        {
-          id: 2,
-          image:
-            'https://image.brandi.me/seller/rhgodls24_profile_1580649925_S.jpg',
-          seller_name: '로그인',
-          tag_first: '20대초반',
-          tag_second: '페미닌',
-          tag_third: '쇼핑몰',
-          like_amount: '9.6k'
-        },
-        {
-          id: 3,
-          image:
-            'https://image.brandi.me/seller/withhuilin_profile_1544338235_S.jpg',
-          seller_name: '위드후이린',
-          tag_first: '20대초반',
-          tag_second: '러블리',
-          tag_third: '마켓',
-          like_amount: '5.2k'
-        },
-        {
-          id: 4,
-          image:
-            'https://image.brandi.me/seller/sora0406_profile_1515997878_S.jpeg',
-          seller_name: '어썸',
-          tag_first: '20대초반',
-          tag_second: '심플베이직',
-          tag_third: '마켓',
-          like_amount: '266.7k'
-        },
-        {
-          id: 5,
-          image:
-            'https://image.brandi.me/sellerTest/bress_profile_1599110981_S.jpg',
-          seller_name: '브레스',
-          tag_first: '10대',
-          tag_second: '러블리',
-          tag_third: '쇼핑몰',
-          like_amount: '324'
-        },
-        {
-          id: 6,
-          image:
-            'https://image.brandi.me/seller/spellonyou01_profile_1582273095_S.jpg',
-          seller_name: '프렌치오브',
-          tag_first: '20대초반',
-          tag_second: '심플베이직',
-          tag_third: '쇼핑몰',
-          like_amount: '7.2k'
+          order: '판매량'
         }
       ],
-      activeTab: 0,
+      storeLists: [],
+      activeTab: 4,
       activeArrange: '추천순',
-      isArrangeDropdown: false
+      isArrangeDropdown: false,
+      select: 0
     };
   },
   methods: {
     setActiveTab(idx) {
       this.activeTab = idx;
+      this.doFetch();
+    },
+    checkfunction() {
+      console.log(this.storeLists);
     },
     arrange(list) {
       this.isArrangeDropdown = !this.isArrangeDropdown;
       this.activeArrange = list.order;
+      this.select = list.id;
+      this.doFetch();
+    },
+    doFetch() {
+      axios
+        .get(
+          `${URL.PRODUCT_URL}/api/products/seller?main_category_id=${this.activeTab}&select=${this.select}`,
+          {}
+        )
+        .then(res => (this.storeLists = res.data));
+      console.log('doFetch');
     }
+  },
+
+  created: function() {
+    this.doFetch();
+    window.addEventListener('click', this.checkfunction);
+  },
+  mounted() {
+    console.log('HELLO', this.storeLists);
   }
 };
 </script>

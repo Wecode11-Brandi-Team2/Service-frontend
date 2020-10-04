@@ -7,7 +7,6 @@ import Mypage from '../pages/Mypage/Mypage';
 import SignUp from '../pages/Login/SignUp';
 import Agreement from '../pages/Login/Agreement.vue';
 import Category from '../pages/Category/Category';
-import CategoryNav from '../components/Nav/CategoryNav';
 import Order from '../pages/Order/Order.vue';
 import Trend from '../pages/Trend/Trend';
 import Brand from '../pages/Brand/Brand';
@@ -21,6 +20,7 @@ import Refund from '../pages/Mypage/Refund';
 import RefundResult from '../pages/Mypage/RefundResult';
 import Shop from '../pages/Shop/Shop.vue';
 import Search from '../pages/Mypage/Search';
+import Ranking from '../pages/Ranking/Ranking';
 
 Vue.use(VueRouter);
 
@@ -63,12 +63,6 @@ export const router = new VueRouter({
       path: '/category/:specification/:title/:id',
       name: 'Category',
       component: Category,
-      props: true
-    },
-    {
-      path: '/category/:specification/:title/:id',
-      name: 'CategoryNav',
-      component: CategoryNav,
       props: true
     },
     {
@@ -135,6 +129,12 @@ export const router = new VueRouter({
       path: '/search',
       name: 'Search',
       component: Search
+    },
+    {
+      path: '/ranking/:specification?/:title?/:id?',
+      name: 'Ranking',
+      component: Ranking,
+      props: true
     }
   ]
 });

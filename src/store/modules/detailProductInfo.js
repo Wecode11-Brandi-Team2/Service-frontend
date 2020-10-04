@@ -1,5 +1,3 @@
-// import axios from 'axios';
-
 export default {
   state: {
     productInfo: {
@@ -57,8 +55,6 @@ export default {
       ],
       name: '네츄럴 시스루 단추 니트 (5color)_ 알콜',
       price: 16100,
-      review_count: 'count',
-      review_rating: 'rating',
       sales_amount: 50,
       seller_name: '알콜',
       seller_url: 'https://web-staging.brandi.co.kr/shop/allcall',
@@ -66,30 +62,46 @@ export default {
         {
           id: 12,
           size: 'Free'
+        },
+        {
+          id: 13,
+          size: 'S'
+        },
+        {
+          id: 14,
+          size: 'M'
+        },
+        {
+          id: 15,
+          size: 'L'
         }
       ]
     },
     isColorSelected: false,
-    // ---
-    // 실제 api 통신할 부분
-    productDetail: {}
+    userSelection: [],
+    selectedOption: {},
+    isOptionSelected: false
   },
   mutations: {
     COLOR_SELECT(state, Selected) {
       state.isColorSelected = Selected;
+    },
+    USER_COLOR_SELECT(state, color) {
+      state.selectedOption.selectedColor = color;
+    },
+    USER_SIZE_SELECT(state, size) {
+      state.selectedOption.selectedSize = size;
+      state.userSelection = state.userSelection.concat([state.selectedOption]);
+      state.isColorSelected = false;
+      state.isOptionSelected = !state.isOptionSelected;
+      // 질문: state.userSelection 에 push, concat 다 해봤는데 다른 옵션을 추가했을 때 두번째 옵션부터 첫번째로 선택한 옵션을 기억하지 못합니다....
+    },
+    DELETE_OPTION(state) {
+      if (confirm('선택하신 상품을 삭제하시겠습니까?') === true) {
+        state.userSelection = [];
+        state.isOptionSelected = !state.isOptionSelected;
+      }
     }
-    // 4. 받아온 api 를 data 에 집어 넣는 과정
-    // SET_DETAIL_INFO(state, detail) {
-    //   state.productDetail = detail;
-    // }
   },
-  actions: {
-    // 3. 백엔드에서 api 를 받아와서 정보를 mutations 를 통해 올리기 전 과정
-    // api 주소만 입력하면 됨
-    // getDetailInfo({ commit }) {
-    //   axios.get('').then(res => {
-    //     commit('SET_DETAIL_INFO', res.data);
-    //   });
-    // }
-  }
+  actions: {}
 };

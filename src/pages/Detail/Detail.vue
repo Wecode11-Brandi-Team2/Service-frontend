@@ -2,31 +2,42 @@
   <main class="Detail">
     <section class="detail-wrapper">
       <div class="product-info-wrapper">
-        <SlideImageWrapper />
+        <SlideImageWrapper :apiDataImage="apiData2.image" />
         <section class="purchase-info">
           <section class="purchase-basic-info">
             <div class="seller-name">
-              <a class="seller-page" :href="apiData.seller_url">
+              <a class="seller-page" :href="apiData2.seller_url">
                 <i class="fas fa-home" />
-                <span>{{ apiData.seller_name }}</span>
+                <span>{{ apiData2.seller_name }}</span>
                 <div class="right-btn"></div>
               </a>
             </div>
-            <div class="product-name">{{ apiData.name }}</div>
+            <div class="product-name">{{ apiData2.name }}</div>
             <div class="price-container">
-              <div class="price">{{ apiData.price }}</div>
-              <span class="won">원</span>
+              <div class="price-wrapper">
+                <div class="price">{{ apiData2.price.toLocaleString() }}</div>
+                <span class="won">원</span>
+              </div>
             </div>
-            <div class="quantity">{{ apiData.sales_amount }}개 구매중</div>
+            <div class="quantity">{{ apiData2.sales_amount }}개 구매중</div>
           </section>
           <section class="option-payment">
-            <SelectColor />
-            <SelectSize />
-            <SelectedOptions />
+            <SelectColor :apiDataColor="apiData2.color" />
+            <SelectSize :apiDataSize="apiData2.size" />
+            <SelectedOptions
+              @update-price="setOptionPrice"
+              @option-price="getOptionPrice"
+              :apiDataPrice="apiData2.price"
+              v-for="(option, idx) in userSelections"
+              :key="idx"
+              :option="option"
+            />
             <div class="total-price-container">
               <div class="total-price-seat">총 상품 금액</div>
               <div class="total-price-wrapper">
-                <div class="total-price">0</div>
+                <div class="total-price">
+                  {{ !isOptionSelected ? 0 : totalPrice.toLocaleString() }}
+                </div>
                 <div class="total-price-won">원</div>
               </div>
             </div>
@@ -60,7 +71,7 @@ import ProductInfomation from './ProductInfomation';
 import QA from './QA';
 import SlideImageWrapper from './SlideImageWrapper';
 import SelectedOptions from './SelectedOptions';
-import axios from 'axios';
+// import axios from 'axios';
 
 export default {
   name: 'Detail',
@@ -79,35 +90,35 @@ export default {
       detailInfoTab: {
         review: 0,
         Q_A: 0
-      }
+      },
+      totalPrice: 0
     };
   },
   created() {
-    let URL = `http://10.251.1.153:5000/api/products/product/${this.$route.params.id}`;
-    axios.get(URL).then(res => {
-      this.apiData = res.data;
-      console.log(this.apiData);
-    });
-    //
-    // 1. created 에서 백엔드와 통신
-    // this.getDetailInfo();
+    // 통신!!
+    // let URL = `http://10.251.1.153:5000/api/products/product/${this.$route.params.id}`;
+    // axios.get(URL).then(res => {
+    //   this.apiData = res.data;
+    // });
   },
   methods: {
-    // 2. actions 와 연결하기 위한 dispatch
-    // getDetailInfo() {
-    //   this.$store.dispatch('getDetailInfo');
-    // }
-    // -> vuex
+    getOptionPrice(price) {
+      this.totalPrice = price;
+    },
+    setOptionPrice(price) {
+      this.totalPrice = price;
+    }
   },
   computed: {
-    ProductInfo() {
+    apiData2() {
       return this.$store.state.detailProductInfo.productInfo;
+    },
+    userSelections() {
+      return this.$store.state.detailProductInfo.userSelection;
+    },
+    isOptionSelected() {
+      return this.$store.state.detailProductInfo.isOptionSelected;
     }
-    // 5. 받아온 api 를 data 에 저장한 후 업데이트 된 정보를 가져온 후 사용
-    // 만약 성공한다면 detail 이외에도 색상, 사이즈 선택 컴포넌트, 슬라이드 이미지 에도 적용할 것
-    // ProductDetail() {
-    //   return this.$store.state.detailProductInfo.productDetail;
-    // }
   }
 };
 </script>
@@ -169,19 +180,20 @@ export default {
           @include setSize(100%, 50px);
           margin-bottom: 12px;
 
-          .price {
+          .price-wrapper {
+            display: flex;
             position: absolute;
             left: -7px;
             padding-top: 9px;
-            font-size: 34px;
-            font-weight: 800;
-          }
 
-          .won {
-            position: absolute;
-            top: 20px;
-            left: 92px;
-            font-size: 20px;
+            .price {
+              @include setFont(34px, null, 800);
+            }
+
+            .won {
+              padding-top: 12px;
+              font-size: 20px;
+            }
           }
         }
 

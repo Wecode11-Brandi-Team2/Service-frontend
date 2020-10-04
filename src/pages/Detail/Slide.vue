@@ -6,12 +6,10 @@
   >
     <div
       class="product-image"
-      v-for="image in apiData"
+      v-for="image in apiDataImage"
       :key="image.id"
       :style="{
-        backgroundImage: 'url(' + image.image_url + ')',
-        backgroundSize: '100%',
-        backgroundRepeat: 'no-repeat'
+        backgroundImage: 'url(' + image.image_url + ')'
       }"
     />
   </div>
@@ -19,7 +17,7 @@
 
 <script>
 export default {
-  props: ['selectedImage', 'apiData'],
+  props: ['selectedImage', 'apiDataImage'],
   methods: {
     calcSlideWidth(width) {
       if (this.selectedImage === 1) return width * 0;

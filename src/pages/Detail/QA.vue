@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
 import QA_List from './QA_List';
 
 export default {
@@ -271,16 +271,16 @@ export default {
       ]
     };
   },
-  created() {
-    let URL = `http://10.251.1.153:5000/api/qnas?product_id=${this.$route.params.id}`;
-    axios.get(URL).then(res => {
-      this.apiData = res.data;
-      console.log(this.apiData);
-    });
-    //
-    // 1. created 에서 백엔드와 통신
-    // this.getDetailInfo();
-  },
+  // created() {
+  //   let URL = `http://10.251.1.153:5000/api/qnas?product_id=${this.$route.params.id}`;
+  //   axios.get(URL).then(res => {
+  //     this.apiData = res.data;
+  //     console.log(this.apiData);
+  //   });
+  //
+  // 1. created 에서 백엔드와 통신
+  // this.getDetailInfo();
+  // },
   methods: {
     myWroteActive() {
       this.myWroteIsActive = !this.myWroteIsActive;

@@ -21,6 +21,7 @@ import RefundResult from '../pages/Mypage/RefundResult';
 import Shop from '../pages/Shop/Shop.vue';
 import Search from '../pages/Mypage/Search';
 import Ranking from '../pages/Ranking/Ranking';
+import Cancel from '../pages/Mypage/Cancel';
 
 Vue.use(VueRouter);
 
@@ -135,6 +136,11 @@ export const router = new VueRouter({
       name: 'Ranking',
       component: Ranking,
       props: true
+    },
+    {
+      path: '/cancel',
+      name: 'Cancel',
+      component: Cancel
     }
   ]
 });

@@ -69,6 +69,7 @@
 import SignUpNav from './components/SignUpNav';
 import NextButton from './components/NextButton';
 import { mapActions } from 'vuex';
+// import axios from 'axios';
 const serviceStore = 'serviceStore';
 
 export default {
@@ -124,7 +125,7 @@ export default {
       return true;
     },
     // fetchData() {
-    //   let URL = `http://10.58.2.0:5000/api/products?first_category_id=${this.$route.params.title}&second_category_id=${this.$route.params.id}&main_category_id=4&is_promotion=${this.promotion}`;
+    //   let URL = `http://10.58.2.245:5000/api/products?first_category_id=${this.$route.params.title}&second_category_id=${this.$route.params.id}&main_category_id=4&is_promotion=${this.promotion}`;
     //   axios.get(URL).then(res => (this.productData = res.data.products));
     // },
     showNumberCheck() {

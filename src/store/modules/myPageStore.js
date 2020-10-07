@@ -1,6 +1,7 @@
 export default {
   namespaced: true,
   state: {
+    isLogin: localStorage.getItem('access_token') ? true : false,
     products: {
       product: {}
     },
@@ -8,7 +9,22 @@ export default {
     refundItemData: {}
   },
 
+  getters: {
+    isLogin(state) {
+      return state.isLogin;
+    },
+    getProducts(state) {
+      return state.products;
+    }
+  },
+
   mutations: {
+    login(state) {
+      state.isLogin = true;
+    },
+    logout(state) {
+      state.isLogin = false;
+    },
     updateProducts(state, product) {
       const newProducts = {
         product
@@ -43,14 +59,16 @@ export default {
   },
 
   actions: {
+    login({ commit }, token) {
+      localStorage.setItem('access_token', token);
+      commit('login');
+    },
+    logout({ commit }) {
+      localStorage.removeItem('access_token');
+      commit('logout');
+    },
     updateProducts({ commit }, { product }) {
       commit('updateProducts', product);
-    }
-  },
-
-  getters: {
-    getProducts(state) {
-      return state.products;
     }
   }
 };

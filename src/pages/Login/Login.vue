@@ -49,6 +49,7 @@ import GoogleLogin from 'vue-google-login';
 import axios from 'axios';
 import { mapActions } from 'vuex';
 const serviceStore = 'serviceStore';
+const myPageStore = 'myPageStore';
 import URL from '../../../src/assets/mock/URL';
 
 export default {
@@ -66,6 +67,7 @@ export default {
 
   methods: {
     ...mapActions(serviceStore, ['updateAccess']),
+    ...mapActions(myPageStore, ['login']),
     onSuccess(googleUser) {
       this.updateAccess({ access: googleUser.wc.access_token });
       axios
@@ -74,7 +76,7 @@ export default {
         })
         .then(console.log('GOOGLE', googleUser.wc.access_token))
         .then(googleUser => {
-          localStorage.setItem('access_token', googleUser.data.access_token);
+          this.login(googleUser.data.access_token);
           console.log('LoginSuccess', googleUser);
           alert('Google Login Success');
           this.$router.push('/');

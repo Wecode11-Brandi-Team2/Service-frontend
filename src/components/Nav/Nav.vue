@@ -7,15 +7,12 @@
     />
     <div class="nav-box">
       <div class="brandi-logo" @click="goHome">
-        <!-- :to="'/' + String(`${CATEGORY[Object.keys(CATEGORY)[3]]}`)" -->
         <router-link to="/" class="logo-link">
-          <!-- <a class="logo-link"> -->
           <img
             class="logo"
             src="https://web-staging.brandi.co.kr/static/3.50.6/images/logo@3x.png"
             alt="brandiLogo"
           />
-          <!-- </a> -->
         </router-link>
       </div>
       <div class="search-box">
@@ -31,9 +28,12 @@
         ㅣ
         <a class="menu" @click="goLogin">마이페이지</a>
         ㅣ
-        <span @click="changeRoute" class="menu">{{
-          this.token ? '로그아웃' : '로그인'
-        }}</span>
+        <router-link to="/login" v-if="!token">
+          로그인
+        </router-link>
+        <router-link to="/" v-else>
+          <span @click="logout"> 로그아웃</span>
+        </router-link>
         ㅣ
         <a class="menu">입점문의</a>
       </div>
@@ -45,6 +45,7 @@
 import { mapActions } from 'vuex';
 import { mapGetters } from 'vuex';
 const serviceStore = 'serviceStore';
+const myPageStore = 'myPageStore';
 
 export default {
   name: 'Nav',
@@ -57,36 +58,42 @@ export default {
   created() {
     this.token = localStorage.getItem('access_token');
   },
+
   computed: {
     ...mapGetters(serviceStore, ['getCategories', 'getTitle']),
+    ...mapGetters(myPageStore, ['isLogin']),
     categories() {
       return this.getCategories;
     },
     titles() {
       return this.getTitle;
     }
+    // token() {
+    //   return this.isLogin;
+    // }
   },
+
   methods: {
     ...mapActions(serviceStore, ['updateCategories', 'updateTitle']),
+    ...mapActions(myPageStore, ['logout']),
 
     testToken(e) {
       e.preventDefault();
-      localStorage.setItem('access_token', '???');
       this.$router.push(`/search?q=${this.queryString}`);
     },
     changeRoute() {
       if (localStorage.getItem('access_token')) {
         localStorage.removeItem('access_token');
-        this.token = '';
         this.$router.push('/');
       } else {
         this.$router.push('/login');
       }
     },
+
     goHome() {
       this.updateTitle({ title: String('/') });
-      console.log(this.titles.title);
     },
+
     goLogin() {
       if (localStorage.getItem('access_token') == undefined) {
         alert('로그인을 해주세요.');
@@ -114,6 +121,7 @@ export default {
     width: 100%;
     margin: 0 auto;
   }
+
   .nav-box {
     @include setFlex(center, null, null);
     max-width: 1300px;
@@ -136,6 +144,7 @@ export default {
         transform: matrix(1.1, 0, 0, 1.1, 1.1, 0);
       }
     }
+
     .search-box {
       margin-top: 20px;
       padding: 0 8%;
@@ -158,6 +167,7 @@ export default {
           overflow: hidden;
           outline: none;
         }
+
         .search-input {
           margin: 0 auto;
           background: none;
@@ -170,11 +180,13 @@ export default {
         }
       }
     }
+
     .upper-menubox {
       line-height: 80px;
       text-align: center;
 
-      .menu {
+      .menu,
+      a {
         @include setFont(14px, #000000, null);
         letter-spacing: -0.05em;
         text-decoration: none;
@@ -185,6 +197,11 @@ export default {
         &:hover {
           color: #ff204b;
         }
+      }
+
+      a,
+      a:visit {
+        text-decoration: none;
       }
     }
   }

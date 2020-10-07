@@ -2,32 +2,32 @@
   <main class="Detail">
     <section class="detail-wrapper">
       <div class="product-info-wrapper">
-        <SlideImageWrapper :apiDataImage="apiData2.image" />
+        <SlideImageWrapper :apiDataImage="apiData.images" />
         <section class="purchase-info">
           <section class="purchase-basic-info">
             <div class="seller-name">
-              <a class="seller-page" :href="apiData2.seller_url">
+              <a class="seller-page" :href="apiData.seller_url">
                 <i class="fas fa-home" />
-                <span>{{ apiData2.seller_name }}</span>
+                <span>{{ apiData.seller_name }}</span>
                 <div class="right-btn"></div>
               </a>
             </div>
-            <div class="product-name">{{ apiData2.name }}</div>
+            <div class="product-name">{{ apiData.name }}</div>
             <div class="price-container">
               <div class="price-wrapper">
-                <div class="price">{{ apiData2.price.toLocaleString() }}</div>
+                <div class="price">{{ productPrice }}</div>
                 <span class="won">원</span>
               </div>
             </div>
-            <div class="quantity">{{ apiData2.sales_amount }}개 구매중</div>
+            <div class="quantity">{{ apiData.sales_amount }}개 구매중</div>
           </section>
           <section class="option-payment">
-            <SelectColor :apiDataColor="apiData2.color" />
-            <SelectSize :apiDataSize="apiData2.size" />
+            <SelectColor :apiDataColor="apiData.color" />
+            <SelectSize :apiDataSize="apiData.size" />
             <SelectedOptions
               @update-price="setOptionPrice"
               @option-price="getOptionPrice"
-              :apiDataPrice="apiData2.price"
+              :apiDataPrice="apiData.price"
               v-for="(option, idx) in userSelections"
               :key="idx"
               :option="option"
@@ -49,15 +49,27 @@
       </div>
       <section>
         <ul class="detail-info-tab-wrapper">
-          <!-- 탭을 선택했을 때 식별하기 위해 v-for 사용할 것을 권장 -->
-          <li>상품정보</li>
-          <li>리뷰({{ detailInfoTab.review }})</li>
-          <li>Q&A({{ detailInfoTab.Q_A }})</li>
-          <li>주문정보</li>
+          <li
+            @click="goToPart(tab)"
+            :class="[activeTab === tab.id ? 'activeTab' : '']"
+            v-for="tab in detailInfoTab"
+            :key="tab.id"
+          >
+            {{ tab.id === 3 ? tab.tab + ' (' + seeMyWrote() + ')' : tab.tab }}
+          </li>
         </ul>
         <section class="detail-info-container">
+          <!--
+          <ProductInfomation /> 이부분을 통신이 되면 
+          {{ productInfoData }} 이렇게 바꿀 것으로 예상
+        -->
           <ProductInfomation />
-          <QA :QA="detailInfoTab.Q_A" />
+          <QA
+            @qna-length="calQnaLen"
+            @qna-location="saveQnaLocation"
+            @myqna-length="calMyQnaLen"
+            @my-wrote-active="myWroteIsActive"
+          />
         </section>
       </section>
     </section>
@@ -71,7 +83,8 @@ import ProductInfomation from './ProductInfomation';
 import QA from './QA';
 import SlideImageWrapper from './SlideImageWrapper';
 import SelectedOptions from './SelectedOptions';
-// import axios from 'axios';
+import axios from 'axios';
+import URL from '../../../src/assets/mock/URL.js';
 
 export default {
   name: 'Detail',
@@ -87,26 +100,103 @@ export default {
   data() {
     return {
       apiData: [],
-      detailInfoTab: {
-        review: 0,
-        Q_A: 0
-      },
-      totalPrice: 0
+      detailInfoTab: [
+        {
+          id: 1,
+          tab: '상품정보'
+        },
+        {
+          id: 2,
+          tab: '리뷰'
+        },
+        {
+          id: 3,
+          tab: 'Q&A'
+        },
+        {
+          id: 4,
+          tab: '주문정보'
+        }
+      ],
+      activeTab: 1,
+      totalPrice: 0,
+      savedQnaLocation: 0,
+      productPrice: 0,
+      qnaLength: 0,
+      myQnaLength: 0,
+      productInfoData: '',
+      myWroteActive: false
     };
   },
   created() {
-    // 통신!!
-    // let URL = `http://10.251.1.153:5000/api/products/product/${this.$route.params.id}`;
-    // axios.get(URL).then(res => {
-    //   this.apiData = res.data;
+    let url = `${URL.PRODUCT_URL}/api/products/product/${this.$route.params.id}`;
+    axios.get(url).then(res => {
+      this.apiData = res.data;
+      this.productPrice = this.apiData.price.toLocaleString();
+    });
+    // 상품 디테일 정보 통째로 받는 부분
+    let productInfoUrl = `${URL.PRODUCT_URL}/api/products/product/1`;
+    // axios.get(productInfoUrl).then(res => {
+    //   console.log(res);
+    //   this.productInfoData = res.data;
     // });
+    // ---
+    window.addEventListener('scroll', this.senseScroll);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.senseScroll);
   },
   methods: {
+    seeMyWrote() {
+      if (this.myWroteActive) return this.myQnaLength;
+      if (!this.myWroteActive) return this.qnaLength;
+    },
+    myWroteIsActive(isActive) {
+      this.myWroteActive = isActive;
+    },
+    calQnaLen(length) {
+      this.qnaLength = length;
+    },
+    calMyQnaLen(length) {
+      this.myQnaLength = length;
+    },
+    senseScroll() {
+      if (window.scrollY < this.savedQnaLocation - 500) {
+        this.activeTab = 1;
+      } else {
+        this.activeTab = 3;
+      }
+    },
     getOptionPrice(price) {
       this.totalPrice = price;
     },
     setOptionPrice(price) {
       this.totalPrice = price;
+    },
+    goToPart(tab) {
+      this.activeTab = tab.id;
+
+      const productInfoLocation = document.querySelector(
+        '.detail-info-container'
+      ).offsetTop;
+      const tabHeight = document.querySelector('.detail-info-tab-wrapper')
+        .offsetHeight;
+
+      if (this.activeTab === 1) {
+        window.scrollTo({
+          top: productInfoLocation - tabHeight,
+          behavior: 'smooth'
+        });
+      }
+      if (this.activeTab === 3) {
+        window.scrollTo({
+          top: this.savedQnaLocation,
+          behavior: 'smooth'
+        });
+      }
+    },
+    saveQnaLocation(qnaLocation) {
+      this.savedQnaLocation = qnaLocation;
     }
   },
   computed: {
@@ -247,6 +337,7 @@ export default {
           color: #fff;
           font-size: 17px;
           font-weight: 500;
+          cursor: pointer;
         }
       }
     }
@@ -269,6 +360,16 @@ export default {
       padding: 17px 4px 22px;
       border-bottom: 4px solid #f2f2f2;
       color: #9a9a9e;
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .activeTab {
+      @include setFlex(center, center, row);
+      @include setSize(25%, 100%);
+      padding: 17px 4px 22px;
+      border-bottom: 4px solid #1e1e1e;
+      color: #1e1e1e;
       font-size: 20px;
       font-weight: 400;
     }

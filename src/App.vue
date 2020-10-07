@@ -54,10 +54,10 @@ export default {
   },
   methods: {
     setLoading(isLoading) {
-      console.log('thisisLOADING', isLoading);
+      // console.log('thisisLOADING', isLoading);
       if (isLoading) {
         this.isLoading = true;
-        console.log('inIf', isLoading);
+        // console.log('inIf', isLoading);
       }
       if (!isLoading) {
         this.isLoading = false;

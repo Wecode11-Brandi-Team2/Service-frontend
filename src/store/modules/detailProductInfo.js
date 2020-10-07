@@ -80,7 +80,62 @@ export default {
     isColorSelected: false,
     userSelection: [],
     selectedOption: {},
-    isOptionSelected: false
+    isOptionSelected: false,
+    myQna: [1],
+    qnaData2: [
+      {
+        a_content: '즐거운 쇼핑되세요',
+        a_created_at: 'Wed, 25 Sep 2020 05:15:56 GMT',
+        a_id: null,
+        a_is_private: 1,
+        q_content: '\ubb38\uc758 \ub0b4\uc6a9 - product 7',
+        q_created_at: 'Wed, 30 Sep 2020 05:15:56 GMT',
+        q_id: 19,
+        q_is_answered: 1,
+        q_is_private: 0,
+        q_type: '\uc0c1\ud488 \ubb38\uc758',
+        q_user: 'user200'
+      },
+      {
+        a_content: '즐거운 쇼핑되세요',
+        a_created_at: null,
+        a_id: null,
+        a_is_private: 0,
+        q_content: '\ubb38\uc758 \ub0b4\uc6a9 2 - product 7',
+        q_created_at: 'Wed, 30 Sep 2020 05:17:13 GMT',
+        q_id: 20,
+        q_is_answered: 1,
+        q_is_private: 0,
+        q_type: '\uc0c1\ud488 \ubb38\uc758',
+        q_user: 'user200'
+      },
+      {
+        a_content: null,
+        a_created_at: null,
+        a_id: null,
+        a_is_private: null,
+        q_content: '\ubb38\uc758 \ub0b4\uc6a9 3 - product 7',
+        q_created_at: 'Wed, 30 Sep 2020 05:18:09 GMT',
+        q_id: 21,
+        q_is_answered: 0,
+        q_is_private: 1,
+        q_type: '\uc0c1\ud488 \ubb38\uc758',
+        q_user: 'user200'
+      },
+      {
+        a_content: null,
+        a_created_at: null,
+        a_id: null,
+        a_is_private: null,
+        q_content: '\ubb38\uc758 \ub0b4\uc6a9 4 - product 7',
+        q_created_at: 'Wed, 30 Sep 2020 05:18:12 GMT',
+        q_id: 22,
+        q_is_answered: 0,
+        q_is_private: 1,
+        q_type: '\uc0c1\ud488 \ubb38\uc758',
+        q_user: 'user200'
+      }
+    ]
   },
   mutations: {
     COLOR_SELECT(state, Selected) {

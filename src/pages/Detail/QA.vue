@@ -1,7 +1,9 @@
 <template>
   <div class="Q-A">
     <section class="QA-heading-container">
-      <h2 class="QA-heading">Q&A({{ QA }})</h2>
+      <h2 class="QA-heading">
+        Q&A ({{ myWroteIsActive ? myQnas.length : apiData.length }})
+      </h2>
       <div class="QA-utils">
         <span class="my-wrote-active" @click="myWroteActive">
           <i
@@ -13,6 +15,7 @@
         <div class="question" @click="toggleQuestArea">문의하기</div>
       </div>
     </section>
+    <!-- 문의하기 start -->
     <div class="QA-write-box-container" v-if="activeQuestArea">
       <ul>
         <li class="question-line">
@@ -48,10 +51,10 @@
                 <li
                   class="quest-type"
                   v-for="quest in questTypes"
-                  :key="quest.id"
+                  :key="quest.q_id"
                   @click="selectQuestType(quest)"
                 >
-                  {{ quest.quest }}
+                  {{ quest.q_type }}
                 </li>
               </ul>
             </div>
@@ -77,12 +80,15 @@
         </li>
       </ul>
       <div class="btn-wrapper">
-        <button type="button" class="btn-cancel" @click="toggleQuestArea">
+        <button type="button" class="btn-cancel" @click="quitQuestArea">
           취소하기
         </button>
-        <button type="submit" class="btn-submit">등록하기</button>
+        <button @click="submitQuest" type="submit" class="btn-submit">
+          등록하기
+        </button>
       </div>
     </div>
+    <!-- 문의하기 end -->
     <table class="QA-list">
       <thead>
         <tr>
@@ -96,45 +102,69 @@
       <tbody>
         <QA_List
           v-show="!myWroteIsActive"
+          @re-fetch-again="
+            doFetch();
+            myQnaFetch();
+          "
           v-for="QA in apiData"
           :key="QA.q_id"
-          :q_type="QA.q_type"
+          :a_content="QA.a_content"
+          :a_created_at="QA.a_created_at"
+          :a_is_private="QA.a_is_private"
+          :q_content="QA.q_content"
+          :q_created_at="QA.q_created_at"
           :q_is_answered="QA.q_is_answered"
           :q_is_private="QA.q_is_private"
-          :q_content="QA.q_content"
-          :q_user="QA.q_user"
-          :a_created_at="QA.a_created_at"
+          :type_name="QA.type_name"
+          :login_id="QA.login_id"
+          :q_id="QA.q_id"
         />
-        <tr v-show="myWroteIsActive">
+        <tr v-if="myWroteIsActive && myQnas.length === 0">
           <td class="no-data" colspan="5">
             등록된 상품문의가 없습니다.
           </td>
         </tr>
+        <MyQA_List
+          @re-fetch-again="
+            myQnaFetch();
+            doFetch();
+          "
+          v-else-if="myWroteIsActive && myQnas.length !== 0"
+          v-for="myQA in myQnas"
+          :key="myQA.q_created_at"
+          :type_name="myQA.type_name"
+          :q_is_answered="myQA.q_is_answered"
+          :a_content="myQA.a_content"
+          :a_created_at="myQA.a_created_at"
+          :a_is_private="myQA.a_is_private"
+          :q_content="myQA.q_content"
+          :q_created_at="myQA.q_created_at"
+          :q_is_private="myQA.q_is_private"
+          :login_id="myQA.login_id"
+          :q_id="myQA.q_id"
+        />
       </tbody>
     </table>
     <div class="pagination">
-      <div class="page">1</div>
-      <div class="page">2</div>
+      <div class="page" @click="getMoreData">1</div>
     </div>
   </div>
 </template>
 
 <script>
-// import axios from 'axios';
+import axios from 'axios';
 import QA_List from './QA_List';
+import MyQA_List from './MyQA_List';
+import URL from '../../../src/assets/mock/URL.js';
 
 export default {
   components: {
-    QA_List
+    QA_List,
+    MyQA_List
   },
-  props: {
-    QA: {
-      type: Number,
-      required: true
-    }
-  },
-  beforeUpdate() {
-    console.log(this.qnaContents);
+  mounted() {
+    const qnaLocation = document.querySelector('.Q-A').offsetTop;
+    this.$emit('qna-location', qnaLocation);
   },
   data() {
     return {
@@ -145,147 +175,100 @@ export default {
       selectedQuestType: '질문유형을 선택하세요.',
       qnaContents: '',
       apiData: [],
+      myQnas: [],
+      beforeSubmitQuest: {},
       questTypes: [
         {
-          id: 1,
-          quest: '질문유형을 선택하세요.'
+          q_id: 1,
+          q_type: '질문유형을 선택하세요.'
         },
         {
-          id: 2,
-          quest: '상품 문의'
+          q_id: 2,
+          q_type: '상품 문의'
         },
         {
-          id: 3,
-          quest: '교환/반품'
+          q_id: 3,
+          q_type: '교환/반품'
         },
         {
-          id: 4,
-          quest: '불량/오배송'
+          q_id: 4,
+          q_type: '불량/오배송'
         },
         {
-          id: 5,
-          quest: '기타'
+          q_id: 5,
+          q_type: '기타'
         },
         {
-          id: 6,
-          quest: '배송 문의'
+          q_id: 6,
+          q_type: '배송 문의'
         },
         {
-          id: 7,
-          quest: '하루배송'
+          q_id: 7,
+          q_type: '하루배송'
         },
         {
-          id: 8,
-          quest: '취소/변경'
+          q_id: 8,
+          q_type: '취소/변경'
         }
       ],
-      QA_list: [
-        {
-          id: 51,
-          type: '교환/반품',
-          state: true,
-          isSecret: true,
-          writer: 'yyk***',
-          date: '2020.06.30'
-        },
-        {
-          id: 50,
-          type: '취소/변경',
-          state: true,
-          isSecret: true,
-          writer: 'ls7***',
-          date: '2020.06.29'
-        },
-        {
-          id: 49,
-          type: '상품 문의',
-          state: true,
-          isSecret: true,
-          writer: 'ehd***',
-          date: '2020.06.27'
-        },
-        {
-          id: 48,
-          type: '교환/반품',
-          state: true,
-          isSecret: true,
-          writer: 'zhf***',
-          date: '2020.06.26'
-        },
-        {
-          id: 47,
-          type: '상품 문의',
-          state: true,
-          isSecret: true,
-          writer: 'qkr***',
-          date: '2020.06.24'
-        },
-        {
-          id: 46,
-          type: '상품 문의',
-          state: true,
-          isSecret: true,
-          writer: 'b00***',
-          date: '2020.06.23'
-        },
-        {
-          id: 45,
-          type: '상품 문의',
-          state: true,
-          isSecret: true,
-          writer: 'wld***',
-          date: '2020.06.18'
-        },
-        {
-          id: 44,
-          type: '하루배송',
-          state: true,
-          isSecret: true,
-          writer: 'min***',
-          date: '2020.06.13'
-        },
-        {
-          id: 43,
-          type: '배송 문의',
-          state: true,
-          isSecret: true,
-          writer: 'sto***',
-          date: '2020.06.12'
-        },
-        {
-          id: 42,
-          type: '교환/반품',
-          state: true,
-          isSecret: true,
-          writer: 'xlc***',
-          date: '2020.06.11'
-        },
-        {
-          id: 41,
-          type: '취소/변경',
-          state: true,
-          isSecret: true,
-          writer: 'pub***',
-          date: '2020.06.10'
-        }
-      ]
+      offset: 0
     };
   },
-  // created() {
-  //   let URL = `http://10.251.1.153:5000/api/qnas?product_id=${this.$route.params.id}`;
-  //   axios.get(URL).then(res => {
-  //     this.apiData = res.data;
-  //     console.log(this.apiData);
-  //   });
-  //
-  // 1. created 에서 백엔드와 통신
-  // this.getDetailInfo();
-  // },
+  created() {
+    this.doFetch();
+    this.myQnaFetch();
+  },
+  computed: {
+    apiData2() {
+      return this.$store.state.detailProductInfo.qnaData2;
+    },
+    myQna2() {
+      return this.$store.state.detailProductInfo.myQna;
+    }
+  },
   methods: {
+    doFetch() {
+      let url = `${URL.PRODUCT_URL}/api/qnas?product_id=${this.$route.params.id}&offset=${this.offset}&limit=5`;
+      axios.get(url).then(res => {
+        this.apiData = res.data;
+        this.$emit('qna-length', this.apiData.length);
+      });
+    },
+    myQnaFetch() {
+      let url = `${URL.PRODUCT_URL}/api/qnas/user`;
+      const access_token = localStorage.getItem('access_token');
+      const headers = {
+        headers: {
+          Authorization: access_token
+        }
+      };
+      axios.get(url, headers).then(res => {
+        this.myQnas = res.data;
+        this.$emit('myqna-length', this.myQnas.length);
+      });
+    },
+    getMoreData() {
+      this.offset = this.offset + 5;
+    },
     myWroteActive() {
       this.myWroteIsActive = !this.myWroteIsActive;
+      this.$emit('my-wrote-active', this.myWroteIsActive);
     },
     toggleQuestArea() {
+      if (!localStorage.getItem('access_token')) {
+        if (
+          confirm(
+            '로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?'
+          ) === true
+        ) {
+          this.$router.push('/login');
+        }
+      }
+      if (localStorage.getItem('access_token')) {
+        this.activeQuestArea = !this.activeQuestArea;
+      }
+    },
+    quitQuestArea() {
       this.activeQuestArea = !this.activeQuestArea;
     },
     dropdownQuestType() {
@@ -295,7 +278,45 @@ export default {
       this.isPrivate = !this.isPrivate;
     },
     selectQuestType(quest) {
-      this.selectedQuestType = quest.quest;
+      this.selectedQuestType = quest.q_type;
+      this.beforeSubmitQuest = quest;
+    },
+    submitQuest() {
+      this.beforeSubmitQuest.q_content = this.qnaContents;
+      this.beforeSubmitQuest.q_is_private = this.isPrivate;
+      if (
+        this.beforeSubmitQuest.q_id === 1 ||
+        this.beforeSubmitQuest.q_type === undefined
+      ) {
+        alert('질문유형을 선택하세요.');
+        return;
+      }
+      if (!this.beforeSubmitQuest.q_content) {
+        alert('내용을 입력하세요.');
+        return;
+      }
+
+      const url = `${URL.PRODUCT_URL}/api/qnas/qna`;
+      const access_token = localStorage.getItem('access_token');
+      const headers = {
+        headers: {
+          Authorization: access_token
+        }
+      };
+      const body = {
+        type_id: this.beforeSubmitQuest.q_id,
+        product_id: this.$route.params.id,
+        content: this.beforeSubmitQuest.q_content,
+        is_private: this.beforeSubmitQuest.q_is_private
+      };
+      axios.post(url, body, headers).then(() => {
+        this.doFetch();
+        this.myQnaFetch();
+      });
+      alert('등록되었습니다.');
+      this.qnaContents = '';
+      this.selectedQuestType = '질문유형을 선택하세요.';
+      this.activeQuestArea = !this.activeQuestArea;
     }
   }
 };

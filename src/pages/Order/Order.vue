@@ -171,9 +171,11 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
+      adress: {},
       isDropdownActive: false
     };
   },
@@ -181,7 +183,15 @@ export default {
     toggleDropdown() {
       this.isDropdownActive = !this.isDropdownActive;
     }
+  },
+  created() {
+    axios.get('url', {}).then(res => res);
   }
+  //   {
+  //     "address" : "서울 소래포구",
+  //     "phone_number" : "010-1234-1234",
+  //     "reciever" : "이용민"
+  // },{
 };
 </script>
 

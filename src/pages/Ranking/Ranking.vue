@@ -2,33 +2,37 @@
   <div class="Ranking">
     <div class="category-set">
       <span
-        >{{ this.$route.params.specification }}>
+        >{{ specificationValue ? specificationValue + '>' : '' }}
         <router-link
           :to="`/ranking/${this.$route.params.specification}/total/total`"
           >랭킹</router-link
-        >>
+        >
         <router-link
           :to="
-            `/ranking/${this.$route.params.specification}/${this.$route.params.title}/total`
+            `/ranking/${this.$route.params.specification}/${this.$route.params.title}`
           "
-          >{{ this.$route.params.title }}</router-link
-        >>
-        <router-link
-          :to="
-            `/ranking/${this.$route.params.specification}/${this.$route.params.title}/${this.$route.params.id}`
-          "
-          >{{ this.$route.params.id }}</router-link
-        ></span
-      >
+          >{{
+            this.$route.params.title === 'total' ||
+            this.$route.params.title === undefined
+              ? '> 전체'
+              : '>' + this.titleValue
+          }}</router-link
+        >
+      </span>
     </div>
     <div class="Category">
       <div class="category-wrapper">
         <div class="category-option">
           <span>상품옵션</span>
         </div>
-        <div>
+
+        <div @click="ChangeSaleCheckActive">
           <SaleCheckButton v-bind:saleCheckActive="saleCheckActive" />
         </div>
+        <!--         
+        <div>
+          <SaleCheckButton v-bind:saleCheckActive="saleCheckActive" />
+        </div> -->
 
         <div class="categories">
           <div class="category-summary">
@@ -105,7 +109,7 @@
       </div>
       <div class="product-section-wrapper">
         <div class="dropdown-filter-container">
-          <section class="dropdown-filter">
+          <section class="dropdown-filter" @click="filterValueChange">
             <div class="picked-filter">
               <span>{{ filterValue }}</span>
               <svg
@@ -128,8 +132,9 @@
             <div :class="[filterActive ? 'filter-sample' : 'hidden']">
               <span
                 v-for="value of filteringValue"
-                :key="value.name"
-                :newkey="value.id"
+                :key="value.id"
+                :newkey="value.name"
+                :data="value.id"
               >
                 {{ value.name }}
               </span>
@@ -152,7 +157,7 @@
 import ProductCard from '../../components/ProductCard/ProductCard';
 import SaleCheckButton from '../../components/Button/SaleCheckButton';
 import axios from 'axios';
-// import URL from '../../../src/assets/mock/URL';
+import URL from '../../../src/assets/mock/URL';
 
 export default {
   name: 'Ranking',
@@ -908,20 +913,21 @@ export default {
       saleCheckActive: false,
       promotion: 0,
       dropDownFilterValue: 0,
-      allStatus: 0
+      allStatus: 0,
+      titleValue: '',
+      idValue: '',
+      specificationValue: ''
     };
   },
   created() {
-    // axios.get(madeURL).then(res => (this.productData = res.data.products));
-    axios
-      .get('http://10.58.2.245:5000/api/products')
-      .then(res => (this.productData = res.data.products));
-    // this.fetchData();
+    this.fetchData();
+    // axios
+    //   .get(`${URL.PRODUCT_URL}/api/products`)
+    //   .then(res => (this.productData = res.data.products));
   },
   computed: {},
 
   mounted() {
-    console.log(this.$route.params.specification);
     this.navData = this.navData.filter(el => el[Object.keys(el)[1]].length > 0);
     this.navData = this.navData.map(el => ({ ...el, active: false }));
     this.navData = this.navData.map(el => {
@@ -931,43 +937,77 @@ export default {
         return { ...el, active: false };
       }
     });
-    console.log(this.navData);
+    this.changeNavToKorean(this.navData);
   },
 
   methods: {
-    // fetchData() {
-    //   let madeURL = this.makeFetchData();
-    //   console.log('FILTERINGURL', madeURL);
-    //   axios.get(madeURL).then(res => (this.productData = res.data.products));
-    // },
+    ChangeSaleCheckActive() {
+      this.saleCheckActive = !this.saleCheckActive;
+      this.promotion === 0 ? (this.promotion = 1) : (this.promotion = 0);
+      console.log('PromoValue', this.promotion);
+      this.fetchData();
+    },
+    changeNavToKorean(navData) {
+      let spec = this.$route.params.specification;
+      let title = this.$route.params.title;
 
-    // makeFetchData() {
-    //   let URL = `http://10.58.2.245:5000/api/products?`;
-    //   if (this.$route.params.title != 'total') {
-    //     URL = URL + '&' + `first_category_id=${this.$route.params.title}`;
-    //   }
-    //   if (this.$route.params.id != 'total') {
-    //     URL = URL + '&' + `second_category_id=${this.$route.params.id}`;
-    //   }
-    //   if (this.promotion != 0) {
-    //     URL = URL + '&' + `is_promotion=${this.promotion}`;
-    //   }
-    //   if (this.dropDownFilterValue != 0) {
-    //     URL = URL + '&' + `select=${this.dropDownFilterValue}`;
-    //   }
-    //   if (this.titles.title['id'] != 0 && this.allStatus === 1) {
-    //     URL =
-    //       URL +
-    //       '&' +
-    //       `main_category_id=${this.titles.title['id']}` +
-    //       '&' +
-    //       `all_items=${this.allStatus}`;
-    //   }
-    //   return (
-    //     URL.slice(0, URL.indexOf('?') + 1) +
-    //     URL.slice(URL.indexOf('?') + 2, URL.length)
-    //   );
-    // },
+      for (let el of navData) {
+        if (Number(el.id) === Number(spec)) {
+          let checkData = el[Object.keys(el)[1]];
+          this.specificationValue = Object.keys(el)[1];
+          checkData.forEach(element => {
+            Number(element.id) === Number(title)
+              ? (this.titleValue = Object.keys(element)[1])
+              : '';
+          });
+        }
+      }
+    },
+
+    fetchData() {
+      let madeURL = this.makeFetchData();
+      console.log('FILTERINGURL', madeURL);
+      axios.get(madeURL).then(res => (this.productData = res.data.products));
+    },
+
+    makeFetchData() {
+      let madeURL = `${URL.PRODUCT_URL}/api/products?`;
+      if (this.$route.params.title != 'total') {
+        this.$route.params.title === undefined
+          ? madeURL
+          : (madeURL =
+              madeURL + '&' + `first_category_id=${this.$route.params.title}`);
+      }
+      // if (this.$route.params.id != 'total') {
+      //   madeURL = madeURL + '&' + `second_category_id=${this.$route.params.id}`;
+      // }
+      if (this.promotion != 0) {
+        madeURL = madeURL + '&' + `is_promotion=${this.promotion}`;
+      }
+      if (Number(this.dropDownFilterValue) != 0) {
+        madeURL = madeURL + '&' + `select=${this.dropDownFilterValue}`;
+      }
+      // if (this.titles.title['id'] != 0 && this.allStatus === 1) {
+      //   madeURL =
+      //     madeURL +
+      //     '&' +
+      //     `main_category_id=${this.$route.params.specification}` +
+      //     '&' +
+      //     `all_items=${this.allStatus}`;
+      // }
+      return (
+        madeURL.slice(0, madeURL.indexOf('?') + 1) +
+        madeURL.slice(madeURL.indexOf('?') + 2, madeURL.length)
+      );
+    },
+    filterValueChange(e) {
+      this.filterActive = !this.filterActive;
+
+      this.filterValue = e.target.attributes.newkey.value;
+      this.dropDownFilterValue = e.target.attributes.data.value;
+      // console.log('selectValue', Number(this.dropDownFilterValue));
+      this.fetchData();
+    },
 
     changeCategory(event) {
       console.log('hello', name);

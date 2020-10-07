@@ -22,6 +22,9 @@ import Shop from '../pages/Shop/Shop.vue';
 import Search from '../pages/Mypage/Search';
 import Ranking from '../pages/Ranking/Ranking';
 import Cancel from '../pages/Mypage/Cancel';
+import Event from '../pages/EventPage/Event';
+import ButtonType from '../pages/EventPage/ButtonType';
+import Closed from '../pages/EventPage/Closed';
 
 Vue.use(VueRouter);
 
@@ -141,6 +144,22 @@ export const router = new VueRouter({
       path: '/cancel',
       name: 'Cancel',
       component: Cancel
+    },
+    {
+      path: '/event',
+      name: 'Event',
+      component: Event
+    },
+    {
+      path: '/buttontype/:getid?',
+      name: 'ButtonType',
+      component: ButtonType,
+      props: true
+    },
+    {
+      path: '/closed',
+      name: 'Closed',
+      component: Closed
     }
   ]
 });

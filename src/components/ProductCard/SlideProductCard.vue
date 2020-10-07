@@ -57,7 +57,9 @@
     <div class="dot-button-container">
       <span
         class="dot-button"
-        :class="[Number(dot.id) === picCount ? 'dot-active' : '']"
+        :class="[
+          Number(dot.id) === picCount ? 'dot-button-active' : 'dot-button'
+        ]"
         :key="dot.id + 'dot'"
         v-for="dot of imageData"
         @click="goSlide(dot.id)"
@@ -139,17 +141,15 @@ export default {
         }
       ],
       picCount: 1
-      // firstClone: {},
-      // lastClone: {},
-      // firstChild: {},
-      // lastChild: {}
     };
   },
 
   mounted() {
-    // this.createNewCard();
     setInterval(() => this.goRight(), 4000);
     window.addEventListener('resize', this.checkFunction);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.checkFunction);
   },
 
   methods: {
@@ -158,9 +158,6 @@ export default {
       this.sliderHeight = Math.ceil(
         document.documentElement.clientWidth / 3.92
       );
-    },
-    keepSliding() {
-      setInterval(this.goRight(), 200);
     },
 
     goRight() {
@@ -172,7 +169,7 @@ export default {
         let photoWidth = this.onePhotoWidth;
         setTimeout(function() {
           slideList.style.transform =
-            'translate3d(-' + (photoWidth * Len + 1) + 'px, 0px, 0px)';
+            'translate3d(-' + photoWidth * Len + 'px, 0px, 0px)';
         }, 0.01);
 
         setTimeout(function() {
@@ -283,12 +280,19 @@ export default {
     padding: 2px;
     margin: 5px;
     border-radius: 100%;
-    border: 1px solid black;
     content: '';
+    background: #222;
   }
-}
-.dot-active {
-  background-color: red;
+  .dot-button-active {
+    display: block;
+    width: 8px;
+    height: 8px;
+    padding: 2px;
+    margin: 5px;
+    border-radius: 100%;
+    content: '';
+    background-color: red;
+  }
 }
 
 .slide-product-card {
@@ -297,7 +301,7 @@ export default {
   .slider-container {
     margin: 0 auto;
     position: relative;
-    overflow: hidden;
+    overflow: auto;
     .slider-swiper {
       transition-duration: 0ms;
       display: flex;

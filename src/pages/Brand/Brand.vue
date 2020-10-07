@@ -112,7 +112,7 @@
           :index="index"
           :key="Data"
           class="numbering-wrapper"
-          v-for="(Data, index) in PRODUCT['products']"
+          v-for="(Data, index) in PRODUCT['product']"
         >
           <ProductCard :product="Data" />
         </div>
@@ -214,23 +214,24 @@ a {
     transition: transform 0.4s ease-in-out;
     transform: scale(1.05);
   }
+
   .ranking-number {
     position: absolute;
-    margin-left: 2px;
-    margin-top: 2px;
-    text-align: center;
-    font-size: 1.2em;
-    background-color: black;
-    color: white;
     width: 30px;
     height: 30px;
-    color: #ffffff;
-    text-align: center;
+    margin-left: 2px;
+    margin-top: 2px;
     line-height: 34px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2em;
+    background-color: black;
   }
+
   .main-product {
     width: 100%;
     height: 100%;
+
     &:hover {
       transition: none;
       transform: none;
@@ -239,23 +240,24 @@ a {
 }
 
 .comment-wrapper {
-  padding: 40px 0px 20px 0px;
   max-width: 1300px;
   margin: 0 auto;
   padding: 0 4%;
+
   .comment {
     font-size: 26px;
     font-weight: bold;
   }
   .more-button {
+    display: flex;
     float: right;
 
-    display: flex;
     a {
       font-size: 18px;
       color: #4a4a4a;
       padding-right: 5px;
     }
+
     .direction {
       display: flex;
       justify-content: center;

@@ -2,7 +2,7 @@
   <div>
     <div class="category-set">
       <span
-        >{{ this.$route.params.specification }}>
+        >{{ specificationValue ? specificationValue : 'specificationValue' }}>
         <router-link
           :to="`/category/${this.$route.params.specification}/total/total`"
           >카테고리</router-link
@@ -11,13 +11,14 @@
           :to="
             `/category/${this.$route.params.specification}/${this.$route.params.title}/total`
           "
-          >{{ this.$route.params.title }}</router-link
-        >>
+          >{{ titleValue ? titleValue : '전체' }}</router-link
+        >
         <router-link
+          :class="[titleValue ? '' : 'hidden']"
           :to="
             `/category/${this.$route.params.specification}/${this.$route.params.title}/${this.$route.params.id}`
           "
-          >{{ this.$route.params.id }}</router-link
+          >{{ idValue ? '>' + idValue : ' >전체' }}</router-link
         ></span
       >
     </div>
@@ -153,6 +154,7 @@
     <Spinner />
   </div>
 </template>
+
 <script>
 import ProductCard from '../../components/ProductCard/ProductCard';
 import SaleCheckButton from '../../components/Button/SaleCheckButton';
@@ -168,12 +170,12 @@ export default {
     ProductCard,
     SaleCheckButton
   },
+
   data() {
     return {
-      navCheckData: [],
       filteredData: {},
       productData: [],
-      modalActive: false,
+      // modalActive: false,
 
       filteringValue: [
         { id: 0, name: '판매량순' },
@@ -184,7 +186,11 @@ export default {
       saleCheckActive: false,
       promotion: 0,
       dropDownFilterValue: 0,
-      allStatus: 0
+      allStatus: 0,
+      titleValue: '',
+      idValue: '',
+      specificationValue: '',
+      titleExtract: {}
     };
   },
 
@@ -201,18 +207,53 @@ export default {
   mounted() {
     let baseData = Object.entries(this.categories.category).map(el => el[1]);
     this.filteringAsideData(baseData);
-    console.log('?', this.titles.title['id']);
+    this.changeNavToKorean();
+    // console.log(this.$route.params.specification);
   },
 
   created: function() {
-    // this.updateTitle({
-    //   title: this.$route.params.specification
-    // });
     this.fetchData();
+    window.addEventListener('click', this.checkfunction);
   },
-
+  updated() {
+    this.changeNavToKorean();
+  },
   methods: {
-    // ...mapActions(serviceStore, ['updateTitle']),
+    checkfunction() {
+      console.log(
+        this.$route.params.specification,
+        this.$route.params.title,
+        this.$route.params.id
+      );
+    },
+    changeNavToKorean() {
+      let spec = this.$route.params.specification;
+      let title = this.$route.params.title;
+      let id = this.$route.params.id;
+
+      if (spec === 'brand') {
+        this.specificationValue = '브랜드';
+      }
+      if (spec === 'trend') {
+        this.specificationValue = '쇼핑몰 · 마켓';
+      }
+      if (spec === 'beauty') {
+        this.specificationValue = '뷰티';
+      }
+
+      for (const el of this.filteredData) {
+        if (+el.id === +title) {
+          this.titleValue = Object.keys(el)[1];
+          this.titleExtract = el[this.titleValue];
+        }
+      }
+
+      this.titleExtract.map(el => {
+        if (Number(el['id']) === Number(id)) {
+          this.idValue = el.name;
+        }
+      });
+    },
 
     filteringAsideData(baseData) {
       for (let i = 0; i < baseData.length; i++) {
@@ -329,18 +370,19 @@ export default {
   cursor: pointer;
 
   .dropdown-filter {
-    z-index: 100;
-    width: 130px;
-    height: 45px;
     display: inline-block;
     position: relative;
+    width: 130px;
+    height: 45px;
     text-align: center;
+    z-index: 100;
+
     .picked-filter {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border: 1px solid #e7e7e7;
       height: 25px;
+      border: 1px solid #e7e7e7;
     }
     .filter-sample {
       position: absolute;
@@ -348,11 +390,13 @@ export default {
       height: 25px;
       span {
         display: block;
-        border: 1px solid #e7e7e7;
         width: 130px;
         height: 25px;
+        border: 1px solid #e7e7e7;
         text-align: left;
+        background-color: white;
         cursor: pointer;
+
         &:hover {
           color: #ff204b;
           border-bottom: 1px solid #ff204b;
@@ -401,7 +445,6 @@ label {
 }
 
 .checked {
-  margin-top: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -409,12 +452,12 @@ label {
   height: 14.1;
   margin-right: 5px;
   margin-left: 5px;
+  margin-top: 3px;
   transform: rotate(90deg);
 }
 
 .not-checked {
   margin-top: 3px;
-
   margin-left: 5px;
   transform: matrix(0, 0, 0, 0, 0, 0) rotate(90deg);
 }

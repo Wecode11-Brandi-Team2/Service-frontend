@@ -52,9 +52,6 @@ export default {
       .then(res => (this.trendProductData = res.data.products));
     window.addEventListener('scroll', this.removeButton);
   },
-  mounted() {
-    console.log(this.trendProductData);
-  },
 
   components: {
     ProductCard,
@@ -68,23 +65,26 @@ a {
 }
 
 .comment-wrapper {
-  padding: 40px 0px 20px 0px;
   max-width: 1300px;
   margin: 0 auto;
   padding: 0 4%;
+
   .comment {
     font-size: 26px;
     font-weight: bold;
   }
+
   .more-button {
+    display: flex;
     float: right;
 
-    display: flex;
     a {
+      padding-right: 5px;
+
       font-size: 18px;
       color: #4a4a4a;
-      padding-right: 5px;
     }
+
     .direction {
       display: flex;
       justify-content: center;

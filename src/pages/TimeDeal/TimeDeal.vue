@@ -4,41 +4,63 @@
       <div class="time-deal-title">
         <span>브랜디 특가</span>
       </div>
-      <ProductCard :key="PRODUCT" v-for="PRODUCT in PRODUCT_SAMPLE" />
+      <ProductCard
+        :product="PRODUCT"
+        :key="PRODUCT"
+        v-for="PRODUCT in timeDealProduct"
+      />
     </section>
   </div>
 </template>
 <script>
 import ProductCard from '../../components/ProductCard/ProductCard';
+import axios from 'axios';
+import URL from '../../../src/assets/mock/URL';
+
 export default {
   name: 'TimeDeal',
   components: {
     ProductCard
   },
+  created: function() {
+    axios
+      .get(
+        `${URL.PRODUCT_URL}/api/products?main_category_id=4&is_promotion=1`,
+        {}
+      )
+      .then(res => (this.timeDealProduct = res.data.products));
+    window.addEventListener('click', this.checkfunction);
+  },
+  methods: {
+    checkfunction() {
+      console.log(this.timeDealProduct);
+    }
+  },
   data: function() {
     return {
-      PRODUCT_SAMPLE: [
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-      ]
+      timeDealProduct: []
+      // PRODUCT_SAMPLE: [
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {},
+      //   {}
+      // ]
     };
   }
 };

@@ -44,9 +44,9 @@
         </div>
       </div>
     </div>
-    <div class="order-btn-wrapper" @click="changeID(newkey)">
+    <div class="order-btn-wrapper">
       <button
-        @click="request(productInfo)"
+        @click="request"
         :class="[this.productInfo.order_status_id === 6 ? 'hidden' : '']"
       >
         {{ createButton() }}
@@ -57,7 +57,9 @@
 
 <script>
 import { mapActions } from 'vuex';
-// import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
+import axios from 'axios';
+import URL from '@/assets/mock/URL';
 const myPageStore = 'myPageStore';
 
 export default {
@@ -70,25 +72,21 @@ export default {
     };
   },
   created() {
-    window.addEventListener('click', this.checkFunction);
     this.updateProducts({ product: this.productInfo });
     this.findDate(this.productInfo.created_at);
     this.createButton();
-  },
-  mounted() {
-    this.getShipStatus();
-    // console.log('PROPSCHECK', this.productInfo);
-    // this.updateProducts({ product: this.productInfo });
+    // console.log('어디보자', this.productInfo.order_detail_id);
   },
 
-  // computed: {
-  //   ...mapGetters(serviceStore, ['getProducts'])
-  // },
+  computed: {
+    ...mapGetters(myPageStore, ['getProducts']),
+    products() {
+      return this.products;
+    }
+  },
   methods: {
     ...mapActions(myPageStore, ['updateProducts']),
-    checkFunction() {
-      console.log('chekckck', this.products.product);
-    },
+
     createButton() {
       let statusOfShip = this.productInfo.order_status_id;
 
@@ -147,8 +145,9 @@ export default {
       }
     },
 
-    request(info) {
-      this.updateProducts({ product: info });
+    request() {
+      this.updateProducts({ product: { id: 11 } });
+      // console.log('제발', this.products.product);
 
       if (this.buttonTitle === '환불요청') {
         let answer = confirm('선택하신 주문을 환불하시겠습니까?');
@@ -158,6 +157,24 @@ export default {
       if (this.buttonTitle === '주문취소') {
         let answer = confirm('선택하신 주문을 취소하시겠습니까?');
         answer ? this.$router.push('Cancel') : '';
+        console.log(this.productInfo);
+        this.$store.commit('myPageStore/CANCEL_ITEM', this.productInfo);
+      }
+      if (this.buttonTitle === '환불요청취소') {
+        console.log('here', this.buttonTitle);
+        axios
+          .post(
+            `${URL.LOGIN_URL}/api/order/refundCancel`,
+            { order_detail_id: this.productInfo.order_detail_id },
+            {
+              headers: {
+                Authorization: localStorage.getItem('access_token')
+              }
+            }
+          )
+          .then(res => console.log(res));
+        let answer = confirm('환불 요청을 취소하시겠습니까?');
+        answer ? this.$router.push('myPage') : '';
       }
     }
   }

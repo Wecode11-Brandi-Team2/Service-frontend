@@ -34,7 +34,6 @@
             <div class="item-name">
               <a>{{ cancelItemInfo.itemName }}</a>
             </div>
-            <div class="order-data">{{ cancelItemInfo.color }}</div>
             <div class="order-data">{{ cancelItemInfo.amount }} 개</div>
           </div>
           <div class="data1-wrapper">

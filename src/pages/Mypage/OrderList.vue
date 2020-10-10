@@ -56,21 +56,23 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import axios from 'axios';
 import URL from '@/assets/mock/URL';
 const myPageStore = 'myPageStore';
 
 export default {
   name: 'OrderList',
+
   props: ['productInfo'],
+
   data() {
     return {
       createdAt: 0,
       buttonTitle: ''
     };
   },
+
   created() {
     this.updateProducts({ product: this.productInfo });
     this.findDate(this.productInfo.created_at);
@@ -152,16 +154,22 @@ export default {
       if (this.buttonTitle === '환불요청') {
         let answer = confirm('선택하신 주문을 환불하시겠습니까?');
 
-        answer ? this.$router.push('refund') : '';
+        if (answer) {
+          let refundToLocal = JSON.stringify(this.productInfo);
+          localStorage.setItem('refund_data', refundToLocal);
+          this.$router.push('refund');
+        }
+
+        this.$store.commit('myPageStore/REFUND_ITEM', this.productInfo);
       }
       if (this.buttonTitle === '주문취소') {
         let answer = confirm('선택하신 주문을 취소하시겠습니까?');
         answer ? this.$router.push('Cancel') : '';
-        console.log(this.productInfo);
+        // console.log(this.productInfo);
         this.$store.commit('myPageStore/CANCEL_ITEM', this.productInfo);
       }
       if (this.buttonTitle === '환불요청취소') {
-        console.log('here', this.buttonTitle);
+        // console.log('here', this.buttonTitle);
         axios
           .post(
             `${URL.LOGIN_URL}/api/order/refundCancel`,

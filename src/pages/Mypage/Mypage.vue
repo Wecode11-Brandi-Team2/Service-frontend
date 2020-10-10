@@ -18,7 +18,7 @@
 import MenuTab from './MenuTab.vue';
 import OrderList from './OrderList.vue';
 import axios from 'axios';
-import URL from '../../../src/assets/mock/URL.js';
+import URL from '../../assets/mock/URL.js';
 
 export default {
   name: 'Mypage',
@@ -34,7 +34,7 @@ export default {
 
   created() {
     axios
-      .get(`${URL.LOGIN_URL}/api/order/item`, {
+      .get(`${URL.PRODUCT_URL}/api/order/item`, {
         headers: {
           Authorization: localStorage.getItem('access_token')
         }
@@ -51,7 +51,6 @@ export default {
           this.showData = false;
         }
       });
-
     // console.log(this.data);
   }
 };
@@ -64,6 +63,7 @@ export default {
   display: flex;
   justify-content: center;
   margin: 50px 0px;
+
   .noData {
     text-align: center;
   }

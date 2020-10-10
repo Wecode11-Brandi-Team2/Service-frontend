@@ -7,8 +7,8 @@
     <div class="page-frame">
       <h2 class="order-detail-info">
         <div>
-          {{ cancelItemInfo.date }}<span class="divider">I</span
-          >{{ cancelItemInfo.orderNumber }}
+          {{ refundItemInfo.created_at }}<span class="divider">I</span
+          >{{ refundItemInfo.order_detail_id }}
         </div>
         <a class="order-detail-button"
           >주문상세보기<img
@@ -20,7 +20,7 @@
       <div class="ordered-item">
         <div class="shop-info">
           <div class="shop-name">
-            <a>{{ cancelItemInfo.sellerName }}</a>
+            <a>{{ refundItemInfo.korean_name }}</a>
           </div>
           <div class="empty"></div>
           <div class="data">주문금액</div>
@@ -28,18 +28,20 @@
         </div>
         <div class="order-info">
           <div class="image">
-            <a class="item-image"> <img :src="cancelItemInfo.itemImage"/></a>
+            <a class="item-image"> <img :src="refundItemInfo.main_img"/></a>
           </div>
           <div class="orderinfo-box">
             <div class="item-name">
-              <a>{{ cancelItemInfo.itemName }}</a>
+              <a>{{ refundItemInfo.name }}</a>
             </div>
-            <div class="order-data">{{ cancelItemInfo.itemInfo }}</div>
-            <div class="order-data">{{ cancelItemInfo.amount }} 개</div>
+            <!-- <div class="order-data">{{ cancelItemInfo.itemInfo }}</div> -->
+            <div class="order-data">{{ refundItemInfo.units }} 개</div>
           </div>
           <div class="data1-wrapper">
-            <div class="data1">{{ cancelItemInfo.price }} 원</div>
-            <div class="data1">{{ cancelItemInfo.status }}</div>
+            <div class="data1">
+              {{ refundItemInfo.price.toLocaleString() }} 원
+            </div>
+            <div class="data1">{{ refundItemInfo.order_status_id }}</div>
           </div>
         </div>
       </div>
@@ -48,12 +50,12 @@
         <div class="select-reason">
           <div class="reason">사유</div>
           <div class="select">
-            <select v-model="selected">
+            <select v-model="selected" @change="changeOption($event)">
               <option selected>사유를 선택하세요.</option>
               <option
                 v-for="option in options"
                 :key="option.value"
-                :value="option.value"
+                :value="option.text"
                 >{{ option.text }}</option
               >
             </select>
@@ -72,7 +74,9 @@
       <h2 class="refund-info">환불정보</h2>
       <div class="refund-info-box">
         <div class="refund-info-title">총 환불예정금액</div>
-        <div class="amount">{{ cancelItemInfo.price }}원</div>
+        <div class="amount">
+          {{ refundItemInfo.total_payment.toLocaleString() }}원
+        </div>
       </div>
       <div class="btn-wrapper">
         <button @click="requestRefund" class="refund-btn">
@@ -97,14 +101,27 @@ export default {
     products() {
       return this.products;
     }
+    // ...mapState({
+    //   refundItemInfo: state => state.myPageStore.refundItemData
+    // })
+    // refundItemInfo() {
+    //   return this.$store.state.myPageStore.refundItemData;
+    // }
   },
   created() {
-    this.cancelItemInfo = this.$store.state.myPageStore.cancelItemData;
+    // this.refundItemInfo = this.$store.state.myPageStore.refundItemData;
+    let refundData = JSON.parse(localStorage.getItem('refund_data'));
+    this.refundItemInfo = refundData;
+  },
+
+  beforeDestroy() {
+    localStorage.removeItem('refund_data');
   },
 
   data() {
     return {
-      cancelItemInfo: {},
+      optionSelected: '',
+      refundItemInfo: {},
       productsData: {},
       selected: '사유를 선택하세요.',
       options: [
@@ -114,7 +131,8 @@ export default {
         { id: 4, text: '교환요청', value: 'option4' },
         { id: 5, text: '일부상품누락', value: 'option5' },
         { id: 6, text: '기타', value: 'option6' }
-      ]
+      ],
+      refundReason: ''
     };
   },
 
@@ -124,7 +142,7 @@ export default {
         .post(
           `${URL.LOGIN_URL}/api/order/refund`,
           {
-            order_detail_id: this.productInfo.order_detail_id
+            // order_detail_id: this.productInfo.order_detail_id
             // refund_reason_id: this.options.refund_reason_id
           },
           {
@@ -136,13 +154,33 @@ export default {
         .then(res => console.log(res));
     },
 
+    changeOption(event) {
+      // this.options.text = event.target.value;
+      this.refundReason = event.target.value;
+    },
+
     requestRefund() {
+      // console.log('나는 환불사유야!!', this.refundReason);
+      // console.log('나는 총 가격이야!!!', this.refundItemInfo.total_payment);
+
+      let refundRequestData = {
+        refundReason: this.refundReason,
+        totalPayment: this.refundItemInfo.total_payment
+      };
+
+      // console.log('잘 담겼나', refundRequestData);
+
       if (this.selected === '사유를 선택하세요.') {
         alert('환불사유를 선택해주세요.');
       }
       if (this.selected !== '사유를 선택하세요.') {
         let answer = confirm('해당 상품을 환불요청하시겠습니까?');
         if (answer === true) {
+          localStorage.setItem(
+            'refund_result_data',
+            JSON.stringify(refundRequestData)
+          );
+
           this.$router.push('/refundResult');
         }
       }

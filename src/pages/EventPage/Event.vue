@@ -21,8 +21,12 @@
         :key="event.id"
         v-for="event of eventData"
       >
-        <div v-bind:style="{ 'background-image': 'url(' + event.src + ')' }">
-          <!-- <img alt="eventBanner" /> -->
+        <div
+          v-bind:style="{
+            'background-image': 'url(' + event.banner_image + ')'
+          }"
+        >
+          <!-- <img alt="eventBanner" :src="event.banner_image" /> -->
         </div>
       </router-link>
     </section>
@@ -45,87 +49,106 @@ export default {
 
   data() {
     return {
-      eventData: [
-        {
-          id: 1,
-          src:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-        },
-        {
-          id: 2,
-          src:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-        },
-        {
-          id: 3,
-          src:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-        },
-        {
-          id: 4,
-          src:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-        },
-        {
-          id: 5,
-          src:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-        },
-        {
-          id: 6,
-          src:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-        },
-        {
-          id: 7,
-          src:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-        },
-        {
-          id: 8,
-          src:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-        },
-        {
-          id: 9,
-          src:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-        },
-        {
-          id: 10,
-          src:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-        }
-      ],
+      eventData: [],
+      // eventData: [
+      //   {
+      //     id: 1,
+      //     src:
+      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
+      //   },
+      //   {
+      //     id: 2,
+      //     src:
+      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
+      //   },
+      //   {
+      //     id: 3,
+      //     src:
+      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
+      //   },
+      //   {
+      //     id: 4,
+      //     src:
+      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
+      //   },
+      //   {
+      //     id: 5,
+      //     src:
+      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
+      //   },
+      //   {
+      //     id: 6,
+      //     src:
+      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
+      //   },
+      //   {
+      //     id: 7,
+      //     src:
+      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
+      //   },
+      //   {
+      //     id: 8,
+      //     src:
+      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
+      //   },
+      //   {
+      //     id: 9,
+      //     src:
+      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
+      //   },
+      //   {
+      //     id: 10,
+      //     src:
+      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
+      //   }
+      // ],
       eventNavData: [
-        { id: 1, name: '진행중' },
-        { id: 2, name: '종료' }
+        { id: 0, name: '진행중' },
+        { id: 1, name: '종료' }
       ],
-      navStatus: 1,
-      dataOffSet: 100,
+      navStatus: 0,
+      dataOffSet: 0,
       buttonActive: true
     };
+  },
+  mounted() {
+    this.fetchData();
+    window.addEventListener('click', this.chekcFunction);
   },
 
   methods: {
     navStatusChange(id) {
       this.navStatus = id;
+      this.eventData = [];
       this.fetchData();
+      this.buttonActive = true;
+      this.dataOffSet = 0;
     },
-
+    chekcFunction() {
+      console.log(this.eventData.map(el => el.banner_image));
+    },
     getMoreData() {
-      this.dataOffSet = this.dataOffSet + 100;
-      this.dataOffset >= 300
+      this.dataOffSet = this.dataOffSet + 10;
+      this.eventData.length >= 30
         ? (this.buttonActive = false)
         : (this.buttonActive = true);
-      console.log(this.dataOffSet);
+      console.log(this.buttonActive);
       this.fetchData();
     },
 
     fetchData() {
       axios
-        .get(`${URL.PRODUCT_URL}&is_end=${this.navStatus}`, {})
-        .then(res => console.log(res));
+        .get(
+          `http://10.251.1.134:5000/api/events?is_deleted=${this.navStatus}&limit=10&offset=${this.dataOffSet}`,
+          {}
+        )
+        .then(res => {
+          if (this.navStatus === 0) {
+            this.eventData = this.eventData.concat(res.data.data);
+          } else if (this.navStatus === 1) {
+            this.eventData = this.eventData.concat(res.data.data);
+          }
+        });
     }
   }
 };

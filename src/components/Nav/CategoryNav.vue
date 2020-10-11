@@ -11,13 +11,6 @@
           :key="String(CATEGORY['name'])"
           v-for="CATEGORY in categories.category"
         >
-          <!-- <div
-            :class="[
-              titles.title === CATEGORY[Object.keys(CATEGORY)[3]]
-                ? 'give-hover'
-                : 'no-hover'
-            ]"
-          > -->
           <div
             :class="[
               $route.path.split('/')[1] === 'category'
@@ -35,11 +28,6 @@
                   ]
             ]"
           >
-            <!-- console.log(this.$route.path.split('/')[1] === 'category' ?
-            (this.$route.path.split('/')[1] === ); -->
-
-            <!-- mainCategoryKeyValue = String(`${CATEGORY[Object.keys(CATEGORY)[0]]}`) -->
-
             <router-link
               :newkey="String(Object.keys(CATEGORY)[1])"
               :to="'/' + String(`${CATEGORY[Object.keys(CATEGORY)[3]]}`)"
@@ -81,7 +69,7 @@
       </ul>
 
       <div
-        class="division-line"
+        v-bind:class="[cateogoryActive ? 'division-line' : 'hidden']"
         :key="String(line) + 'alpha'"
         v-for="line in lines"
         v-bind:style="{ left: (line - 0.5) * (100 / lines.length) + '%' }"
@@ -990,25 +978,27 @@ export default {
   left: 0;
   box-shadow: 0px 3px 5px 2px rgba(0, 0, 0, 0.3);
   background: rgba(255, 255, 255, 0.96);
+  /* transition: all 0.3s ease-in-out; */
 
   ul {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
     padding: 0 7%;
+    /* transition: all 0.3s ease-in-out; */
 
     li {
       width: 16.6666%;
       margin-bottom: 5px;
       padding: 0 3.6%;
       line-height: 40px;
+      transition: all 0.3s ease-in-out;
 
       .category-value {
         display: block;
         text-align: center;
         font-weight: 700;
         color: black;
-        transition: all 0.3s ease-in-out;
         &:hover {
           color: #ff204b;
         }
@@ -1021,7 +1011,7 @@ export default {
         font-size: 16px;
         cursor: pointer;
         color: black;
-        transition: all 0.3s ease-in-out;
+        transition: all 0.5s ease-in-out;
         &:hover {
           color: #ff204b;
         }
@@ -1030,6 +1020,7 @@ export default {
   }
 }
 .division-line {
+  visibility: visible;
   position: absolute;
   top: 0;
   width: 1px;

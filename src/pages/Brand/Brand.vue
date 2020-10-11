@@ -22,7 +22,7 @@
     <section class="product-section">
       <div
         :index="index"
-        :key="PRODUCT"
+        :key="PRODUCT.id + 'key'"
         class="numbering-wrapper"
         v-for="(PRODUCT, index) in brandProduct['best_items']"
       >
@@ -39,9 +39,9 @@
       <section class="product-section">
         <div
           :index="index"
-          :key="PRODUCT"
+          :key="PRODUCT.id + 'key'"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in brandProduct['best_items'].slice(0, 5)"
+          v-for="(PRODUCT, index) in brandProduct['best_items']"
         >
           <ProductCard :product="PRODUCT" />
         </div>
@@ -73,9 +73,9 @@
       <section class="product-section">
         <div
           :index="index"
-          :key="PRODUCT"
+          :key="PRODUCT.id + 'forkey'"
           class="numbering-wrapper"
-          v-for="(PRODUCT, index) in brandProduct['best_items'].slice(0, 5)"
+          v-for="(PRODUCT, index) in brandProduct['best_items']"
         >
           <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
           <ProductCard :product="PRODUCT" />
@@ -86,7 +86,7 @@
 
     <section
       class="recommend-seller"
-      :key="PRODUCT + 'lala' + index"
+      :key="PRODUCT.id + 'lala' + index"
       v-for="(PRODUCT, index) in this.brandProduct['category_items']"
     >
       <div class="comment-wrapper">
@@ -110,7 +110,7 @@
       <section class="product-section">
         <div
           :index="index"
-          :key="Data"
+          :key="Data.id + 'key' + index"
           class="numbering-wrapper"
           v-for="(Data, index) in PRODUCT['product']"
         >
@@ -142,7 +142,7 @@
       <section class="product-section">
         <div
           :index="index"
-          :key="PRODUCT"
+          :key="PRODUCT.id + 'keyuse' + index"
           class="numbering-wrapper"
           v-for="(PRODUCT, index) in this.brandProduct['recommended_items']"
         >

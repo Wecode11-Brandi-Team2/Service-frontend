@@ -274,7 +274,7 @@ a {
 
 .product-section {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
   max-width: 1300px;
   margin: 0 auto;

@@ -91,6 +91,7 @@ export default {
             'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
         }
       ],
+
       user_id: '안뇽',
       data: '2020.06.30',
       user_src: 'https://image.brandi.me/user/empty_profile.jpg',
@@ -99,6 +100,9 @@ export default {
   },
   methods: {
     getComment() {
+      if (this.inputComment <= 1) {
+        return;
+      }
       let inputInformation = {
         id: '',
         user_id: this.user_id,
@@ -114,13 +118,10 @@ export default {
       inputInformation.comment = this.inputComment;
       this.commentData = [...this.commentData, inputInformation];
       this.inputComment = '';
-      //need to do axios in here(send changed Object)
     },
 
     deleteComment(deleteId) {
-      console.log(deleteId);
       this.commentData = this.commentData.filter(el => el.id != deleteId);
-      //need to do axios in here(send changed Object)
     }
   }
 };

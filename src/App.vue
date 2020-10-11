@@ -49,15 +49,13 @@ export default {
   },
   data() {
     return {
-      isLoading: false
+      isLoading: true
     };
   },
   methods: {
     setLoading(isLoading) {
-      // console.log('thisisLOADING', isLoading);
       if (isLoading) {
         this.isLoading = true;
-        // console.log('inIf', isLoading);
       }
       if (!isLoading) {
         this.isLoading = false;

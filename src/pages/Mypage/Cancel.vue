@@ -7,7 +7,7 @@
     <div class="page-frame">
       <h2 class="order-detail-info">
         <div>
-          {{ cancelItemInfo.date }}<span class="divider">I</span
+          {{ createdAt }}<span class="divider">I</span
           >{{ cancelItemInfo.orderNumber }}
         </div>
         <a class="order-detail-button"
@@ -38,7 +38,7 @@
           </div>
           <div class="data1-wrapper">
             <div class="data1">{{ cancelItemInfo.price }} 원</div>
-            <div class="data1">{{ cancelItemInfo.status }}</div>
+            <div class="data1">{{ getShipStatus() }}</div>
           </div>
         </div>
       </div>
@@ -79,7 +79,8 @@ export default {
     return {
       cancelItemInfo: {},
       productsData: {},
-      selected: '선택하신 주문을 취소하시겠습니까?'
+      selected: '선택하신 주문을 취소하시겠습니까?',
+      createdAt: 0
     };
   },
 
@@ -88,7 +89,7 @@ export default {
       axios
         .post(
           `${URL.LOGIN_URL}/api/order/cancel`,
-          { order_detail_id: this.productInfo.order_detail_id },
+          { order_detail_id: this.cancelItemInfo.orderNumber },
           {
             headers: {
               Authorization: localStorage.getItem('access_token')
@@ -103,10 +104,38 @@ export default {
       if (this.selected === '선택하신 주문을 취소하시겠습니까?') {
         if (answer === true) {
           alert('주문 취소가 완료되었습니다.');
-          this.$router.push('/');
+          this.$router.push('/mypage');
         }
       }
       this.fetchData();
+    },
+
+    getShipStatus() {
+      let statusOfShip = this.cancelItemInfo.status;
+      if (statusOfShip === 1) {
+        return '결제완료';
+      }
+      if (statusOfShip === 2) {
+        return '상품준비';
+      }
+      if (statusOfShip === 3) {
+        return '배송중';
+      }
+      if (statusOfShip === 4) {
+        return '배송완료';
+      }
+    },
+
+    findDate(date) {
+      const fulldate = date;
+      const convert = new Date(fulldate);
+      const year = convert.getFullYear();
+      const month = convert.getMonth() + 1;
+      let day = convert.getDate();
+      if (day < 10) {
+        day = '0' + day;
+      }
+      this.createdAt = `${year}.${month}.${day}`;
     }
   }
 };

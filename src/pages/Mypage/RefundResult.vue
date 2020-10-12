@@ -62,6 +62,7 @@ export default {
     getRefundData() {
       this.refundData = JSON.parse(localStorage.getItem('refund_result_data'));
     },
+
     moveToMypage() {
       this.$router.push('/mypage');
     },

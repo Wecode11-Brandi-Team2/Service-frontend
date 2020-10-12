@@ -1,4 +1,3 @@
-<!-- 환불요청 페이지 -->
 <template>
   <div class="refund">
     <div class="page-title">
@@ -7,7 +6,7 @@
     <div class="page-frame">
       <h2 class="order-detail-info">
         <div>
-          {{ refundItemInfo.created_at }}<span class="divider">I</span
+          {{ createdAt }}<span class="divider">I</span
           >{{ refundItemInfo.order_detail_id }}
         </div>
         <a class="order-detail-button"
@@ -41,7 +40,7 @@
             <div class="data1">
               {{ refundItemInfo.price.toLocaleString() }} 원
             </div>
-            <div class="data1">{{ refundItemInfo.order_status_id }}</div>
+            <div class="data1">{{ getShipStatus() }}</div>
           </div>
         </div>
       </div>
@@ -54,8 +53,9 @@
               <option selected>사유를 선택하세요.</option>
               <option
                 v-for="option in options"
-                :key="option.value"
+                :key="option.id"
                 :value="option.text"
+                :name="option.id"
                 >{{ option.text }}</option
               >
             </select>
@@ -112,6 +112,7 @@ export default {
     // this.refundItemInfo = this.$store.state.myPageStore.refundItemData;
     let refundData = JSON.parse(localStorage.getItem('refund_data'));
     this.refundItemInfo = refundData;
+    this.createdAt = this.refundItemInfo.created_at;
   },
 
   beforeDestroy() {
@@ -132,18 +133,20 @@ export default {
         { id: 5, text: '일부상품누락', value: 'option5' },
         { id: 6, text: '기타', value: 'option6' }
       ],
-      refundReason: ''
+      refundReason: '',
+      refundReasonId: 0
     };
   },
 
   methods: {
     fetchData() {
+      console.log('확인');
       axios
         .post(
           `${URL.LOGIN_URL}/api/order/refund`,
           {
-            // order_detail_id: this.productInfo.order_detail_id
-            // refund_reason_id: this.options.refund_reason_id
+            order_detail_id: this.refundItemInfo.order_detail_id,
+            refund_reason_id: this.refundReasonId
           },
           {
             headers: {
@@ -154,9 +157,23 @@ export default {
         .then(res => console.log(res));
     },
 
-    changeOption(event) {
+    findDate(date) {
+      const fulldate = date;
+      const convert = new Date(fulldate);
+      const year = convert.getFullYear();
+      const month = convert.getMonth() + 1;
+      let day = convert.getDate();
+      if (day < 10) {
+        day = '0' + day;
+      }
+      this.createdAt = `${year}.${month}.${day}`;
+    },
+
+    changeOption($event) {
+      const options = event.target.options;
+      this.refundReasonId = options.selectedIndex;
       // this.options.text = event.target.value;
-      this.refundReason = event.target.value;
+      this.refundReason = $event.target.value;
     },
 
     requestRefund() {
@@ -185,6 +202,22 @@ export default {
         }
       }
       this.fetchData();
+    },
+
+    getShipStatus() {
+      let statusOfShip = this.refundItemInfo.order_status_id;
+      if (statusOfShip === 1) {
+        return '결제완료';
+      }
+      if (statusOfShip === 2) {
+        return '상품준비';
+      }
+      if (statusOfShip === 3) {
+        return '배송중';
+      }
+      if (statusOfShip === 4) {
+        return '배송완료';
+      }
     }
   }
 };

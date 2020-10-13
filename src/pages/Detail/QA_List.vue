@@ -13,6 +13,8 @@
         :q_content="q_content"
         :q_is_private="q_is_private"
         :q_id="q_id"
+        :u_id="u_id"
+        :my_id="my_id"
       />
     </td>
     <div class="detail-active" v-if="isActiveContents">
@@ -63,8 +65,10 @@ export default {
     'q_is_answered',
     'q_is_private',
     'type_name',
-    'login_id',
-    'q_id'
+    'q_user',
+    'q_id',
+    'u_id',
+    'my_id'
   ],
   data() {
     return {
@@ -74,7 +78,7 @@ export default {
   },
   computed: {
     writer() {
-      const writer = this.login_id
+      const writer = this.q_user
         .split('')
         .slice(0, 3)
         .concat('***')

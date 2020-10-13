@@ -6,9 +6,9 @@
         <section class="purchase-info">
           <section class="purchase-basic-info">
             <div class="seller-name">
-              <a class="seller-page" :href="apiData.seller_url">
+              <a class="seller-page" :href="apiData.site_url">
                 <i class="fas fa-home" />
-                <span>{{ apiData.seller_name }}</span>
+                <span>{{ apiData.korean_name }}</span>
                 <div class="right-btn"></div>
               </a>
             </div>
@@ -22,11 +22,18 @@
             <div class="quantity">{{ apiData.sales_amount }}개 구매중</div>
           </section>
           <section class="option-payment">
-            <SelectColor :apiDataColor="apiData.color" />
-            <SelectSize :apiDataSize="apiData.size" />
+            <SelectColor
+              :apiDataColor="apiData.colors"
+              @color-select="colorSelect"
+            />
+            <SelectSize
+              :apiDataSize="apiData.sizes"
+              @size-select="sizeSelect"
+            />
             <SelectedOptions
               @update-price="setOptionPrice"
               @option-price="getOptionPrice"
+              @update-purchase-quantity="updatePurchaseQuantity"
               :apiDataPrice="apiData.price"
               v-for="(option, idx) in userSelections"
               :key="idx"
@@ -41,9 +48,7 @@
                 <div class="total-price-won">원</div>
               </div>
             </div>
-            <router-link to="/order">
-              <button class="buy-btn">바로 구매</button>
-            </router-link>
+            <button @click="purchaseOrder" class="buy-btn">바로 구매</button>
           </section>
         </section>
       </div>
@@ -59,14 +64,12 @@
           </li>
         </ul>
         <section class="detail-info-container">
+          <div class="v-html" v-html="detailDescription" />
           <!--
-          <ProductInfomation /> 이부분을 통신이 되면 
-          {{ productInfoData }} 이렇게 바꿀 것으로 예상
-        -->
           <ProductInfomation />
+          -->
           <QA
             @qna-length="calQnaLen"
-            @qna-location="saveQnaLocation"
             @myqna-length="calMyQnaLen"
             @my-wrote-active="myWroteIsActive"
           />
@@ -79,19 +82,18 @@
 <script>
 import SelectColor from './SelectColor';
 import SelectSize from './SelectSize';
-import ProductInfomation from './ProductInfomation';
+// import ProductInfomation from './ProductInfomation';
 import QA from './QA';
 import SlideImageWrapper from './SlideImageWrapper';
 import SelectedOptions from './SelectedOptions';
-import axios from 'axios';
-import URL from '../../../src/assets/mock/URL.js';
+import { mapState } from 'vuex';
 
 export default {
   name: 'Detail',
   components: {
+    // ProductInfomation,
     SelectColor,
     SelectSize,
-    ProductInfomation,
     QA,
     SlideImageWrapper,
     SelectedOptions
@@ -99,7 +101,9 @@ export default {
   props: ['id'],
   data() {
     return {
-      apiData: [],
+      // apiData: [],
+      // detailDescription: '',
+      // productPrice: 0,
       detailInfoTab: [
         {
           id: 1,
@@ -120,33 +124,58 @@ export default {
       ],
       activeTab: 1,
       totalPrice: 0,
-      savedQnaLocation: 0,
-      productPrice: 0,
+      // savedQnaLocation: 0,
       qnaLength: 0,
       myQnaLength: 0,
-      productInfoData: '',
-      myWroteActive: false
+      myWroteActive: false,
+      purchaseQuantity: 1,
+      isColorSelected: false,
+      isSizeSelected: false
     };
   },
   created() {
-    let url = `${URL.PRODUCT_URL}/api/products/product/${this.$route.params.id}`;
-    axios.get(url).then(res => {
-      this.apiData = res.data;
-      this.productPrice = this.apiData.price.toLocaleString();
-    });
-    // 상품 디테일 정보 통째로 받는 부분
-    let productInfoUrl = `${URL.PRODUCT_URL}/api/products/product/1`;
-    // axios.get(productInfoUrl).then(res => {
-    //   console.log(res);
-    //   this.productInfoData = res.data;
-    // });
-    // ---
+    window.scrollTo(0, 0);
+    this.getData(this.$route.params.id);
     window.addEventListener('scroll', this.senseScroll);
   },
   destroyed() {
     window.removeEventListener('scroll', this.senseScroll);
   },
   methods: {
+    getData(paramsId) {
+      this.$store.dispatch('GET_DATA', paramsId);
+    },
+    colorSelect(select) {
+      this.isColorSelected = select;
+    },
+    sizeSelect(select) {
+      this.isSizeSelected = select;
+    },
+    updatePurchaseQuantity(quantity) {
+      this.purchaseQuantity = quantity;
+    },
+    purchaseOrder() {
+      if (!this.isColorSelected) {
+        alert('[컬러]를 선택하세요.');
+        return;
+      }
+      if (!this.isSizeSelected) {
+        alert('[사이즈]를 선택하세요.');
+        return;
+      }
+      if (this.isColorSelected && this.isSizeSelected) {
+        let itemOption = {
+          product_id: this.apiData.p_id,
+          image: this.apiData.images[0].image_url,
+          seller_name: this.apiData.korean_name,
+          product_name: this.apiData.name,
+          total_price: this.totalPrice,
+          total_amount: this.purchaseQuantity
+        };
+        this.$store.commit('PURCHASE_ORDER', itemOption);
+        this.$router.push('/order');
+      }
+    },
     seeMyWrote() {
       if (this.myWroteActive) return this.myQnaLength;
       if (!this.myWroteActive) return this.qnaLength;
@@ -161,7 +190,7 @@ export default {
       this.myQnaLength = length;
     },
     senseScroll() {
-      if (window.scrollY < this.savedQnaLocation - 500) {
+      if (window.scrollY < 48100) {
         this.activeTab = 1;
       } else {
         this.activeTab = 3;
@@ -190,19 +219,18 @@ export default {
       }
       if (this.activeTab === 3) {
         window.scrollTo({
-          top: this.savedQnaLocation,
+          top: 48100,
           behavior: 'smooth'
         });
       }
-    },
-    saveQnaLocation(qnaLocation) {
-      this.savedQnaLocation = qnaLocation;
     }
   },
   computed: {
-    apiData2() {
-      return this.$store.state.detailProductInfo.productInfo;
-    },
+    ...mapState({
+      apiData: state => state.detailProductInfo.detailData,
+      detailDescription: state => state.detailProductInfo.detailDescription,
+      productPrice: state => state.detailProductInfo.productPrice
+    }),
     userSelections() {
       return this.$store.state.detailProductInfo.userSelection;
     },
@@ -215,6 +243,12 @@ export default {
 
 <style scoped lang="scss">
 @import '../../styles/common.scss';
+
+.v-html {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .detail-wrapper {
   max-width: 1230px;

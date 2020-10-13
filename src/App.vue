@@ -26,6 +26,7 @@ export default {
     Spinner
   },
   created() {
+    this.removeData();
     axios.interceptors.request.use(
       config => {
         this.setLoading(false);
@@ -47,6 +48,9 @@ export default {
         }
       );
   },
+  updated() {
+    this.removeData();
+  },
   data() {
     return {
       isLoading: true
@@ -59,6 +63,15 @@ export default {
       }
       if (!isLoading) {
         this.isLoading = false;
+      }
+    },
+    removeData() {
+      let detailPath = this.$route.path.includes('detail');
+      let orderPath = this.$route.path.includes('order');
+
+      if (!(detailPath || orderPath)) {
+        localStorage.removeItem('selected_option');
+        localStorage.removeItem('detail_data');
       }
     }
   }

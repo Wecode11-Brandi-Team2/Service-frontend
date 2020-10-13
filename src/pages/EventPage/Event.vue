@@ -39,7 +39,7 @@
 <script>
 import ContentsPlusButton from '../Main/components/ContentsPlusButton';
 import axios from 'axios';
-import URL from '../../assets/mock/URL';
+// import URL from '../../assets/mock/URL';
 
 export default {
   name: 'Event',

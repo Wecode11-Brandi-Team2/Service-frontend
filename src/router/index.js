@@ -122,7 +122,7 @@ export const router = new VueRouter({
       component: GoogleInformation
     },
     {
-      path: '/mypage/qna',
+      path: '/qna',
       name: 'qna',
       component: QnA
     },

@@ -4,7 +4,7 @@
     <div class="qna">
       <div class="qna-headerbox">
         <h2 class="qna-header">상품 Q&A</h2>
-        <div class="qna-filter-box">
+        <!-- <div class="qna-filter-box">
           <div class="button-wrapper">
             <div
               class="check-button"
@@ -36,7 +36,7 @@
               미답변
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="qna-listbar">
         <div class="status">답변상태</div>
@@ -44,24 +44,30 @@
         <div class="writer">작성자</div>
         <div class="date">작성일</div>
       </div>
-      <ul class="qna-title" @click="dropdownContents">
-        <li class="aa">미답변</li>
-        <li class="bb">test</li>
-        <li class="aa"></li>
-        <li class="aa">2020.09.25</li>
-      </ul>
-      <ul class="qna-answer" v-if="activeContents">
-        <li class="aa"></li>
-        <li class="bb">test</li>
-        <li class="aa"></li>
-        <li class="aa">2020.09.25</li>
-      </ul>
+      <div v-for="(data, idx) in myQnaData" :key="idx">
+        <ul class="qna-title">
+          <li class="aa">미답변</li>
+          <li @click="dropdownContents()" class="bb">
+            {{ data.q_content }}
+          </li>
+          <li class="aa"></li>
+          <li class="aa">{{ calDate(data.q_created_at) }}</li>
+        </ul>
+        <ul class="qna-answer" v-show="activeContents">
+          <li class="aa"></li>
+          <li class="bb">{{ data.q_content }}</li>
+          <li class="aa"></li>
+          <li class="aa"></li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import MenuTab from './MenuTab.vue';
+import URL from '../../assets/mock/URL.js';
 
 export default {
   name: 'qna',
@@ -75,13 +81,40 @@ export default {
         qnaTitle: '안녕하세요',
         writer: '',
         date: 20200924
-      }
+      },
+      myQnaData: {},
+      isActiveDropdown: false
     };
   },
+  created() {
+    this.getQnaData();
+  },
   methods: {
+    calDate(yetDate) {
+      const convert = new Date(yetDate);
+      const year = convert.getFullYear();
+      const month = convert.getMonth() + 1;
+      let day = convert.getDate();
+      if (day < 10) {
+        day = '0' + day;
+      }
+      return `${year}.${month}.${day}`;
+    },
+    getQnaData() {
+      let url = `${URL.PRODUCT_URL}/api/qnas/user`;
+      const access_token = localStorage.getItem('access_token');
+      const headers = {
+        headers: {
+          Authorization: access_token
+        }
+      };
+      axios.get(url, headers).then(res => {
+        this.myQnaData = res.data;
+      });
+    },
     dropdownContents() {
+      // 할수 있을 텐데...
       this.activeContents = !this.activeContents;
-      console.log(this.activeContents);
     },
     checkedToggle(id) {
       this.checkedButton = id;

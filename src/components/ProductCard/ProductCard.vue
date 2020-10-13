@@ -16,19 +16,14 @@
         <span :class="[product.discount_rate === 0 ? 'hidden' : 'discount']">
           {{ product.discount_rate }}%</span
         >
-        <span class="price"
-          >{{ product.price.toLocaleString('en') || 2222 }}원</span
-        >
+        <span class="price">{{ price || 2222 }}원</span>
         <span
           :class="[product.discount_rate === 0 ? 'hidden' : 'discountPrice']"
-          >{{ product.discount_price.toLocaleString('en') || 2222 }}원</span
+          >{{ discountPrice || 2222 }}원</span
         >
       </li>
       <li>
-        <span class="count"
-          >{{ product.sales_amount.toLocaleString('en') || 2222 }}개 구매
-          중</span
-        >
+        <span class="count">{{ count || 2222 }}개 구매 중</span>
       </li>
       <li></li>
     </ul>
@@ -37,10 +32,20 @@
 
 <script>
 export default {
-  name: 'MainProduct',
   props: ['product'],
   data() {
     return {};
+  },
+  computed: {
+    price() {
+      return this.product.price?.toLocaleString('en');
+    },
+    discountPrice() {
+      return this.product.discount_price?.toLocaleString('en');
+    },
+    count() {
+      return this.product.sales_amount?.toLocaleString('en');
+    }
   },
   created() {},
 
@@ -116,13 +121,7 @@ a {
       color: #757575;
     }
     margin: 5px 0;
-    /* span {
-      display: inline-block;
-      width: 220px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    } */
+
     &:nth-child(2) {
       min-height: 35px;
     }

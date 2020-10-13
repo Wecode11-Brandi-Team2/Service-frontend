@@ -7,7 +7,7 @@
       </li>
     </a>
     <li class="seller-content">
-      <div class="seller-title">{{ storeList.name }}</div>
+      <div class="seller-title">{{ storeList.korean_name }}</div>
       <div class="store-tag">
         <!-- <span>#{{ storeList.tag_first }}</span>
         <span>#{{ storeList.tag_second }}</span>
@@ -22,7 +22,7 @@
       <span
         class="like-amount"
         :class="{ 'like-amount-active': isLikeThisSeller }"
-        >{{ storeList.like_amount }}</span
+        >{{ storeList.sales_amount }}</span
       >
     </li>
   </ul>

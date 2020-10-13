@@ -1,14 +1,25 @@
 <template>
   <div class="contents-plus-button">
-    <button>
-      더보기
+    <button
+      v-bind:style="{
+        width: `${width}`,
+        height: `${height}`,
+        fontSize: `${fontSize}`
+      }"
+    >
+      {{ getTitle }}
     </button>
   </div>
 </template>
 <script>
 export default {
   name: 'ContentsPlusButton',
-  props: {}
+  props: ['title', 'getid', 'width', 'height', 'fontSize'],
+  computed: {
+    getTitle() {
+      return this.title ? this.title : '더보기';
+    }
+  }
 };
 </script>
 <style scoped lang="scss">
@@ -19,6 +30,8 @@ export default {
   padding: 20px 0;
 
   button {
+    cursor: pointer;
+
     &:hover {
       background-color: black;
       color: white;

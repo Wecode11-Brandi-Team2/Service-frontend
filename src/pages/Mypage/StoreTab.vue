@@ -2,20 +2,28 @@
   <div class="store-tab">
     <div class="search-header">
       <h2>
-        스토어 검색결과 (<span class="results">{{ value }}</span
+        스토어 검색결과 (<span class="results">{{ sellers.count }}</span
         >건)
       </h2>
     </div>
     <div class="product-wrapper">
-      <ul class="store-card" v-for="store in storeItem" :key="store.id">
+      <ul
+        class="store-card"
+        v-for="seller in sellers.seller_list"
+        :key="seller.id"
+      >
         <li class="store-image">
-          <img :src="store.storeImg" />
+          <img :src="seller.image_url" />
         </li>
         <div class="txt-wrapper">
-          <li class="store-title">{{ store.title }}</li>
-          <li class="store-tag">#{{ store.tag }}</li>
+          <li class="store-title">{{ seller.korean_name }}</li>
         </div>
       </ul>
+      <div class="span-wrapper">
+        <span :class="[sellers.seller_list.length <= 1 ? 'hidden' : 'nope']"
+          >검색된 스토어가 없습니다.</span
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -23,29 +31,7 @@
 <script>
 export default {
   name: 'StoreTab',
-  data() {
-    return {
-      value: 2,
-      storeItem: [
-        {
-          id: 0,
-          storeImg:
-            'https://image.brandi.me/seller/summermarket_profile_1581389098.png',
-          title: '여름',
-          tag: '캐주얼'
-        },
-        {
-          id: 1,
-          storeImg:
-            'https://image.brandi.me/seller/summermarket_profile_1581389098.png',
-          title: '여름마켓',
-          tag: '심플베이직'
-        }
-      ]
-    };
-  },
-  components: {},
-  methods: {}
+  props: ['sellers']
 };
 </script>
 
@@ -105,11 +91,16 @@ export default {
         color: #000;
         font-size: 16px;
       }
-      .store-tag {
-        padding-top: 0px;
-        padding: 5px 0px 0px 15px;
-        color: #8d8d8d;
-        font-size: 13px;
+    }
+    .span-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 50px 0;
+      font-size: 17px;
+
+      .nope {
+        display: none;
       }
     }
   }

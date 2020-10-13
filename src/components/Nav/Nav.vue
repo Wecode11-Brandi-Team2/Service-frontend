@@ -21,7 +21,7 @@
       <div class="search-box">
         <form class="search-bar">
           <button @click="testToken" class="search-btn"></button>
-          <input class="search-input" type="text" />
+          <input class="search-input" type="text" @input="handleKeyword" />
         </form>
       </div>
       <div class="upper-menubox">
@@ -50,6 +50,7 @@ export default {
   name: 'Nav',
   data() {
     return {
+      queryString: '',
       token: ''
     };
   },
@@ -68,8 +69,10 @@ export default {
   methods: {
     ...mapActions(serviceStore, ['updateCategories', 'updateTitle']),
 
-    testToken() {
+    testToken(e) {
+      e.preventDefault();
       localStorage.setItem('access_token', '???');
+      this.$router.push(`/search?q=${this.queryString}`);
     },
     changeRoute() {
       if (localStorage.getItem('access_token')) {
@@ -91,6 +94,10 @@ export default {
       } else {
         this.$router.push('/mypage');
       }
+    },
+    handleKeyword(e) {
+      this.queryString = e.target.value;
+      // console.log(this.queryString);
     }
   }
 };

@@ -2,19 +2,19 @@
   <div class="product-tab">
     <div class="search-header">
       <h2>
-        검색결과 <span class="results">{{ value.toLocaleString() }}</span
-        >건
+        검색결과
       </h2>
-
       <div class="arrange-standard-line">
         <div @click="ChangeSaleCheckActive">
+          <!-- 세일 체크 버튼 -->
           <SaleCheckButton
             :saleCheckActive="saleCheckActive"
             style="border: none"
           />
         </div>
         <div>
-          <div @click="arrange()" class="arrange-standard">
+          <!-- 최신순/판매순 셀렉트박스 -->
+          <div @click="activeDropdown" class="arrange-standard">
             <span>{{ activeArrange }}</span>
             <div
               class="dropdown-icon"
@@ -35,17 +35,58 @@
       </div>
     </div>
     <div class="product-wrapper">
-      <ul class="product-card" v-for="item in shopItem" :key="item.id">
+      <!-- 판매량순 start -->
+      <ul
+        class="product-card"
+        v-for="item in products"
+        v-show="!isNew"
+        :key="item.id"
+      >
         <li class="product-img">
-          <img :src="item.productImg" alt="product-image" />
+          <img :src="item.image" alt="product-image" />
         </li>
-        <li class="seller">{{ item.seller }}</li>
-        <li class="title">{{ item.title }}</li>
-        <li class="price">{{ item.price }}</li>
-        <li class="count">{{ item.count }}</li>
+        <li class="seller">{{ item.seller_name }}</li>
+        <li class="title">{{ item.name }}</li>
+        <div class="price_wrapper">
+          <li :class="item.discount_rate === 0 ? 'hidden' : 'discount-rate'">
+            {{ item.discount_rate }}%&nbsp;
+          </li>
+          <li class="price">{{ item.discount_price.toLocaleString() }}</li>
+          <li :class="item.discount_rate > 0 ? 'discount-price' : 'hidden'">
+            {{ item.price.toLocaleString() }}
+          </li>
+        </div>
+
+        <li class="count">{{ item.sales_amount }}개 구매중</li>
       </ul>
+      <!-- 판매량순 end -->
+      <!-- 최신순 start -->
+      <ul
+        class="product-card"
+        v-for="(item, idx) in newData"
+        v-show="isNew"
+        :key="idx"
+      >
+        <li class="product-img">
+          <img :src="item.image" alt="product-image" />
+        </li>
+        <li class="seller">{{ item.seller_name }}</li>
+        <li class="title">{{ item.name }}</li>
+        <div class="price_wrapper">
+          <li :class="item.discount_rate === 0 ? 'hidden' : 'discount-rate'">
+            {{ item.discount_rate }}%&nbsp;
+          </li>
+          <li class="price">{{ item.discount_price.toLocaleString() }}</li>
+          <li :class="item.discount_rate > 0 ? 'discount-price' : 'hidden'">
+            {{ item.price.toLocaleString() }}
+          </li>
+        </div>
+
+        <li class="count">{{ item.sales_amount }}개 구매중</li>
+      </ul>
+      <!-- 최신순 end -->
     </div>
-    <div class="btn-wrapper">
+    <div class="btn-wrapper" @click="getMoreData">
       <button class="more-btn">
         더보기
       </button>
@@ -55,13 +96,24 @@
 
 <script>
 import SaleCheckButton from '../../components/Button/SaleCheckButton';
+import axios from 'axios';
+import URL from '../../assets/mock/URL.js';
 
 export default {
   name: 'ProductTab',
+
+  props: [
+    'products',
+    'getMoreData',
+    'fetchData',
+    'ChangeSaleCheckActive',
+    'saleCheckActive'
+  ],
+
   data() {
     return {
-      saleCheckActive: false,
-      value: 18394,
+      isNew: false,
+      newData: [],
       activeArrange: '판매량순',
       isArrangeDropdown: false,
       arrangeDropdownList: [
@@ -73,106 +125,35 @@ export default {
           id: 1,
           order: '최신순'
         }
-      ],
-      shopItem: [
-        {
-          id: 0,
-          productImg:
-            'https://image.brandi.me/cproduct/2020/06/11/17324705_1591884631_image1_M.jpg',
-          seller: '셀러',
-          title: '단추 브이넥',
-          price: '13,700',
-          count: '4,782 구매중'
-        },
-        {
-          id: 1,
-          productImg:
-            'https://image.brandi.me/cproduct/2020/06/10/17238594_1591751342_image1_M.jpg',
-          seller: '바이영',
-          title: '단추 브이넥',
-          price: '13,700',
-          count: '4,782 구매중'
-        },
-        {
-          id: 2,
-          productImg:
-            'https://image.brandi.me/cproduct/2020/07/17/18290308_1594969526_image1_M.jpg',
-          seller: '바이영',
-          title: '단추 브이넥',
-          price: '13,700',
-          count: '4,782 구매중'
-        },
-        {
-          id: 3,
-          productImg:
-            'https://image.brandi.me/cproduct/2020/06/11/17324705_1591884631_image1_M.jpg',
-          seller: '바이영',
-          title: '단추 브이넥',
-          price: '13,700',
-          count: '4,782 구매중'
-        },
-        {
-          id: 4,
-          productImg:
-            'https://image.brandi.me/cproduct/2020/06/11/17324705_1591884631_image1_M.jpg',
-          seller: '바이영',
-          title: '단추 브이넥',
-          price: '13,700',
-          count: '4,782 구매중'
-        },
-        {
-          id: 5,
-          productImg:
-            'https://image.brandi.me/cproduct/2020/06/11/17324705_1591884631_image1_M.jpg',
-          seller: '바이영',
-          title: '단추 브이넥',
-          price: '13,700',
-          count: '4,782 구매중'
-        },
-        {
-          id: 6,
-          productImg:
-            'https://image.brandi.me/cproduct/2020/06/11/17324705_1591884631_image1_M.jpg',
-          seller: '바이영',
-          title: '단추 브이넥',
-          price: '13,700',
-          count: '4,782 구매중'
-        },
-        {
-          id: 7,
-          productImg:
-            'https://image.brandi.me/cproduct/2020/06/11/17324705_1591884631_image1_M.jpg',
-          seller: '바이영',
-          title: '단추 브이넥',
-          price: '13,700',
-          count: '4,782 구매중'
-        }
       ]
     };
   },
   components: {
     SaleCheckButton
   },
+
   methods: {
+    activeDropdown() {
+      this.isArrangeDropdown = !this.isArrangeDropdown;
+      console.log(this.$route.query);
+    },
+
     arrange(list) {
       this.isArrangeDropdown = !this.isArrangeDropdown;
       this.activeArrange = list.order;
-    },
-    ChangeSaleCheckActive() {
-      this.saleCheckActive = !this.saleCheckActive;
-      this.promotion === 0 ? (this.promotion = 1) : (this.promotion = 0);
-      console.log('PromoValue', this.promotion);
-      this.fetchData();
-    },
-    fetchData() {
-      // axios
-      //   .get(
-      //     `http://10.251.1.153:5000/api/products?offset=${this.offset}&limit=100`,
-      //     {}
-      //   )
-      //   .then(
-      //     res => (this.productData = this.productData.concat(res.data.products))
-      //   );
+      if (list.id === 0) this.isNew = false;
+      if (list.id === 1) {
+        console.log(this.$route.query.q);
+        axios
+          .get(
+            `${URL.PRODUCT_URL}/api/products?select=1&q=&${this.$route.query.q}`
+          )
+          .then(res => {
+            this.newData = res.data.products;
+            // console.log('최신순 데이터에욥', this.newData);
+            this.isNew = true;
+          });
+      }
     }
   }
 };
@@ -260,11 +241,9 @@ export default {
       li {
         padding: 8px 10px;
         border-bottom: 1px solid #c5c5c5;
-
         &:last-child {
           border-bottom: none;
         }
-
         &:hover {
           color: #ff204b;
         }
@@ -287,7 +266,10 @@ export default {
 
       .product-img img {
         width: 100%;
+        max-height: 254px;
+        min-height: 254px;
       }
+
       .seller {
         margin-top: 8px;
         letter-spacing: 0;
@@ -295,18 +277,45 @@ export default {
         font-size: 16px;
         color: #4a4a4a;
       }
+
       .title {
-        height: 25px;
         padding: 0;
         font-size: 16px;
         font-weight: 500;
         padding-top: 5px;
+        width: 95%;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
-      .price {
-        line-height: 25px;
-        padding: 0;
-        font-size: 21px;
-        font-weight: 800;
+
+      .price_wrapper {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 1.2em;
+
+        .discount-rate {
+          color: #ff204b;
+        }
+
+        .discount-price {
+          color: #757575;
+          padding: 5px 0 0 6px;
+          font-weight: 500;
+          font-size: 16px;
+          text-decoration: line-through;
+        }
+
+        .hidden {
+          display: none;
+        }
+
+        .price {
+          line-height: 25px;
+          padding: 0;
+          font-size: 21px;
+          font-weight: 800;
+        }
       }
       .count {
         margin-top: 10px;

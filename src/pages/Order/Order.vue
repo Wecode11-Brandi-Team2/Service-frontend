@@ -733,7 +733,8 @@ export default {
         option_size: itemOption.selectedSize.size,
         units: itemOption.total_amount
       };
-
+      alert('결제가 완료되었습니다');
+      this.$router.push('/');
       axios.post(url, body, headers).then(res => console.log(res));
     },
     identifyShippingListFull() {

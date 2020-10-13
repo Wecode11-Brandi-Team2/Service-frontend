@@ -42,7 +42,6 @@ export default {
         }
       })
       .then(res => {
-        console.log('잘 왔나', res.data.data);
         this.myPageData = res.data.data;
         this.noData = false;
         this.showData = true;

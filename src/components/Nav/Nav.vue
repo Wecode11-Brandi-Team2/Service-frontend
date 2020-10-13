@@ -28,11 +28,18 @@
         ㅣ
         <a class="menu" @click="goLogin">마이페이지</a>
         ㅣ
-        <router-link to="/login" v-if="!token">
-          로그인
+        <router-link to="/login" v-if="!have">
+          <span @click="doLogIn">로그인</span>
         </router-link>
         <router-link to="/" v-else>
-          <span @click="logout"> 로그아웃</span>
+          <span
+            @click="
+              doLogOut();
+              logout();
+            "
+          >
+            로그아웃</span
+          >
         </router-link>
         ㅣ
         <a class="menu">입점문의</a>
@@ -52,11 +59,16 @@ export default {
   data() {
     return {
       queryString: '',
-      token: ''
+      token: '',
+      have: false
     };
   },
   created() {
-    this.token = localStorage.getItem('access_token');
+    let haveTok = localStorage.getItem('access_token');
+    if (haveTok) {
+      this.have = !this.have;
+    }
+    // this.token = localStorage.getItem('access_token');
   },
 
   computed: {
@@ -67,16 +79,25 @@ export default {
     },
     titles() {
       return this.getTitle;
+    },
+    token() {
+      return this.isLogin;
     }
-    // token() {
-    //   return this.isLogin;
-    // }
   },
 
   methods: {
     ...mapActions(serviceStore, ['updateCategories', 'updateTitle']),
     ...mapActions(myPageStore, ['logout']),
 
+    doLogIn() {
+      console.log('로그인을 해보자');
+    },
+    doLogOut() {
+      let yetToken = localStorage.getItem('access_token');
+      if (yetToken) {
+        this.have = !this.have;
+      }
+    },
     testToken(e) {
       e.preventDefault();
       this.$router.push(`/search?q=${this.queryString}`);

@@ -84,7 +84,7 @@ export default {
     fetchData() {
       axios
         .get(
-          `http://10.251.1.134:5000/api/events?is_displayed=${this.navStatus}&limit=10&offset=${this.dataOffSet}`,
+          `${URL.PRODUCT_URL}/api/events?is_displayed=${this.navStatus}&limit=10&offset=${this.dataOffSet}`,
           {}
         )
         .then(res => {

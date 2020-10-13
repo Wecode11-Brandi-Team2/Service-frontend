@@ -20,18 +20,18 @@ export default {
   props: ['selectedImage', 'apiDataImage'],
   methods: {
     calcSlideWidth(width) {
-      if (this.selectedImage === 1) return width * 0;
-      if (this.selectedImage === 2) return width;
-      if (this.selectedImage === 3) return width * 2;
-      if (this.selectedImage === 4) return width * 3;
-      if (this.selectedImage === 5) return width * 4;
-    }
-  },
-  computed: {
-    slideImage() {
-      return this.$store.state.detailProductInfo.productInfo.image;
+      if (this.selectedImage === 0) return width * 0;
+      if (this.selectedImage === 1) return width;
+      if (this.selectedImage === 2) return width * 2;
+      if (this.selectedImage === 3) return width * 3;
+      if (this.selectedImage === 4) return width * 4;
     }
   }
+  // computed: {
+  //   slideImage() {
+  //     return this.$store.state.detailProductInfo.productInfo.image;
+  //   }
+  // }
 };
 </script>
 

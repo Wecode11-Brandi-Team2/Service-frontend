@@ -54,6 +54,7 @@ export default {
     selectSize(size) {
       this.activeDropdown = !this.activeDropdown;
       this.$store.commit('USER_SIZE_SELECT', size);
+      this.$emit('size-select', true);
     }
   },
   computed: {

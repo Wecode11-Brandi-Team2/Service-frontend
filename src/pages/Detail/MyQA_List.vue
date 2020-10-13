@@ -63,7 +63,7 @@ export default {
     'q_is_answered',
     'q_is_private',
     'type_name',
-    'login_id',
+    'q_user',
     'q_id'
   ],
   data() {
@@ -72,9 +72,12 @@ export default {
       isActiveContents: false
     };
   },
+  // created() {
+  //   console.log(this.q_user + '');
+  // },
   computed: {
     writer() {
-      const writer = this.login_id
+      const writer = this.q_user
         .split('')
         .slice(0, 3)
         .concat('***')

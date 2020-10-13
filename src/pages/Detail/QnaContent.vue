@@ -1,7 +1,7 @@
 <template>
   <div :style="{ opacity: opacity }">
     <span @click="activeContent">{{ q_content }}</span>
-    <i @click="deleteQna" class="fas fa-times" />
+    <i v-if="u_id === my_id" @click="deleteQna" class="fas fa-times" />
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import axios from 'axios';
 import URL from '../../../src/assets/mock/URL.js';
 
 export default {
-  props: ['opacity', 'q_is_private', 'q_content', 'q_id'],
+  props: ['opacity', 'q_is_private', 'q_content', 'q_id', 'u_id', 'my_id'],
   methods: {
     deleteQna() {
       let question_id = this.q_id;

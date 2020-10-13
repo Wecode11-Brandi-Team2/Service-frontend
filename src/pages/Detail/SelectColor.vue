@@ -48,6 +48,7 @@ export default {
     selectColor(color) {
       this.selectedColor = color.color;
       this.activeDropdown = !this.activeDropdown;
+      this.$emit('color-select', true);
       this.$store.commit('COLOR_SELECT', true);
       this.$store.commit('USER_COLOR_SELECT', color);
     }

@@ -106,8 +106,8 @@
             doFetch();
             myQnaFetch();
           "
-          v-for="QA in apiData"
-          :key="QA.q_id"
+          v-for="(QA, idx) in apiData"
+          :key="idx"
           :a_content="QA.a_content"
           :a_created_at="QA.a_created_at"
           :a_is_private="QA.a_is_private"
@@ -116,8 +116,10 @@
           :q_is_answered="QA.q_is_answered"
           :q_is_private="QA.q_is_private"
           :type_name="QA.type_name"
-          :login_id="QA.login_id"
+          :q_user="QA.q_user"
           :q_id="QA.q_id"
+          :u_id="QA.u_id"
+          :my_id="my_id"
         />
         <tr v-if="myWroteIsActive && myQnas.length === 0">
           <td class="no-data" colspan="5">
@@ -140,7 +142,7 @@
           :q_content="myQA.q_content"
           :q_created_at="myQA.q_created_at"
           :q_is_private="myQA.q_is_private"
-          :login_id="myQA.login_id"
+          :q_user="myQA.q_user"
           :q_id="myQA.q_id"
         />
       </tbody>
@@ -162,10 +164,10 @@ export default {
     QA_List,
     MyQA_List
   },
-  mounted() {
-    const qnaLocation = document.querySelector('.Q-A').offsetTop;
-    this.$emit('qna-location', qnaLocation);
-  },
+  // mounted() {
+  //   const qnaLocation = document.querySelector('.Q-A').offsetTop;
+  //   this.$emit('qna-location', qnaLocation);
+  // },
   data() {
     return {
       myWroteIsActive: false,
@@ -211,26 +213,26 @@ export default {
           q_type: '취소/변경'
         }
       ],
-      offset: 0
+      offset: 0,
+      my_id: 0
     };
   },
   created() {
     this.doFetch();
     this.myQnaFetch();
   },
-  computed: {
-    apiData2() {
-      return this.$store.state.detailProductInfo.qnaData2;
-    },
-    myQna2() {
-      return this.$store.state.detailProductInfo.myQna;
-    }
-  },
   methods: {
     doFetch() {
       let url = `${URL.PRODUCT_URL}/api/qnas?product_id=${this.$route.params.id}&offset=${this.offset}&limit=5`;
-      axios.get(url).then(res => {
-        this.apiData = res.data;
+      const access_token = localStorage.getItem('access_token');
+      const headers = {
+        headers: {
+          Authorization: access_token
+        }
+      };
+      axios.get(url, headers).then(res => {
+        this.apiData = res.data.qna;
+        this.my_id = res.data.login_user_id.user_id;
         this.$emit('qna-length', this.apiData.length);
       });
     },
@@ -259,7 +261,7 @@ export default {
         if (
           confirm(
             '로그인이 필요한 서비스입니다. 로그인 페이지로 이동하시겠습니까?'
-          ) === true
+          )
         ) {
           this.$router.push('/login');
         }

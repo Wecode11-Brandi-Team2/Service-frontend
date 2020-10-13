@@ -4,11 +4,11 @@
     <div class="slider-container">
       <div
         class="image-slide-tab"
-        :class="[image.id === selectedImage ? 'active-tab' : '']"
-        v-for="image in apiDataImage"
-        :key="image.id"
+        :class="[idx === selectedImage ? 'active-tab' : '']"
+        v-for="(image, idx) in apiDataImage"
+        :key="idx"
         :style="{ backgroundImage: 'url(' + image.image_url + ')' }"
-        @click="imageSlide(image)"
+        @click="imageSlide(idx)"
       ></div>
     </div>
   </section>
@@ -24,20 +24,14 @@ export default {
   },
   data() {
     return {
-      selectedImage: 1,
-      apiData: []
+      selectedImage: 0
     };
   },
   methods: {
-    imageSlide(image) {
-      this.selectedImage = image.id;
+    imageSlide(idx) {
+      this.selectedImage = idx;
     }
   }
-  // computed: {
-  //   ProductInfoImage() {
-  //     return this.$store.state.detailProductInfo.productInfo.image;
-  //   }
-  // }
 };
 </script>
 

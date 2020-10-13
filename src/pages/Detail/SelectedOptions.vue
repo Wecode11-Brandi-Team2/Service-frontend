@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   props: ['option', 'apiDataPrice'],
   data() {
@@ -41,6 +43,7 @@ export default {
   },
   updated() {
     this.$emit('update-price', this.optionPrice);
+    this.$emit('update-purchase-quantity', this.purchaseQuantity);
   },
   methods: {
     minus() {
@@ -61,9 +64,10 @@ export default {
         alert('최대 구매 수량은 20개 입니다.');
       }
     },
-    deleteOption() {
-      this.$store.commit('DELETE_OPTION');
-    }
+    ...mapMutations({ deleteOption: 'DELETE_OPTION' })
+    // deleteOption() {
+    //   this.$store.commit('DELETE_OPTION');
+    // }
   }
 };
 </script>

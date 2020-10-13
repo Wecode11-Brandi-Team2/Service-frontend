@@ -37,30 +37,20 @@ export const router = new VueRouter({
       component: Main
     },
     {
-      path: '/detail/:id',
-      name: 'Detail',
-      component: Detail,
+      path: '/event',
+      name: 'Event',
+      component: Event
+    },
+    {
+      path: '/event/:getid?',
+      name: 'ButtonType',
+      component: ButtonType,
       props: true
     },
     {
-      path: '/login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/mypage',
-      name: 'Mypage',
-      component: Mypage
-    },
-    {
-      path: '/signup',
-      name: 'SignUp',
-      component: SignUp
-    },
-    {
-      path: '/agreement',
-      name: 'Agreement',
-      component: Agreement,
+      path: '/detail/:id',
+      name: 'Detail',
+      component: Detail,
       props: true
     },
     {
@@ -89,6 +79,28 @@ export const router = new VueRouter({
       name: 'Beauty',
       component: Beauty
     },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/mypage',
+      name: 'Mypage',
+      component: Mypage
+    },
+    {
+      path: '/signup',
+      name: 'SignUp',
+      component: SignUp
+    },
+    {
+      path: '/agreement',
+      name: 'Agreement',
+      component: Agreement,
+      props: true
+    },
+
     {
       path: '/information',
       name: 'Information',
@@ -144,17 +156,6 @@ export const router = new VueRouter({
       path: '/cancel',
       name: 'Cancel',
       component: Cancel
-    },
-    {
-      path: '/event',
-      name: 'Event',
-      component: Event
-    },
-    {
-      path: '/event/:getid?',
-      name: 'ButtonType',
-      component: ButtonType,
-      props: true
     },
     {
       path: '/closed',

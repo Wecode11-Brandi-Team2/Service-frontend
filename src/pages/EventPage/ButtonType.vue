@@ -71,6 +71,7 @@ import ProductCard from '@/components/ProductCard/ProductCard';
 import ContentsPlusButton from '../Main/components/ContentsPlusButton';
 import ClassifyButton from '../../components/Button/ClassifyButton';
 import axios from 'axios';
+import URL from '../../assets/mock/URL';
 
 export default {
   name: 'ButtonType',
@@ -99,14 +100,14 @@ export default {
       console.log('ProductData', this.productData);
       console.log('makeclassify', this.buttonData);
       console.log(
-        `http://10.251.1.134:5000/api/events/detail?id=${this.$route.params.getid}&limit=30&offset=0`
+        `${URL.PRODUCT_URL}/api/events/detail?id=${this.$route.params.getid}&limit=30&offset=0`
       );
     },
 
     fetchButton() {
       axios
         .get(
-          `http://10.251.1.134:5000/api/events/detail?id=${this.$route.params.getid}`,
+          `${URL.PRODUCT_URL}/api/events/detail?id=${this.$route.params.getid}`,
           {}
         )
         .then(res => {
@@ -124,19 +125,19 @@ export default {
     fetchProduct() {
       axios
         .get(
-          `http://10.251.1.134:5000/api/events/products?id=${this.$route.params.getid}&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`,
+          `${URL.PRODUCT_URL}/api/events/products?id=${this.$route.params.getid}&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`,
           {}
         )
         .then(res => (this.productData = res.data['event_product']));
 
       console.log(
-        `http://10.251.1.134:5000/api/events/products?id=${this.$route.params.getid}&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`
+        `${URL.PRODUCT_URL}/api/events/products?id=${this.$route.params.getid}&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`
       );
     },
     getMoreData() {
       axios
         .get(
-          `http://10.251.1.134:5000/api/events/products?id=${this.$route.params.getid}&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`,
+          `${URL.PRODUCT_URL}/api/events/products?id=${this.$route.params.getid}&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`,
           {}
         )
         .then(
@@ -146,7 +147,7 @@ export default {
             ))
         );
       console.log(
-        `http://10.251.1.134:5000/api/events/products?id=1&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`
+        `${URL.PRODUCT_URL}/api/events/products?id=1&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`
       );
     },
     plusButtonActive() {

@@ -92,6 +92,7 @@
 </template>
 <script>
 import axios from 'axios';
+import URL from '../../assets/mock/URL';
 export default {
   name: 'SildeProductCard',
 
@@ -138,7 +139,7 @@ export default {
     getSlideData() {
       axios
         .get(
-          'http://10.251.1.134:5000/api/events?is_displayed=1&limit=14&offset=0',
+          `${URL.PRODUCT_URL}/api/events?is_displayed=1&limit=14&offset=0`,
           {}
         )
         .then(res => (this.imageData = res.data.data));

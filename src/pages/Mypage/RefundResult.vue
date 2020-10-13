@@ -54,7 +54,6 @@ export default {
   },
 
   beforeDestroy() {
-    console.log('새로고침을 해도 내가 실행되냐');
     localStorage.removeItem('refund_result_data');
   },
 

@@ -33,7 +33,6 @@
             <div class="item-name">
               <a>{{ refundItemInfo.name }}</a>
             </div>
-            <!-- <div class="order-data">{{ cancelItemInfo.itemInfo }}</div> -->
             <div class="order-data">{{ refundItemInfo.units }} 개</div>
           </div>
           <div class="data1-wrapper">
@@ -101,15 +100,8 @@ export default {
     products() {
       return this.products;
     }
-    // ...mapState({
-    //   refundItemInfo: state => state.myPageStore.refundItemData
-    // })
-    // refundItemInfo() {
-    //   return this.$store.state.myPageStore.refundItemData;
-    // }
   },
   created() {
-    // this.refundItemInfo = this.$store.state.myPageStore.refundItemData;
     let refundData = JSON.parse(localStorage.getItem('refund_data'));
     this.refundItemInfo = refundData;
     this.convertDate(this.refundItemInfo.created_at);
@@ -122,10 +114,12 @@ export default {
   data() {
     return {
       optionSelected: '',
+      selected: '사유를 선택하세요.',
       createdAt: 0,
       refundItemInfo: {},
       productsData: {},
-      selected: '사유를 선택하세요.',
+      refundReason: '',
+      refundReasonId: 0,
       options: [
         { id: 1, text: '단순변심', value: 'option1' },
         { id: 2, text: '상품불량', value: 'option2' },
@@ -133,9 +127,7 @@ export default {
         { id: 4, text: '교환요청', value: 'option4' },
         { id: 5, text: '일부상품누락', value: 'option5' },
         { id: 6, text: '기타', value: 'option6' }
-      ],
-      refundReason: '',
-      refundReasonId: 0
+      ]
     };
   },
 
@@ -160,7 +152,6 @@ export default {
     changeOption($event) {
       const options = event.target.options;
       this.refundReasonId = options.selectedIndex;
-      // this.options.text = event.target.value;
       this.refundReason = $event.target.value;
     },
 
@@ -177,15 +168,10 @@ export default {
     },
 
     requestRefund() {
-      // console.log('나는 환불사유야!!', this.refundReason);
-      // console.log('나는 총 가격이야!!!', this.refundItemInfo.total_payment);
-
       let refundRequestData = {
         refundReason: this.refundReason,
         totalPayment: this.refundItemInfo.total_payment
       };
-
-      // console.log('잘 담겼나', refundRequestData);
 
       if (this.selected === '사유를 선택하세요.') {
         alert('환불사유를 선택해주세요.');

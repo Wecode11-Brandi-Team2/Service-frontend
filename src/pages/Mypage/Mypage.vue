@@ -2,12 +2,14 @@
   <div class="mypage-container">
     <MenuTab />
     <div v-if="showData">
+      <!-- 배송 상품 정보-->
       <OrderList
         :productInfo="orderList"
         v-for="orderList in myPageData"
         :key="orderList.orderNumber"
       ></OrderList>
     </div>
+    <!-- 주문한 상품이 없을 경우 -->
     <div class="txt-wrapper">
       <div class="no-data" v-if="noData">주문한 상품이 없습니다.</div>
     </div>
@@ -15,10 +17,10 @@
 </template>
 
 <script>
-import MenuTab from './MenuTab.vue';
-import OrderList from './OrderList.vue';
 import axios from 'axios';
 import URL from '../../assets/mock/URL.js';
+import MenuTab from './MenuTab.vue';
+import OrderList from './OrderList.vue';
 
 export default {
   name: 'Mypage',
@@ -40,8 +42,8 @@ export default {
         }
       })
       .then(res => {
+        console.log('잘 왔나', res.data.data);
         this.myPageData = res.data.data;
-        // console.log('data', this.myPageData);
         this.noData = false;
         this.showData = true;
       })
@@ -51,7 +53,6 @@ export default {
           this.showData = false;
         }
       });
-    // console.log(this.data);
   }
 };
 </script>

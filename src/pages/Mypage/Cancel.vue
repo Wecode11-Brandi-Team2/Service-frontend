@@ -7,7 +7,7 @@
       <h2 class="order-detail-info">
         <div>
           {{ createdAt }}<span class="divider">I</span
-          >{{ cancelItemInfo.orderNumber }}
+          >{{ cancelItemInfo.order_detail_id }}
         </div>
         <a class="order-detail-button"
           >주문상세보기<img
@@ -27,13 +27,13 @@
         </div>
         <div class="order-info">
           <div class="image">
-            <a class="item-image"> <img :src="cancelItemInfo.itemImage"/></a>
+            <a class="item-image"> <img :src="cancelItemInfo.main_img"/></a>
           </div>
           <div class="orderinfo-box">
             <div class="item-name">
-              <a>{{ cancelItemInfo.itemName }}</a>
+              <a>{{ cancelItemInfo.name }}</a>
             </div>
-            <div class="order-data">{{ cancelItemInfo.amount }} 개</div>
+            <div class="order-data">{{ cancelItemInfo.units }} 개</div>
           </div>
           <div class="data1-wrapper">
             <div class="data1">{{ cancelItemInfo.price }} 원</div>
@@ -44,7 +44,7 @@
       <h2 class="refund-info">주문 취소 정보</h2>
       <div class="refund-info-box">
         <div class="refund-info-title">총 주문취소금액</div>
-        <div class="amount">{{ cancelItemInfo.price }}원</div>
+        <div class="amount">{{ cancelItemInfo.total_payment }}원</div>
       </div>
       <div class="btn-wrapper">
         <button @click="requestCancel" class="refund-btn">
@@ -71,7 +71,6 @@ export default {
     }
   },
   created() {
-    // this.cancelItemInfo = this.$store.state.myPageStore.cancelItemData;
     let cancelData = JSON.parse(localStorage.getItem('cancel_data'));
     this.cancelItemInfo = cancelData;
     this.convertDate(this.cancelItemInfo.created_at);
@@ -95,7 +94,7 @@ export default {
       axios
         .post(
           `${URL.LOGIN_URL}/api/order/cancel`,
-          { order_detail_id: this.cancelItemInfo.orderNumber },
+          { order_detail_id: this.cancelItemInfo.order_detail_id },
           {
             headers: {
               Authorization: localStorage.getItem('access_token')
@@ -117,7 +116,7 @@ export default {
     },
 
     getShipStatus() {
-      let statusOfShip = this.cancelItemInfo.status;
+      let statusOfShip = this.cancelItemInfo.order_status_id;
       if (statusOfShip === 1) {
         return '결제완료';
       }

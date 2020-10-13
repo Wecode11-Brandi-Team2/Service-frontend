@@ -80,6 +80,9 @@
                   <span class="detail-key">
                     <router-link
                       @click="reChangeAllStatus"
+                      v-bind:class="[
+                        $route.params.id == 'total' ? 'picked' : 'not-picked'
+                      ]"
                       :to="
                         `/category/${$route.params.specification}/${MODAL['id']}/total`
                       "
@@ -174,7 +177,6 @@ export default {
     return {
       filteredData: {},
       productData: [],
-      // modalActive: false,
 
       filteringValue: [
         { id: 0, name: '판매량순' },
@@ -207,7 +209,7 @@ export default {
     let baseData = Object.entries(this.categories.category).map(el => el[1]);
     this.filteringAsideData(baseData);
     this.changeNavToKorean();
-    // console.log(this.$route.params.specification);
+    window.scrollTo(0, 0);
   },
 
   created: function() {

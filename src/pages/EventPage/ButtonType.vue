@@ -1,35 +1,52 @@
 <template>
   <main class="ButtonType">
-    <section class="media-wrapper">
+    <section
+      :class="[
+        this.buttonData.event_detail[0]['video_url'] === null ||
+        this.buttonData.event_detail[0]['video_url'] === undefined
+          ? 'hidden'
+          : 'media-wrapper'
+      ]"
+    >
       <div class="youtube">
-        <!--src data will get from api ex) `${state.video_src}` -->
         <iframe
           width="1080"
           height="605"
-          src="https://www.youtube.com/embed/eZXxxQlLk9U"
+          :src="this.buttonData.event_detail[0]['video_url']"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
         ></iframe>
       </div>
     </section>
-    <section class="banner-image-container">
+    <section
+      :class="[
+        this.buttonData.event_detail.detail_image === null ||
+        this.buttonData.event_detail.detail_image === undefined
+          ? 'hidden'
+          : 'banner-image-container'
+      ]"
+    >
       <img
         alt="banner-image"
-        src="https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg"
+        :src="this.buttonData.event_detail.detail_image"
       />
     </section>
     <section class="text-title-wrapper">
-      <span class="text-title">최대 70% 할인 진행 중최대 7</span>
-      <span class="text">최대 70% 할인 진행 중최대 7</span>
+      <span class="text-title">{{
+        this.buttonData.event_detail[0]['detail_description']
+      }}</span>
+      <span class="text">{{
+        this.buttonData.event_detail[0]['simple_description']
+      }}</span>
     </section>
     <section class="classify-button-wrapper">
       <ClassifyButton
         :classifyNum="classifyNum"
         :filterBrand="filterBrand"
         :classify="classify"
-        v-for="classify of ClassifyData"
-        :key="classify.id"
+        v-for="classify of buttonData.event_button"
+        :key="classify.button_id"
       />
     </section>
     <section class="product-section">
@@ -37,10 +54,13 @@
         :class="[!product.active ? 'show' : 'hidden']"
         :product="product"
         :key="index"
-        v-for="(product, index) of ButtonTypeProductData"
+        v-for="(product, index) of this.productData"
       />
     </section>
-    <section class="button-wrapper">
+    <section
+      :class="[buttonActive ? 'hidden' : 'button-wrapper']"
+      @click="plusButtonActive"
+    >
       <ContentsPlusButton :ClassifyActive="ClassifyActive" />
     </section>
   </main>
@@ -59,176 +79,97 @@ export default {
 
   data() {
     return {
-      ClassifyData: [
-        {
-          id: 1,
-          name: '브레스'
-        },
-        {
-          id: 2,
-          name: '미쏘'
-        }
-      ],
-      ButtonTypeProductData: [
-        {
-          id: 1,
-          image:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg',
-          seller_name: '브랜디',
-          name: '옷옷옷옷',
-          discount_rate: 10,
-          price: 10000,
-          sales_amount: 1000000
-        },
-        {
-          id: 1,
-          image:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg',
-          seller_name: '브랜디',
-          name: '옷옷옷옷',
-          discount_rate: 10,
-          price: 10000,
-          sales_amount: 1000000
-        },
-        {
-          id: 1,
-          image:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg',
-          seller_name: '브랜디',
-          name: '옷옷옷옷',
-          discount_rate: 10,
-          price: 10000,
-          sales_amount: 1000000
-        },
-        {
-          id: 1,
-          image:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg',
-          seller_name: '브랜디',
-          name: '옷옷옷옷',
-          discount_rate: 10,
-          price: 10000,
-          sales_amount: 1000000
-        },
-        {
-          id: 2,
-          image:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg',
-          seller_name: '브랜디',
-          name: '옷옷옷옷',
-          discount_rate: 10,
-          price: 10000,
-          sales_amount: 1000000
-        },
-        {
-          id: 2,
-          image:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg',
-          seller_name: '브랜디',
-          name: '옷옷옷옷',
-          discount_rate: 10,
-          price: 10000,
-          sales_amount: 1000000
-        },
-        {
-          id: 2,
-          image:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg',
-          seller_name: '브랜디',
-          name: '옷옷옷옷',
-          discount_rate: 10,
-          price: 10000,
-          sales_amount: 1000000
-        },
-        {
-          id: 1,
-          image:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg',
-          seller_name: '브랜디',
-          name: '옷옷옷옷',
-          discount_rate: 10,
-          price: 10000,
-          sales_amount: 1000000
-        },
-        {
-          id: 2,
-          image:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg',
-          seller_name: '브랜디',
-          name: '옷옷옷옷',
-          discount_rate: 10,
-          price: 10000,
-          sales_amount: 1000000
-        },
-        {
-          id: 1,
-          image:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg',
-          seller_name: '브랜디',
-          name: '옷옷옷옷',
-          discount_rate: 10,
-          price: 10000,
-          sales_amount: 1000000
-        },
-        {
-          id: 1,
-          image:
-            'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg',
-          seller_name: '브랜디',
-          name: '옷옷옷옷',
-          discount_rate: 10,
-          price: 10000,
-          sales_amount: 1000000
-        }
-      ],
       ClassifyActive: false,
       FilterdData: [],
       classifyNum: 1,
-      EventDetailData: [
-        {
-          products: [{}, {}, {}],
-          buttons: [{}, {}],
-          youtube: [{}],
-          MainImage: 'bdfasdfadfs'
-        }
-      ]
+      buttonData: [],
+      productData: [],
+      offset: 0,
+      buttonActive: false
     };
   },
   created() {
-    // this.doFetch();
-    this.filterBrand(this.classifyNum);
-    this.ButtonTypeProductData.map(el => ({ ...el, active: true }));
-    this.fetchingById();
+    window.addEventListener('click', this.checkfucntion);
+    this.fetchButton();
   },
+
   methods: {
-    fetchingById() {
-      // 10.251.1.134:5000/api/events/detail?id=1
+    checkfucntion() {
+      console.log('ButtonData', JSON.parse(JSON.stringify(this.buttonData)));
+      console.log('ProductData', this.productData);
+      console.log('makeclassify', this.buttonData);
+      console.log(
+        `http://10.251.1.134:5000/api/events/detail?id=${this.$route.params.getid}&limit=30&offset=0`
+      );
+    },
+
+    fetchButton() {
       axios
-        // .get(`http://10.251.1.134:5000/api/events/detail?id=${this.getid}`, {})
-        .get(`http://10.251.1.134:5000/api/events/detail?id=1`, {})
-        .then(res => console.log(res.data.data));
+        .get(
+          `http://10.251.1.134:5000/api/events/detail?id=${this.$route.params.getid}`,
+          {}
+        )
+        .then(res => {
+          res.data === null || res.data === undefined
+            ? (this.buttonData = [])
+            : (this.buttonData = res.data);
+
+          res.data['event_button'] === 0
+            ? (this.classifyNum = 0)
+            : (this.classifyNum = this.buttonData.event_button[0]['button_id']);
+          this.filterBrand(this.classifyNum);
+        });
+    },
+
+    fetchProduct() {
+      axios
+        .get(
+          `http://10.251.1.134:5000/api/events/products?id=${this.$route.params.getid}&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`,
+          {}
+        )
+        .then(res => (this.productData = res.data['event_product']));
+
+      console.log(
+        `http://10.251.1.134:5000/api/events/products?id=${this.$route.params.getid}&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`
+      );
+    },
+    getMoreData() {
+      axios
+        .get(
+          `http://10.251.1.134:5000/api/events/products?id=${this.$route.params.getid}&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`,
+          {}
+        )
+        .then(
+          res =>
+            (this.productData = this.productData.concat(
+              res.data['event_product']
+            ))
+        );
+      console.log(
+        `http://10.251.1.134:5000/api/events/products?id=1&button_id=${this.classifyNum}&limit=30&offset=${this.offset}`
+      );
+    },
+    plusButtonActive() {
+      this.offset = this.offset + 10;
+      if (this.offset >= 30) {
+        this.offset = 0;
+        return (this.buttonActive = true);
+      } else if (this.offset < 30) {
+        this.buttonActive = false;
+      }
+      this.getMoreData();
     },
 
     filterBrand(classify) {
-      this.classifyNum = classify;
-      console.log(classify);
+      classify === undefined || classify === null
+        ? (this.classifyNum = 0)
+        : (this.classifyNum = classify);
 
-      console.log(
-        (this.ButtonTypeProductData = this.ButtonTypeProductData.map(el => {
-          if (Number(el.id) === Number(this.classifyNum)) {
-            el, (el.active = true);
-          } else {
-            el, (el.active = false);
-          }
-          return el;
-        }))
-      );
+      this.offset = 0;
+      console.log(classify);
+      this.fetchProduct();
+      this.buttonActive = false;
     }
-    // doFetch() {
-    //   axios
-    //     .get(`${URL.PRODUCT_URL}/api/products/change_data`, {})
-    //     .then(res => (this.aaa = res));
-    // }
   }
 };
 </script>
@@ -248,6 +189,7 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: 60px;
 
   .text-title {
     margin-bottom: 8px;

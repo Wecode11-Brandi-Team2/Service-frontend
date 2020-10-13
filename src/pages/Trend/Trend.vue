@@ -24,7 +24,7 @@
         :product="product"
         :key="product.id"
         :id="index"
-        v-for="(product, index) in this.trendProductData.slice(0, -4)"
+        v-for="(product, index) in this.trendProductData"
       />
     </section>
   </div>

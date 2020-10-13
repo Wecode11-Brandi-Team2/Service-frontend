@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 베스트 -->
     <SlideProductCard />
     <div class="comment-wrapper">
       <span class="comment">베스트</span>
@@ -50,15 +51,14 @@
       </section>
     </section>
 
-    <!-- 추천스토어 -->
-
+    <!-- 카테고리별 분류 -->
     <section class="recommend-seller">
       <div class="comment-wrapper">
         <span class="comment">추천스토어</span>
         <div class="more-button">
           <router-link
             class="more-button-comment"
-            to="/category/brand/total/total"
+            to="/category/beauty/total/total"
             >더보기</router-link
           >
           <svg class="direction" viewBox="0 0 10px 10px" role="presentation">
@@ -78,12 +78,13 @@
           class="numbering-wrapper"
           v-for="(PRODUCT, index) in beautyProduct['brand_items']"
         >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
           <ProductCard :product="PRODUCT" />
         </div>
         <div class="line" />
       </section>
     </section>
+    <!--제품카테고리별 분류 -->
+    <!-- http://localhost:8080/category/beauty/26/total -->
 
     <section
       class="recommend-seller"
@@ -95,7 +96,7 @@
         <div class="more-button">
           <router-link
             class="more-button-comment"
-            to="/category/brand/total/total"
+            :to="`/category/beauty/${PRODUCT['category_id']}/total`"
             >더보기</router-link
           >
           <svg class="direction" viewBox="0 0 10px 10px" role="presentation">

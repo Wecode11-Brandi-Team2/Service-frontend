@@ -17,7 +17,7 @@
     <section class="event-contents-wrapper">
       <router-link
         class=""
-        :to="`/buttontype/${event.id}`"
+        :to="`/event/${event.id}`"
         :key="event.id"
         v-for="event of eventData"
       >
@@ -25,9 +25,7 @@
           v-bind:style="{
             'background-image': 'url(' + event.banner_image + ')'
           }"
-        >
-          <!-- <img alt="eventBanner" :src="event.banner_image" /> -->
-        </div>
+        ></div>
       </router-link>
     </section>
     <div
@@ -50,63 +48,11 @@ export default {
   data() {
     return {
       eventData: [],
-      // eventData: [
-      //   {
-      //     id: 1,
-      //     src:
-      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-      //   },
-      //   {
-      //     id: 2,
-      //     src:
-      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-      //   },
-      //   {
-      //     id: 3,
-      //     src:
-      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-      //   },
-      //   {
-      //     id: 4,
-      //     src:
-      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-      //   },
-      //   {
-      //     id: 5,
-      //     src:
-      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-      //   },
-      //   {
-      //     id: 6,
-      //     src:
-      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-      //   },
-      //   {
-      //     id: 7,
-      //     src:
-      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-      //   },
-      //   {
-      //     id: 8,
-      //     src:
-      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-      //   },
-      //   {
-      //     id: 9,
-      //     src:
-      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-      //   },
-      //   {
-      //     id: 10,
-      //     src:
-      //       'https://image.brandi.me/eventTest/2020/10/05/1601876594_banner.jpg'
-      //   }
-      // ],
       eventNavData: [
-        { id: 0, name: '진행중' },
-        { id: 1, name: '종료' }
+        { id: 1, name: '진행중' },
+        { id: 0, name: '종료' }
       ],
-      navStatus: 0,
+      navStatus: 1,
       dataOffSet: 0,
       buttonActive: true
     };
@@ -135,11 +81,10 @@ export default {
       console.log(this.buttonActive);
       this.fetchData();
     },
-
     fetchData() {
       axios
         .get(
-          `http://10.251.1.134:5000/api/events?is_deleted=${this.navStatus}&limit=10&offset=${this.dataOffSet}`,
+          `http://10.251.1.134:5000/api/events?is_displayed=${this.navStatus}&limit=10&offset=${this.dataOffSet}`,
           {}
         )
         .then(res => {

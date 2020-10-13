@@ -40,7 +40,7 @@
           :index="index"
         />
       </div>
-      <div class="more-pagination-container">
+      <div class="more-pagination-container" @click="getMoreData">
         <button class="more-btn">더보기</button>
       </div>
     </div>
@@ -86,12 +86,20 @@ export default {
       activeTab: 4,
       activeArrange: '추천순',
       isArrangeDropdown: false,
-      select: 0
+      select: 0,
+      offset: 0
     };
   },
+  created: function() {
+    this.doFetch();
+    window.addEventListener('click', this.checkfunction);
+  },
+  mounted() {},
   methods: {
     setActiveTab(idx) {
       this.activeTab = idx;
+      this.storeLists = [];
+      this.offset = 0;
       this.doFetch();
     },
     checkfunction() {
@@ -101,25 +109,41 @@ export default {
       this.isArrangeDropdown = !this.isArrangeDropdown;
       this.activeArrange = list.order;
       this.select = list.id;
-      this.doFetch();
+      // this.storeLists = [];
+      this.filteringFetch();
     },
     doFetch() {
       axios
         .get(
-          `${URL.PRODUCT_URL}/api/products/seller?main_category_id=${this.activeTab}&select=${this.select}`,
+          `${URL.PRODUCT_URL}/api/products/seller?main_category_id=${this.activeTab}&select=${this.select}&limit=20&offset=${this.offset}`,
+          {}
+        )
+        .then(res => (this.storeLists = this.storeLists.concat(res.data)));
+
+      console.log(
+        `${URL.PRODUCT_URL}/api/products/seller?main_category_id=${this.activeTab}&select=${this.select}&limit=20&offset=${this.offset}`
+      );
+    },
+    filteringFetch() {
+      axios
+        .get(
+          `${URL.PRODUCT_URL}/api/products/seller?main_category_id=${this.activeTab}&select=${this.select}&limit=20&offset=${this.offset}`,
           {}
         )
         .then(res => (this.storeLists = res.data));
-      console.log('doFetch');
-    }
-  },
 
-  created: function() {
-    this.doFetch();
-    window.addEventListener('click', this.checkfunction);
-  },
-  mounted() {
-    console.log('HELLO', this.storeLists);
+      console.log(
+        `${URL.PRODUCT_URL}/api/products/seller?main_category_id=${this.activeTab}&select=${this.select}&limit=20&offset=${this.offset}`
+      );
+    },
+
+    getMoreData() {
+      this.offset = this.offset + 20;
+      if (this.offset >= 40) {
+        return (this.buttonActive = false);
+      }
+      this.doFetch();
+    }
   }
 };
 </script>

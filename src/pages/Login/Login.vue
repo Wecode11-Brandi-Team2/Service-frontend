@@ -74,7 +74,7 @@ export default {
         .post(`${URL.LOGIN_URL}/api/user/googleLogin`, {
           access_token: googleUser.wc.access_token
         })
-        .then(console.log('GOOGLE', googleUser.wc.access_token))
+        .then(console.log('GOOGLE', googleUser.wc))
         .then(googleUser => {
           this.login(googleUser.data.access_token);
           console.log('LoginSuccess', googleUser);

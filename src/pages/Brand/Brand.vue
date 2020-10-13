@@ -70,6 +70,7 @@
           </svg>
         </div>
       </div>
+      <!--베스트 상품 -->
       <section class="product-section">
         <div
           :index="index"
@@ -77,13 +78,12 @@
           class="numbering-wrapper"
           v-for="(PRODUCT, index) in brandProduct['best_items']"
         >
-          <!-- <span class="ranking-number">{{ index + 1 }}</span> -->
           <ProductCard :product="PRODUCT" />
         </div>
         <div class="line" />
       </section>
     </section>
-
+    <!--카테고리별 아이템 -->
     <section
       class="recommend-seller"
       :key="PRODUCT.id + 'lala' + index"
@@ -94,7 +94,7 @@
         <div class="more-button">
           <router-link
             class="more-button-comment"
-            to="/category/brand/total/total"
+            :to="`/category/brand/${PRODUCT['category_id']}/total`"
             >더보기</router-link
           >
           <svg class="direction" viewBox="0 0 10px 10px" role="presentation">

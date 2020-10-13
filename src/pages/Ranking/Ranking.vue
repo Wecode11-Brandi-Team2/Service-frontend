@@ -148,6 +148,7 @@
             :key="product"
             v-for="product of productData"
           />
+          <div>{{ productLength }}</div>
         </section>
       </div>
     </div>
@@ -925,7 +926,11 @@ export default {
     //   .get(`${URL.PRODUCT_URL}/api/products`)
     //   .then(res => (this.productData = res.data.products));
   },
-  computed: {},
+  computed: {
+    // productLength() {
+    //   return this.productData.length < 1 ? 'no-result' : 'hidden';
+    // }
+  },
 
   mounted() {
     this.navData = this.navData.filter(el => el[Object.keys(el)[1]].length > 0);
@@ -1074,6 +1079,7 @@ export default {
       width: 130px;
       height: 25px;
       span {
+        background-color: white;
         display: block;
         border: 1px solid #e7e7e7;
         width: 130px;
@@ -1307,7 +1313,7 @@ label {
 }
 .product-section {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
   padding: 0 3%;
   .main-product {

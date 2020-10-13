@@ -47,7 +47,7 @@
             <div class="category-key">
               <div
                 class="category-title"
-                :key="String(Object.keys(MODAL)[1]) + 'divtag'"
+                :key="[Object.keys(MODAL)] + 'divtag'"
                 v-for="MODAL in this.filteredData"
                 @click="changeModalActive"
               >
@@ -93,7 +93,7 @@
                     ]"
                     class="detail-key"
                     v-for="Item of MODAL[Object.keys(MODAL)[1]]"
-                    :key="String(Item['id']) + 'likey'"
+                    :key="String(Item['name']) + 'likey'"
                   >
                     <router-link
                       :to="
@@ -133,7 +133,7 @@
             <div :class="[filterActive ? 'filter-sample' : 'hidden']">
               <span
                 v-for="value of filteringValue"
-                :key="value.name"
+                :key="value.id + 'forkey'"
                 :newkey="value.id"
                 @click="filterValueChange"
               >
@@ -145,13 +145,12 @@
         <section class="product-section">
           <ProductCard
             :product="product"
-            :key="product"
+            :key="product.id"
             v-for="product of productData"
           />
         </section>
       </div>
     </div>
-    <Spinner />
   </div>
 </template>
 
@@ -279,7 +278,10 @@ export default {
 
     makeFetchData() {
       let ChangeURL = `${URL.PRODUCT_URL}/api/products?`;
-      if (this.$route.params.title != 'total') {
+      if (
+        this.$route.params.title != 'total' &&
+        this.$route.params.title != undefined
+      ) {
         ChangeURL =
           ChangeURL + '&' + `first_category_id=${this.$route.params.title}`;
       }
@@ -293,7 +295,11 @@ export default {
       if (this.dropDownFilterValue != 0) {
         ChangeURL = ChangeURL + '&' + `select=${this.dropDownFilterValue}`;
       }
-      if (this.titles.title['id'] != 0 && this.allStatus === 1) {
+      if (
+        this.titles.title['id'] != 0 &&
+        this.allStatus === 1 &&
+        this.titles.title['id'] != undefined
+      ) {
         ChangeURL =
           ChangeURL +
           '&' +
@@ -538,9 +544,9 @@ label {
 .category-option {
   height: 60px;
   margin: 0px;
-  padding: 0;
 
   span {
+    display: block;
     color: #1e1e1e;
     font-size: 18px;
     font-weight: 600;
@@ -623,7 +629,7 @@ label {
 }
 .product-section {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: wrap;
   padding: 0 3%;
   .main-product {

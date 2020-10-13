@@ -183,19 +183,30 @@ export default {
       ],
       ClassifyActive: false,
       FilterdData: [],
-      classifyNum: 1
+      classifyNum: 1,
+      EventDetailData: [
+        {
+          products: [{}, {}, {}],
+          buttons: [{}, {}],
+          youtube: [{}],
+          MainImage: 'bdfasdfadfs'
+        }
+      ]
     };
   },
   created() {
-    this.doFetch();
+    // this.doFetch();
     this.filterBrand(this.classifyNum);
     this.ButtonTypeProductData.map(el => ({ ...el, active: true }));
+    this.fetchingById();
   },
   methods: {
     fetchingById() {
+      // 10.251.1.134:5000/api/events/detail?id=1
       axios
-        .get(`${URL.PRODUT_URL}/api/products/event_id=${this.getid}`, {})
-        .then(res => console.log(res));
+        // .get(`http://10.251.1.134:5000/api/events/detail?id=${this.getid}`, {})
+        .get(`http://10.251.1.134:5000/api/events/detail?id=1`, {})
+        .then(res => console.log(res.data.data));
     },
 
     filterBrand(classify) {
@@ -212,12 +223,12 @@ export default {
           return el;
         }))
       );
-    },
-    doFetch() {
-      axios
-        .get(`${URL.PRODUCT_URL}/api/products/change_data`, {})
-        .then(res => (this.aaa = res));
     }
+    // doFetch() {
+    //   axios
+    //     .get(`${URL.PRODUCT_URL}/api/products/change_data`, {})
+    //     .then(res => (this.aaa = res));
+    // }
   }
 };
 </script>

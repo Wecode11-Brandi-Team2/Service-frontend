@@ -7,7 +7,7 @@
       <section class="product-section">
         <ProductCard
           :product="product"
-          :key="product"
+          :key="product.id + 'key'"
           v-for="product of productData.slice(0, 26)"
         />
       </section>
@@ -15,7 +15,7 @@
       <section class="product-section">
         <ProductCard
           :product="product"
-          :key="product"
+          :key="product.id + 'key'"
           v-for="product of productData.slice(27, 52)"
         />
       </section>
@@ -23,7 +23,7 @@
       <section class="product-section">
         <ProductCard
           :product="product"
-          :key="product"
+          :key="product.id + 'thirdKey'"
           v-for="product of productData.slice(53, -2)"
         />
       </section>

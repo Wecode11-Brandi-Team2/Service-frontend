@@ -31,7 +31,7 @@
           :id="imageData[imageData.length - 1].id"
         >
           <router-link
-            :to="`/buttontype${imageData[imageData.length - 1].id}`"
+            :to="`/event/${imageData[imageData.length - 1].id}`"
             class="slider-link"
           >
             <img
@@ -48,7 +48,7 @@
           v-for="data of imageData"
           :id="data.id"
         >
-          <router-link :to="`/buttontype/${data.id}`" class="slider-link">
+          <router-link :to="`/event/${data.id}`" class="slider-link">
             <img
               :src="data.banner_image"
               :style="{ width: onePhotoWidth, height: `${sliderHeight}` }"
@@ -61,10 +61,7 @@
           class="slider-card"
           :id="[imageData[0].id]"
         >
-          <router-link
-            :to="`/buttontype/${imageData[0].id}`"
-            class="slider-link"
-          >
+          <router-link :to="`/event/${imageData[0].id}`" class="slider-link">
             <img
               :src="imageData[0].banner_image"
               :style="{ width: onePhotoWidth, height: `${sliderHeight}` }"
@@ -102,83 +99,12 @@ export default {
     return {
       sliderHeight: Math.ceil(document.documentElement.clientWidth / 3.92),
       onePhotoWidth: document.documentElement.clientWidth,
-      // imageData: [
-      //   {
-      //     id: '1',
-      //     src:
-      //       'https://image.brandi.me/home/banner/bannerImage_193302_1601517502.jpg'
-      //   },
-      //   {
-      //     id: '2',
-      //     src:
-      //       'https://image.brandi.me/home/banner/bannerImage_193507_1601517624.jpg'
-      //   },
-      //   {
-      //     id: '3',
-      //     src:
-      //       'https://image.brandi.me/home/banner/bannerImage_193059_1601348483.jpg'
-      //   },
-      //   {
-      //     id: '4',
-      //     src:
-      //       'https://image.brandi.me/home/banner/bannerImage_1_1601344943.jpg'
-      //   },
-      //   {
-      //     id: '5',
-      //     src:
-      //       'https://image.brandi.me/home/banner/bannerImage_193375_1601517602.jpg'
-      //   },
-      //   {
-      //     id: '6',
-      //     src: 'http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg'
-      //   },
-      //   {
-      //     id: '7',
-      //     src: 'http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg'
-      //   },
-      //   {
-      //     id: '8',
-      //     src: 'http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg'
-      //   },
-      //   {
-      //     id: '9',
-      //     src: 'http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg'
-      //   },
-      //   {
-      //     id: '10',
-      //     src:
-      //       'http://image.brandi.me/home/banner/bannerImage_159860_1593396179.jpg'
-      //   },
-      //   {
-      //     id: '11',
-      //     src: 'http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg'
-      //   },
-      //   {
-      //     id: '12',
-      //     src: 'http://image.brandi.me/home/banner/bannerImage_2_1591345434.jpg'
-      //   },
-      //   {
-      //     id: '13',
-      //     src:
-      //       'http://image.brandi.me/home/banner/bannerImage_159860_1593396179.jpg'
-      //   },
-      //   {
-      //     id: '14',
-      //     src:
-      //       'https://image.brandi.me/home/banner/bannerImage_193375_1601517602.jpg'
-      //   }
-      // ],
       imageData: [],
       picCount: 1,
       sliding: null,
       stopSignal: false,
       dragStartPoint: 0,
-      dragEndPoint: 0,
-      dragging: 0,
       dragSignal: false,
-      posX1: 0,
-      posX2: 0,
-      posFinal: 0,
       diff: 0,
       dragClientX: 0,
       ghostImage: {
@@ -189,10 +115,7 @@ export default {
   },
 
   mounted() {
-    // let img = new Image();
-    // img.src = this.ghostImage.src;
     window.addEventListener('resize', this.widthCheckFunction);
-    // document.dataTransfer.setDragImage(img, 0, 0);
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.widthCheckFunction);
@@ -215,16 +138,13 @@ export default {
     getSlideData() {
       axios
         .get(
-          'http://10.251.1.134:5000/api/events?is_deleted=0&limit=14&offset=0',
+          'http://10.251.1.134:5000/api/events?is_displayed=1&limit=14&offset=0',
           {}
         )
         .then(res => (this.imageData = res.data.data));
     },
     dragStart(e) {
       this.deleteGhostImg(e);
-      // let img = new Image();
-      // img.src = this.ghostImage.src;
-      // e.dataTransfer.setDragImage(img, 0, 0);
 
       this.dragSignal = false;
       this.dragStartPoint = e.clientX;
@@ -232,10 +152,6 @@ export default {
 
     draging(e) {
       this.deleteGhostImg(e);
-
-      // let img = new Image();
-      // img.src = this.ghostImage.src;
-      // e.dataTransfer.setDragImage(img, 0, 0);
 
       if (e.clientX != 0 && e.clientX <= this.onePhotoWidth) {
         this.diff =
@@ -259,9 +175,6 @@ export default {
       if (this.dragSignal != true && e.clientX == 0) {
         return;
       }
-      // let img = new Image();
-      // img.src = this.ghostImage.src;
-      // e.dataTransfer.setDragImage(img, 0, 0);
       this.dragSignal = false;
 
       if (this.dragStartPoint - this.dragClientX >= this.onePhotoWidth / 3) {

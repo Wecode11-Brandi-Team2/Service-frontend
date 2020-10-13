@@ -151,7 +151,7 @@ export const router = new VueRouter({
       component: Event
     },
     {
-      path: '/buttontype/:getid?',
+      path: '/event/:getid?',
       name: 'ButtonType',
       component: ButtonType,
       props: true

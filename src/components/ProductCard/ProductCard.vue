@@ -31,7 +31,14 @@
         >
       </li>
       <li>
-        <span class="count">{{ count }}개 구매 중</span>
+        <span
+          :class="[
+            product.count == undefined || product.count == null
+              ? 'hidden'
+              : 'count'
+          ]"
+          >{{ count }}개 구매 중</span
+        >
       </li>
       <li></li>
     </ul>

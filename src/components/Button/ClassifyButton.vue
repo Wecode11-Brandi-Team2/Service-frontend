@@ -1,13 +1,13 @@
 <template>
   <div
     :class="[
-      classify.id === classifyNum
+      classify['button_id'] === classifyNum
         ? 'ClassifyButton-hover'
         : 'ClassifyButton-not-hover'
     ]"
-    @click="filterBrand(classify.id)"
+    @click="filterBrand(classify['button_id'])"
   >
-    <span>{{ classify.name }}</span>
+    <span>상품{{ classify['button_id'] }}</span>
   </div>
 </template>
 <script>

@@ -1,4 +1,3 @@
-<!-- 주문취소 페이지 -->
 <template>
   <div class="refund">
     <div class="page-title">
@@ -7,8 +6,8 @@
     <div class="page-frame">
       <h2 class="order-detail-info">
         <div>
-          {{ orderInfo.orderDate }}<span class="divider">I</span
-          >{{ orderInfo.orderNumber }}
+          {{ createdAt }}<span class="divider">I</span
+          >{{ cancelItemInfo.order_detail_id }}
         </div>
         <a class="order-detail-button"
           >주문상세보기<img
@@ -20,7 +19,7 @@
       <div class="ordered-item">
         <div class="shop-info">
           <div class="shop-name">
-            <a>{{ orderInfo.shopName }}</a>
+            <a>{{ cancelItemInfo.sellerName }}</a>
           </div>
           <div class="empty"></div>
           <div class="data">주문금액</div>
@@ -28,28 +27,24 @@
         </div>
         <div class="order-info">
           <div class="image">
-            <a class="item-image">
-              <img
-                src="https://image.brandi.me/cproduct/2020/04/28/15899675_1588044782_image1_L.jpg"
-            /></a>
+            <a class="item-image"> <img :src="cancelItemInfo.main_img"/></a>
           </div>
           <div class="orderinfo-box">
             <div class="item-name">
-              <a>{{ orderInfo.itemName }}</a>
+              <a>{{ cancelItemInfo.name }}</a>
             </div>
-            <div class="order-data">{{ orderInfo.itemInfo }}</div>
-            <div class="order-data">{{ orderInfo.amount }} 개</div>
+            <div class="order-data">{{ cancelItemInfo.units }} 개</div>
           </div>
           <div class="data1-wrapper">
-            <div class="data1">{{ orderInfo.price }} 원</div>
-            <div class="data1">{{ orderInfo.status }}</div>
+            <div class="data1">{{ cancelItemInfo.price }} 원</div>
+            <div class="data1">{{ getShipStatus() }}</div>
           </div>
         </div>
       </div>
       <h2 class="refund-info">주문 취소 정보</h2>
       <div class="refund-info-box">
         <div class="refund-info-title">총 주문취소금액</div>
-        <div class="amount">{{ orderInfo.price }}원</div>
+        <div class="amount">{{ cancelItemInfo.total_payment }}원</div>
       </div>
       <div class="btn-wrapper">
         <button @click="requestCancel" class="refund-btn">
@@ -63,6 +58,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import axios from 'axios';
+import URL from '../../../src/assets/mock/URL.js';
 
 const myPageStore = 'myPageStore';
 export default {
@@ -74,35 +70,22 @@ export default {
       return this.products;
     }
   },
-  // created() {
-  //   window.addEventListener('click', this.checkFunction);
-  // },
-  mounted() {
-    this.productsData = this.products.product;
-    console.log('storeCheck', this.productsData);
+  created() {
+    let cancelData = JSON.parse(localStorage.getItem('cancel_data'));
+    this.cancelItemInfo = cancelData;
+    this.convertDate(this.cancelItemInfo.created_at);
   },
+
+  beforeDestroy() {
+    localStorage.removeItem('cancel_data');
+  },
+
   data() {
     return {
+      cancelItemInfo: {},
       productsData: {},
       selected: '선택하신 주문을 취소하시겠습니까?',
-      orderInfo: {
-        orderDate: '2020.09.24',
-        orderNumber: 202020202020,
-        shopName: '밀리',
-        itemName: '윈드 아노락 세트',
-        itemInfo: '아이보리',
-        amount: 3,
-        price: 910,
-        status: '배송중'
-      },
-      options: [
-        { id: 0, text: '단순변심', value: 'option1' },
-        { id: 1, text: '상품불량', value: 'option2' },
-        { id: 2, text: '오배송', value: 'option3' },
-        { id: 3, text: '교환요청', value: 'option4' },
-        { id: 4, text: '일부상품누락', value: 'option5' },
-        { id: 5, text: '기타', value: 'option6' }
-      ]
+      createdAt: 0
     };
   },
 
@@ -110,8 +93,8 @@ export default {
     fetchData() {
       axios
         .post(
-          'http://10.251.1.113:5000/api/order/cancel',
-          { order_detail_id: '202010050784' },
+          `${URL.LOGIN_URL}/api/order/cancel`,
+          { order_detail_id: this.cancelItemInfo.order_detail_id },
           {
             headers: {
               Authorization: localStorage.getItem('access_token')
@@ -126,15 +109,39 @@ export default {
       if (this.selected === '선택하신 주문을 취소하시겠습니까?') {
         if (answer === true) {
           alert('주문 취소가 완료되었습니다.');
-          this.$router.push('/');
+          this.$router.push('/mypage');
         }
       }
       this.fetchData();
+    },
+
+    getShipStatus() {
+      let statusOfShip = this.cancelItemInfo.order_status_id;
+      if (statusOfShip === 1) {
+        return '결제완료';
+      }
+      if (statusOfShip === 2) {
+        return '상품준비';
+      }
+      if (statusOfShip === 3) {
+        return '배송중';
+      }
+      if (statusOfShip === 4) {
+        return '배송완료';
+      }
+    },
+
+    convertDate(date) {
+      const fulldate = date;
+      const convert = new Date(fulldate);
+      const year = convert.getFullYear();
+      const month = convert.getMonth() + 1;
+      let day = convert.getDate();
+      if (day < 10) {
+        day = '0' + day;
+      }
+      this.createdAt = `${year}.${month}.${day}`;
     }
-    // checkFunction() {
-    //   console.log('productsData', this.productsData);
-    //   console.log('products', this.products.product);
-    // }
   }
 };
 </script>
@@ -255,53 +262,6 @@ export default {
       .divider {
         font-size: 26px;
         margin: 0 8px;
-      }
-    }
-    .select-reason {
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid #bdbdbd;
-
-      .reason {
-        display: flex;
-        align-items: center;
-        width: 252px;
-        height: 70px;
-        padding: 10px 15px;
-        font-weight: 700;
-      }
-      .select {
-        width: 978px;
-      }
-      .select > select {
-        padding: 13px;
-        background: #f5f5f5;
-        color: #8d8d8d;
-        border: none;
-        font-size: 0.9em;
-        margin: 3px 0px;
-        outline: none;
-      }
-      .textarea-wrapper {
-        padding: 10px 0;
-        display: flex;
-        align-items: center;
-        background: white;
-        color: #8d8d8d;
-        border: none;
-        font-size: 0.9em;
-        margin: 3px 0px;
-        height: 124px;
-
-        .text-area {
-          padding: 13px;
-          border: none;
-          background-color: #f5f5f5;
-          width: 952px;
-          height: 100px;
-          resize: none;
-          outline: none;
-        }
       }
     }
     .refund-info {

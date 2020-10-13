@@ -1,18 +1,26 @@
 <template>
   <div class="mypage-container">
     <MenuTab />
-    <OrderList
-      :productInfo="orderList"
-      v-for="orderList in myPageData"
-      :key="orderList.orderNumber"
-    ></OrderList>
+    <div v-if="showData">
+      <!-- 배송 상품 정보-->
+      <OrderList
+        :productInfo="orderList"
+        v-for="orderList in myPageData"
+        :key="orderList.orderNumber"
+      ></OrderList>
+    </div>
+    <!-- 주문한 상품이 없을 경우 -->
+    <div class="txt-wrapper">
+      <div class="no-data" v-if="noData">주문한 상품이 없습니다.</div>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import URL from '../../assets/mock/URL.js';
 import MenuTab from './MenuTab.vue';
 import OrderList from './OrderList.vue';
-import axios from 'axios';
 
 export default {
   name: 'Mypage',
@@ -20,31 +28,45 @@ export default {
   data() {
     return {
       myPageData: [],
-      token: ''
+      token: '',
+      noData: false,
+      showData: true
     };
   },
+
   created() {
     axios
-      .get('http://10.251.1.113:5000/api/order/item', {
+      .get(`${URL.PRODUCT_URL}/api/order/item`, {
         headers: {
           Authorization: localStorage.getItem('access_token')
         }
       })
       .then(res => {
-        // console.log('res', res);
+        console.log('잘 왔나', res.data.data);
         this.myPageData = res.data.data;
-        // console.log('너냐', this.myPageData);
+        this.noData = false;
+        this.showData = true;
+      })
+      .catch(error => {
+        if (error.response.status === 400) {
+          this.noData = true;
+          this.showData = false;
+        }
       });
-
-    console.log(this.data);
-
-    // document.addEventListener('click', this.checkfucntion);
   }
-
-  // methods: {
-  //   checkfucntion() {
-  //     console.log(this.data);
-  //   }
-  // }
 };
 </script>
+
+<style scoped lang="scss">
+@import '../../styles/common.scss';
+
+.txt-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 50px 0px;
+
+  .noData {
+    text-align: center;
+  }
+}
+</style>

@@ -13,15 +13,17 @@
       <div class="refund-detail">
         <div class="wrapper">
           <div class="request-info">환불요청일</div>
-          <div class="request-data">{{ refundInfo.date }}</div>
+          <div class="request-data">{{ getToday() }}</div>
         </div>
         <div class="wrapper">
           <div class="request-info">환불사유</div>
-          <div class="request-data">{{ refundInfo.reason }}</div>
+          <div class="request-data">{{ refundData.refundReason }}</div>
         </div>
         <div class="wrapper">
           <div class="estimated">환불예정금액</div>
-          <div class="amount">{{ refundInfo.amount }}원</div>
+          <div class="amount">
+            {{ refundData.totalPayment.toLocaleString() }}원
+          </div>
         </div>
       </div>
       <div class="information-box">
@@ -41,20 +43,39 @@
 </template>
 
 <script>
+import Refund from './Refund';
 export default {
+  name: 'RefundResult',
+  component: { Refund },
   data() {
     return {
-      refundInfo: {
-        date: '2020-09-26',
-        reason: '상품불량',
-        amount: 910
-      }
+      refundData: {}
     };
   },
+
+  beforeDestroy() {
+    localStorage.removeItem('refund_result_data');
+  },
+
   methods: {
+    getRefundData() {
+      this.refundData = JSON.parse(localStorage.getItem('refund_result_data'));
+    },
+
     moveToMypage() {
       this.$router.push('/mypage');
+    },
+
+    getToday() {
+      const date = new Date();
+      return (
+        date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+      );
     }
+  },
+
+  created() {
+    this.getRefundData();
   }
 };
 </script>

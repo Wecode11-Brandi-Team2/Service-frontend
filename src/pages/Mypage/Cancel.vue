@@ -1,4 +1,3 @@
-<!-- 주문취소 페이지 -->
 <template>
   <div class="refund">
     <div class="page-title">
@@ -72,7 +71,14 @@ export default {
     }
   },
   created() {
-    this.cancelItemInfo = this.$store.state.myPageStore.cancelItemData;
+    // this.cancelItemInfo = this.$store.state.myPageStore.cancelItemData;
+    let cancelData = JSON.parse(localStorage.getItem('cancel_data'));
+    this.cancelItemInfo = cancelData;
+    this.convertDate(this.cancelItemInfo.created_at);
+  },
+
+  beforeDestroy() {
+    localStorage.removeItem('cancel_data');
   },
 
   data() {
@@ -126,7 +132,7 @@ export default {
       }
     },
 
-    findDate(date) {
+    convertDate(date) {
       const fulldate = date;
       const convert = new Date(fulldate);
       const year = convert.getFullYear();

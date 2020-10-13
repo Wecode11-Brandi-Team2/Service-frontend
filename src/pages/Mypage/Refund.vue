@@ -112,7 +112,7 @@ export default {
     // this.refundItemInfo = this.$store.state.myPageStore.refundItemData;
     let refundData = JSON.parse(localStorage.getItem('refund_data'));
     this.refundItemInfo = refundData;
-    this.createdAt = this.refundItemInfo.created_at;
+    this.convertDate(this.refundItemInfo.created_at);
   },
 
   beforeDestroy() {
@@ -122,6 +122,7 @@ export default {
   data() {
     return {
       optionSelected: '',
+      createdAt: 0,
       refundItemInfo: {},
       productsData: {},
       selected: '사유를 선택하세요.',
@@ -140,7 +141,6 @@ export default {
 
   methods: {
     fetchData() {
-      console.log('확인');
       axios
         .post(
           `${URL.LOGIN_URL}/api/order/refund`,
@@ -157,7 +157,14 @@ export default {
         .then(res => console.log(res));
     },
 
-    findDate(date) {
+    changeOption($event) {
+      const options = event.target.options;
+      this.refundReasonId = options.selectedIndex;
+      // this.options.text = event.target.value;
+      this.refundReason = $event.target.value;
+    },
+
+    convertDate(date) {
       const fulldate = date;
       const convert = new Date(fulldate);
       const year = convert.getFullYear();
@@ -167,13 +174,6 @@ export default {
         day = '0' + day;
       }
       this.createdAt = `${year}.${month}.${day}`;
-    },
-
-    changeOption($event) {
-      const options = event.target.options;
-      this.refundReasonId = options.selectedIndex;
-      // this.options.text = event.target.value;
-      this.refundReason = $event.target.value;
     },
 
     requestRefund() {

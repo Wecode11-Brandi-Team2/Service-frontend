@@ -147,9 +147,12 @@ export default {
       }
     },
 
+    refresh() {
+      window.location.reload();
+    },
+
     request() {
       this.updateProducts({ product: { id: 11 } });
-      // console.log('제발', this.products.product);
 
       if (this.buttonTitle === '환불요청') {
         let answer = confirm('선택하신 주문을 환불하시겠습니까?');
@@ -164,14 +167,18 @@ export default {
       }
       if (this.buttonTitle === '주문취소') {
         let answer = confirm('선택하신 주문을 취소하시겠습니까?');
-        answer ? this.$router.push('Cancel') : '';
-        // console.log(this.productInfo);
+
+        if (answer) {
+          let cancelToLocal = JSON.stringify(this.productInfo);
+          localStorage.setItem('cancel_data', cancelToLocal);
+          this.$router.push('cancel');
+          // console.log(this.productInfo);
+        }
         this.$store.commit('myPageStore/CANCEL_ITEM', this.productInfo);
-      }
-      if (this.buttonTitle === '환불요청취소') {
-        // console.log('here', this.buttonTitle);
-        axios
-          .post(
+        if (this.buttonTitle === '환불요청취소') {
+          console.log('환불요청취소');
+          // console.log('here', this.buttonTitle);
+          axios.post(
             `${URL.LOGIN_URL}/api/order/refundCancel`,
             { order_detail_id: this.productInfo.order_detail_id },
             {
@@ -179,10 +186,11 @@ export default {
                 Authorization: localStorage.getItem('access_token')
               }
             }
-          )
-          .then(res => console.log(res));
-        let answer = confirm('환불 요청을 취소하시겠습니까?');
-        answer ? this.$router.push('myPage') : '';
+          );
+          let answer = confirm('환불 요청을 취소하시겠습니까?');
+          answer ? this.$router.push('myPage') : '';
+        }
+        // this.refresh();
       }
     }
   }

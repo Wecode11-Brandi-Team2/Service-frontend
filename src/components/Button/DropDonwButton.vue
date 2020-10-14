@@ -9,10 +9,9 @@
               ? 'reverse-direction transition'
               : 'direction transition'
           ]"
-          viewBox="0 0 10px 10px"
           role="presentation"
         >
-          <svg id="chevron-left" viewBox="0 0 10px 10px">
+          <svg id="chevron-left" viewBox="0 0 8.3 14.1">
             <polygon
               class="st0"
               points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "

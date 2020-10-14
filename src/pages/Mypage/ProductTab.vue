@@ -36,54 +36,27 @@
     </div>
     <div class="product-wrapper">
       <!-- 판매량순 start -->
-      <ul
+
+      <ProductCard
         class="product-card"
         v-for="item in products"
         v-show="!isNew"
+        :product="item"
         :key="item.id"
-      >
-        <li class="product-img">
-          <img :src="item.image" alt="product-image" />
-        </li>
-        <li class="seller">{{ item.seller_name }}</li>
-        <li class="title">{{ item.name }}</li>
-        <div class="price_wrapper">
-          <li :class="item.discount_rate === 0 ? 'hidden' : 'discount-rate'">
-            {{ item.discount_rate }}%&nbsp;
-          </li>
-          <li class="price">{{ item.discount_price.toLocaleString() }}</li>
-          <li :class="item.discount_rate > 0 ? 'discount-price' : 'hidden'">
-            {{ item.price.toLocaleString() }}
-          </li>
-        </div>
+      />
 
-        <li class="count">{{ item.sales_amount }}개 구매중</li>
-      </ul>
       <!-- 판매량순 end -->
-      <!-- 최신순 start -->
-      <ul
-        class="product-card"
-        v-for="(item, idx) in newData"
-        v-show="isNew"
-        :key="idx"
-      >
-        <li class="product-img">
-          <img :src="item.image" alt="product-image" />
-        </li>
-        <li class="seller">{{ item.seller_name }}</li>
-        <li class="title">{{ item.name }}</li>
-        <div class="price_wrapper">
-          <li :class="item.discount_rate === 0 ? 'hidden' : 'discount-rate'">
-            {{ item.discount_rate }}%&nbsp;
-          </li>
-          <li class="price">{{ item.discount_price.toLocaleString() }}</li>
-          <li :class="item.discount_rate > 0 ? 'discount-price' : 'hidden'">
-            {{ item.price.toLocaleString() }}
-          </li>
-        </div>
 
-        <li class="count">{{ item.sales_amount }}개 구매중</li>
-      </ul>
+      <!-- 최신순 start -->
+
+      <ProductCard
+        class="product-card"
+        v-for="(item, index) in newData"
+        v-show="isNew"
+        :product="item"
+        :key="index"
+      />
+
       <!-- 최신순 end -->
     </div>
     <div class="btn-wrapper" @click="getMoreData">
@@ -97,6 +70,7 @@
 <script>
 import SaleCheckButton from '../../components/Button/SaleCheckButton';
 import axios from 'axios';
+import ProductCard from '../../components/ProductCard/ProductCard';
 import URL from '../../assets/mock/URL.js';
 
 export default {
@@ -129,7 +103,8 @@ export default {
     };
   },
   components: {
-    SaleCheckButton
+    SaleCheckButton,
+    ProductCard
   },
 
   methods: {
@@ -252,78 +227,9 @@ export default {
   }
   .product-wrapper {
     display: flex;
+    justify-content: flex-start;
     flex-wrap: wrap;
-
-    .product-card {
-      margin-left: 0px;
-      width: 20%;
-      padding: 0 0.5% 30px 0.5%;
-      box-sizing: border-box;
-      overflow: hidden;
-      height: auto;
-      margin: 0;
-      cursor: pointer;
-
-      .product-img img {
-        width: 100%;
-        max-height: 254px;
-        min-height: 254px;
-      }
-
-      .seller {
-        margin-top: 8px;
-        letter-spacing: 0;
-        padding: 0;
-        font-size: 16px;
-        color: #4a4a4a;
-      }
-
-      .title {
-        padding: 0;
-        font-size: 16px;
-        font-weight: 500;
-        padding-top: 5px;
-        width: 95%;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-
-      .price_wrapper {
-        display: flex;
-        align-items: center;
-        font-weight: bold;
-        font-size: 1.2em;
-
-        .discount-rate {
-          color: #ff204b;
-        }
-
-        .discount-price {
-          color: #757575;
-          padding: 5px 0 0 6px;
-          font-weight: 500;
-          font-size: 16px;
-          text-decoration: line-through;
-        }
-
-        .hidden {
-          display: none;
-        }
-
-        .price {
-          line-height: 25px;
-          padding: 0;
-          font-size: 21px;
-          font-weight: 800;
-        }
-      }
-      .count {
-        margin-top: 10px;
-        font-size: 14px;
-        color: #757575;
-        padding: 0;
-      }
-    }
+    margin: 0 auto;
   }
   .btn-wrapper {
     display: flex;

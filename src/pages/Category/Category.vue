@@ -59,10 +59,9 @@
                         ? 'reverse-direction transition'
                         : 'direction transition'
                     ]"
-                    viewBox="0 0 10px 10px"
                     role="presentation"
                   >
-                    <svg id="chevron-left" viewBox="0 0 10px 10px">
+                    <svg id="chevron-left" viewBox="0 0 8.3 14.1">
                       <polygon
                         class="st0"
                         points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
@@ -122,10 +121,9 @@
                     ? 'reverse-direction transition'
                     : 'direction transition'
                 ]"
-                viewBox="0 0 10px 10px"
                 role="presentation"
               >
-                <svg id="chevron-left" viewBox="0 0 10px 10px">
+                <svg id="chevron-left" viewBox="0 0 8.3 14.1">
                   <polygon
                     class="st0"
                     points="1.3,14.1 0,12.8 5.8,7 0,1.3 1.3,0 8.3,7  "
@@ -474,8 +472,8 @@ label {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 8.3;
-  height: 14.1;
+  width: 8.3px;
+  height: 14.1px;
   margin-right: 5px;
   transform: rotate(90deg);
 }
@@ -484,8 +482,8 @@ label {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 8.3;
-  height: 14.1;
+  width: 8.3px;
+  height: 14.1px;
   margin-right: 5px;
   transform: rotate(270deg);
 }

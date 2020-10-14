@@ -28,7 +28,7 @@
         <div
           :style="{ width: onePhotoWidth, height: `${sliderHeight}` }"
           class="slider-card"
-          :id="imageData[imageData.length - 1].id"
+          :id="imageData && imageData[imageData.length - 1].id"
         >
           <router-link
             :to="`/event/${imageData[imageData.length - 1].id}`"
@@ -45,7 +45,7 @@
           :style="{ width: onePhotoWidth, height: `${sliderHeight}` }"
           class="slider-card"
           :key="data.id"
-          v-for="data of imageData"
+          v-for="data of imageData && imageData"
           :id="data.id"
         >
           <router-link :to="`/event/${data.id}`" class="slider-link">
@@ -61,7 +61,10 @@
           class="slider-card"
           :id="[imageData[0].id]"
         >
-          <router-link :to="`/event/${imageData[0].id}`" class="slider-link">
+          <router-link
+            :to="`/event/${imageData && imageData[0].id}`"
+            class="slider-link"
+          >
             <img
               :src="imageData[0].banner_image"
               :style="{ width: onePhotoWidth, height: `${sliderHeight}` }"
@@ -85,7 +88,7 @@
         ]"
         :key="dot.id + 'dot'"
         v-for="(dot, index) of imageData"
-        @click="goSlide(index)"
+        @click="goSlide(index + 1)"
       ></span>
     </div>
   </section>
@@ -127,11 +130,9 @@ export default {
     this.getSlideData();
   },
 
-  // watch() {
-  //   this.dragEnd();
-  // },
   methods: {
     deleteGhostImg(e) {
+      if (e === undefined || e.dataTransfer === undefined) return;
       let img = new Image();
       img.src = this.ghostImage.src;
       e.dataTransfer.setDragImage(img, 0, 0);
@@ -270,6 +271,8 @@ export default {
       console.log('id', id);
       console.log('picCount', this.picCount);
       this.picCount = Number(id);
+      let slideList = document.querySelector('.slider-swiper');
+      slideList.style.transition = 'all 0.3s ease-in-out';
     }
   }
 };

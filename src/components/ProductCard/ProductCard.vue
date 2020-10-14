@@ -26,7 +26,13 @@
         >
         <span class="price">{{ price }}원</span>
         <span
-          :class="[product.discount_rate === 0 ? 'hidden' : 'discountPrice']"
+          :class="[
+            product.discount_rate === 0 ||
+            product.discount_rate === undefined ||
+            product.discount_rate === null
+              ? 'hidden'
+              : 'discountPrice'
+          ]"
           >{{ discountPrice }}원</span
         >
       </li>
@@ -53,13 +59,13 @@ export default {
   },
   computed: {
     price() {
-      return this.product.price?.toLocaleString('en');
+      return this.product.price?.toLocaleString();
     },
     discountPrice() {
-      return this.product.discount_price?.toLocaleString('en');
+      return this.product.discount_price?.toLocaleString();
     },
     count() {
-      return this.product.sales_amount?.toLocaleString('en');
+      return this.product.sales_amount?.toLocaleString();
     }
   },
   created() {},

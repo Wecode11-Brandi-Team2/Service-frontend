@@ -29,7 +29,7 @@
         <a class="menu" @click="goLogin">마이페이지</a>
         ㅣ
         <router-link to="/login" v-if="!have">
-          <span @click="doLogIn">로그인</span>
+          <span @click="doLogIn" class="show-login-status">로그인</span>
         </router-link>
         <router-link to="/" v-else>
           <span
@@ -104,8 +104,10 @@ export default {
       if (localStorage.getItem('access_token')) {
         localStorage.removeItem('access_token');
         this.$router.push('/');
+        window.location.reload();
       } else {
         this.$router.push('/login');
+        window.location.reload();
       }
     },
 
@@ -131,6 +133,14 @@ export default {
 
 <style scoped lang="scss">
 @import '../../styles/common.scss';
+
+.show-login-status {
+  color: #ff204b;
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    color: black;
+  }
+}
 
 .Nav {
   min-width: 1300px;

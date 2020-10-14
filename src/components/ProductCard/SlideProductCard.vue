@@ -132,7 +132,7 @@ export default {
 
   methods: {
     deleteGhostImg(e) {
-      if (e === undefined || e.dataTransfer === undefined) return;
+      // if (e === undefined || e.dataTransfer === undefined) return;
       let img = new Image();
       img.src = this.ghostImage.src;
       e.dataTransfer.setDragImage(img, 0, 0);

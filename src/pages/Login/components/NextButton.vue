@@ -1,7 +1,9 @@
 <template>
-  <div class="cellphoneButton">
-    <a>{{ word }}</a>
-  </div>
+  <router-link to="/">
+    <div class="cellphoneButton">
+      <a>{{ word }}</a>
+    </div>
+  </router-link>
 </template>
 <script>
 export default {
@@ -12,6 +14,9 @@ export default {
 <style scoped lang="scss">
 @import '../../../styles/common.scss';
 
+a {
+  text-decoration: none;
+}
 .cellphoneButton {
   @include setSize(200px, 60px);
   line-height: 59px;

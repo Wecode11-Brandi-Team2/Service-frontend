@@ -45,13 +45,23 @@ export default {
         this.myPageData = res.data.data;
         this.noData = false;
         this.showData = true;
-      })
-      .catch(error => {
-        if (error.response.status === 400) {
-          this.noData = true;
-          this.showData = false;
-        }
+        console.log(res.data.data);
+        this.showNoProduct(res.data.data);
       });
+    // .catch(error => {
+    //   if (error.response.status === 400) {
+    //     this.noData = true;
+    //     this.showData = false;
+    //   }
+    // });
+  },
+  methods: {
+    showNoProduct(data) {
+      if (data === undefined) {
+        this.noData = true;
+        this.showData = false;
+      }
+    }
   }
 };
 </script>

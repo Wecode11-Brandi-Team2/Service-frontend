@@ -812,6 +812,7 @@ export default {
       };
       axios.get(url, headers).then(res => {
         this.shippingLists = res.data;
+        console.log('배송지리스트', this.shippingLists);
         this.identifyShippingListFull();
       });
     },

@@ -82,13 +82,15 @@ export default {
         const i = randInt(users.length);
         this.msg = users[i];
       });
-    // .then(this.updateSpinner({ spinner: true }));
     window.addEventListener('scroll', this.removeButton);
+    window.addEventListener('click', this.checkFunction);
   },
 
   methods: {
     ...mapActions(serviceStore, ['updateSpinner']),
-
+    checkFunction() {
+      console.log('Data', this.productData);
+    },
     getMoreData() {
       this.offset = this.offset + 100;
       console.log(this.offset);

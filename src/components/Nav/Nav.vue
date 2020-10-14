@@ -59,7 +59,6 @@ export default {
   data() {
     return {
       queryString: '',
-      token: '',
       have: false
     };
   },
@@ -68,7 +67,6 @@ export default {
     if (haveTok) {
       this.have = !this.have;
     }
-    // this.token = localStorage.getItem('access_token');
   },
 
   computed: {

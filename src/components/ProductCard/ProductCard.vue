@@ -8,9 +8,9 @@
         <span class="brand">{{ product.seller_name }}</span>
       </li>
       <li class="product-name-tag">
-        <a href="">
+        <router-link :to="`/detail/${product.id}`">
           <span class="productname">{{ product.name }} </span>
-        </a>
+        </router-link>
       </li>
       <li>
         <span

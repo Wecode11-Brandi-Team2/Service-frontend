@@ -43,6 +43,15 @@ export default {
           return response;
         },
         error => {
+          //발표위한 임의 401 및 500 에러 처리
+          if (error.response.status === 401) {
+            this.setLoading(true);
+            return Promise.reject(error);
+          }
+          if (error.response.status === 500) {
+            this.setLoading(true);
+            return Promise.reject(error);
+          }
           this.setLoading(false);
           return Promise.reject(error);
         }

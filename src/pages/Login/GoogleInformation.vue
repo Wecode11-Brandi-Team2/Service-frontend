@@ -61,11 +61,12 @@ export default {
   mounted() {
     console.log(localStorage.getItem('access_token'));
   },
+
   methods: {
     fetchData() {
       console.log('login?');
       console.log(this.accesses.access, this.phones.phone, this.loginId);
-      let MADE_URL = `${URL.LOGIN_URL}/api/user/googleSignup`;
+      let MADE_URL = `${URL.PRODUCT_URL}/api/user/googleSignup`;
       axios
         .post(MADE_URL, {
           access_token: this.accesses.access,

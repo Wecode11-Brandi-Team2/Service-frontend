@@ -8,7 +8,7 @@
         <ProductCard
           :product="product"
           :key="product.id + 'key'"
-          v-for="product of productData.slice(0, 26)"
+          v-for="product of productData.slice(0, 25)"
         />
       </section>
       <BannerProduct />

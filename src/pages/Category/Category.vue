@@ -212,19 +212,19 @@ export default {
 
   created: function() {
     this.fetchData();
-    window.addEventListener('click', this.checkfunction);
+    // window.addEventListener('click', this.checkfunction);
   },
   updated() {
     this.changeNavToKorean();
   },
   methods: {
-    checkfunction() {
-      console.log(
-        this.$route.params.specification,
-        this.$route.params.title,
-        this.$route.params.id
-      );
-    },
+    // checkfunction() {
+    //   console.log(
+    //     this.$route.params.specification,
+    //     this.$route.params.title,
+    //     this.$route.params.id
+    //   );
+    // },
     changeNavToKorean() {
       let spec = this.$route.params.specification;
       let title = this.$route.params.title;
@@ -256,8 +256,8 @@ export default {
 
     filteringAsideData(baseData) {
       for (let i = 0; i < baseData.length; i++) {
-        let parsedData = JSON.parse(JSON.stringify(baseData[i]));
-        let nameData = JSON.parse(JSON.stringify(Object.keys(baseData[i])[1]));
+        let parsedData = baseData[i];
+        let nameData = Object.keys(baseData[i])[1];
 
         if (parsedData['name'] === this.$route.params.specification) {
           let filteredData = parsedData[nameData];
@@ -381,7 +381,7 @@ export default {
     width: 130px;
     height: 45px;
     text-align: center;
-    z-index: 100;
+    /* z-index: 100; */
 
     .picked-filter {
       display: flex;

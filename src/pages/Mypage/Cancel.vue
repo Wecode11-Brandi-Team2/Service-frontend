@@ -36,7 +36,9 @@
             <div class="order-data">{{ cancelItemInfo.units }} 개</div>
           </div>
           <div class="data1-wrapper">
-            <div class="data1">{{ cancelItemInfo.price }} 원</div>
+            <div class="data1">
+              {{ cancelItemInfo.price.toLocaleString() }} 원
+            </div>
             <div class="data1">{{ getShipStatus() }}</div>
           </div>
         </div>
@@ -44,7 +46,9 @@
       <h2 class="refund-info">주문 취소 정보</h2>
       <div class="refund-info-box">
         <div class="refund-info-title">총 주문취소금액</div>
-        <div class="amount">{{ cancelItemInfo.total_payment }}원</div>
+        <div class="amount">
+          {{ cancelItemInfo.total_payment.toLocaleString() }}원
+        </div>
       </div>
       <div class="btn-wrapper">
         <button @click="requestCancel" class="refund-btn">
@@ -167,6 +171,7 @@ export default {
     .ordered-item {
       .shop-info {
         display: flex;
+        justify-content: space-around;
         align-items: center;
         height: 64px;
 

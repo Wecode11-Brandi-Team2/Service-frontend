@@ -1,5 +1,5 @@
 <template>
-  <router-link to="/">
+  <router-link :to="route">
     <div class="cellphoneButton">
       <a>{{ word }}</a>
     </div>
@@ -8,7 +8,7 @@
 <script>
 export default {
   name: 'cellphoneButton',
-  props: ['word']
+  props: ['word', 'route']
 };
 </script>
 <style scoped lang="scss">

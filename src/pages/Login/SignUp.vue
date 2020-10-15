@@ -22,7 +22,7 @@
           </div>
           <div class="line" />
           <div @click="showNumberCheck">
-            <NextButton word="휴대폰 인증" />
+            <NextButton word="휴대폰 인증" route="/signup" />
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@
             />
           </div>
           <div class="submit-button" @click="goToAgreement">
-            <NextButton word="다음 단계로 이동" />
+            <NextButton word="다음 단계로 이동" route="/signup" />
           </div>
         </div>
       </div>

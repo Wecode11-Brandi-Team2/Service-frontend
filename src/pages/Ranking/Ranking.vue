@@ -1059,7 +1059,7 @@ export default {
   cursor: pointer;
 
   .dropdown-filter {
-    z-index: 100;
+    /* z-index: 100; */
     width: 130px;
     height: 45px;
     display: inline-block;

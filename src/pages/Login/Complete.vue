@@ -21,8 +21,8 @@
         </div>
         <div class="line" />
         <div class="button-wrapper">
-          <NextButton word="쿠폰 확인하기" />
-          <NextButton word="바로 쇼핑하기" />
+          <NextButton word="쿠폰 확인하기" route="/" />
+          <NextButton word="바로 쇼핑하기" route="/" />
         </div>
       </div>
     </div>

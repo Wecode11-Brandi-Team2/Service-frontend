@@ -148,15 +148,10 @@ export default {
       });
     },
     categoryActiveChange(categoryData) {
-      this.getCategory = categoryData;
-      if (this.getCategory === undefined) {
-        return;
-      }
-      this.navCheckData = this.getCategory;
       for (let i = 0; i < this.categories.category.length; i++) {
-        if (this.categories.category[i][this.navCheckData]) {
+        if (this.categories.category[i][categoryData]) {
           this.titleShowingData = this.categories.category[i];
-          this.showingData = this.categories.category[i][this.navCheckData];
+          this.showingData = this.categories.category[i][categoryData];
           this.updateTitle({ title: this.titleShowingData });
           this.cateogoryActive = true;
         }
@@ -227,6 +222,7 @@ export default {
   height: 60px;
   border-top: 0.5px solid gray;
   border-bottom: 0.5px solid gray;
+  z-index: 1000;
 
   ul {
     display: flex;

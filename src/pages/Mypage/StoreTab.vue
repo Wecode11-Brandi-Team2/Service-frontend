@@ -102,6 +102,9 @@ export default {
       .nope {
         display: none;
       }
+      .hidden {
+        display: none;
+      }
     }
   }
 }

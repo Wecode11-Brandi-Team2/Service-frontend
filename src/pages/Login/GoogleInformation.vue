@@ -24,7 +24,7 @@
       </div>
 
       <div @click="fetchData">
-        <NextButton word="다음" />
+        <NextButton word="다음" route="/complete" />
       </div>
     </div>
   </div>

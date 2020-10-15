@@ -44,7 +44,7 @@
         <div class="line" />
         <div class="button-wrapper">
           <router-link to="/googleinformation">
-            <NextButton word="다음 단계로 이동" />
+            <NextButton word="다음 단계로 이동" route="/googleinformation" />
           </router-link>
         </div>
       </div>
